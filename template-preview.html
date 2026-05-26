@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GroundfloorSports Athlete Template Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-900: #0a1729;
+    --navy-800: #0f2040;
+    --navy-700: #14305f;
+    --cyan: #2fa3e8;
+    --cyan-bright: #4ec4ff;
+    --cream: #f2eee3;
+    --cream-bright: #f8f5ec;
+    --fog: rgba(242, 238, 227, 0.7);
+    --fog-line: rgba(242, 238, 227, 0.16);
+    --glass: rgba(242, 238, 227, 0.06);
+    --glass-border: rgba(242, 238, 227, 0.18);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 70% 50% at 80% 0%, rgba(78, 196, 255, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 100%);
+    color: var(--cream);
+    font-family: Inter, sans-serif;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 36px 20px 56px;
+  }
+  .hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .brand {
+    font-family: Anton, sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cream-bright);
+  }
+  .brand span { color: var(--cyan-bright); }
+  .sub { color: var(--fog); max-width: 760px; line-height: 1.5; }
+  .pill {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--fog-line);
+    background: rgba(242,238,227,0.04);
+    color: var(--cyan-bright);
+    font: 600 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0,0,0,.16);
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: Anton, sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--cream-bright);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .field {
+    padding: 14px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+  }
+  .label {
+    display: block;
+    font: 600 10px/1.2 JetBrains Mono, monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 8px;
+  }
+  .value {
+    color: var(--cream-bright);
+    font-size: 14px;
+    line-height: 1.4;
+    min-height: 20px;
+  }
+  .blank { color: rgba(242,238,227,0.45); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  th, td {
+    border-bottom: 1px solid var(--fog-line);
+    padding: 12px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    font: 600 10px/1.2 JetBrains Mono, monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fog);
+    background: rgba(255,255,255,0.03);
+  }
+  td { color: var(--cream-bright); font-size: 13px; }
+  tr:last-child td { border-bottom: 0; }
+  .foot {
+    margin-top: 16px;
+    color: var(--fog);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .brand { font-size: 28px; }
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="brand">Groundfloor<span>Sports</span></div>
+        <div class="sub">Athlete CSV template preview. This matches the downloadable template and the admin import fields one-for-one.</div>
+      </div>
+      <div class="pill">CSV Template Preview</div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-head">
+        <div class="card-title">Required / core fields</div>
+        <div class="sub" style="max-width:none;">Blank cells indicate the values the user should fill in.</div>
+      </div>
+
+      <div class="grid">
+        <div class="field"><span class="label">Jersey #</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">First Name</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Last Name</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Position</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Email</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Phone</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Class/Yr</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Height</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Weight</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">State/Province</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">School/Team</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Rec Team</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Instagram</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">X (Twitter)</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">TikTok</span><div class="value blank">blank</div></div>
+        <div class="field"><span class="label">Video Url</span><div class="value blank">blank</div></div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Package</th>
+            <th>Status</th>
+            <th>Grade</th>
+            <th>Transcript</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="blank">blank</td>
+            <td class="blank">blank</td>
+            <td class="blank">blank</td>
+            <td class="blank">blank</td>
+            <td class="blank">blank</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="foot">Use this template to fill in athlete data, then import the downloaded CSV into Admin. The field order matches the admin CSV import and the template download button.</div>
+    </div>
+  </div>
+</body>
+</html>

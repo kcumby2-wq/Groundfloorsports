@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GroundfloorSports Marketplace (Duplicate)</title>
+  <!-- Copy of marketplace.html for new feature/page development -->
+  <link rel="stylesheet" href="globals.css">
+</head>
+<body>
+<!-- BEGIN DUPLICATE CONTENT -->
+I class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>78</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Katy vs Katy Tompkins</div>
+          <div class="game-meta">Sep 20, 2026<span class="dot">.</span>Houston District</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+  <a href="https://groundfloorsports.com/marketplace" class="nav-logo">
+        </div>
+      </a>
+
+    </div>
+
+    <div class="results-empty hidden" id="resultsEmpty">No clips matched your filters. Try removing a tag or widening your search.</div>
+
+    <div class="pagination">
+      <button class="pg-btn" disabled><- Prev</button>
+      <script>
+        (function () {
+          const searchInputs = Array.from(document.querySelectorAll('.search-input'));
+          const playerInput = searchInputs[0] || null;
+          const teamInput = searchInputs[1] || null;
+          const searchBtn = document.querySelector('.search-btn');
+          const clearSearchBtn = document.querySelector('.search-clear');
+          const clearAllFiltersBtn = document.getElementById('clearAllFilters');
+          const gameGrid = document.querySelector('.game-grid');
+          const resultsCount = document.getElementById('resultsCount') || document.querySelector('.results-count');
+          const emptyState = document.getElementById('resultsEmpty') || document.querySelector('.results-empty');
+          const activeFilters = document.getElementById('activeFilters');
+          const pagination = document.querySelector('.pagination');
+          const filterSection = document.querySelector('.filter-section');
+          const searchBar = document.querySelector('.search-bar');
+          const filterActions = document.querySelector('.filter-actions');
+
+          if (!gameGrid || !resultsCount || !pagination) return;
+
+          const filterRows = Array.from(document.querySelectorAll('.filter-row'));
+          const prevBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Prev'));
+          const nextBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Next'));
+          const pageButtons = Array.from(pagination.querySelectorAll('.pg-btn')).filter((btn) => /^\d+$/.test(btn.textContent.trim()));
+          const pageInfo = pagination.querySelector('.pg-info');
+          const cards = Array.from(gameGrid.querySelectorAll('.game-card'));
+          const pageSize = 6;
+          let currentPage = 1;
+          let loadingTimer = null;
+          const STORAGE_KEY = 'sr_event_queue';
+          const TRACKING_SOURCE = 'gfs_marketplace_static';
+          const RECENT_SEARCHES_KEY = 'gfs_marketplace_recent_searches';
+          const SAVED_FILTERS_KEY = 'gfs_marketplace_saved_filters';
+          const GFS_STRIPE_LINK_KEYS = {
+            clip: 'gfs_stripe_payment_link_clip',
+            fullGame: 'gfs_stripe_payment_link_full_game',
+            seasonBundle: 'gfs_stripe_payment_link_season_bundle',
+          };
+
+          function injectEnhancementStyles() {
+            if (document.getElementById('marketplaceQuickWinStyles')) return;
+            const style = document.createElement('style');
+            style.id = 'marketplaceQuickWinStyles';
+            style.textContent = `
+              .search-recent{width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;padding:12px 14px;color:var(--muted-strong)}
+              .search-recent option{color:#111}
+              .filter-extra-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+              .filter-extra-btn{border:1px solid var(--pill-border);border-radius:8px;padding:10px 12px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-strong)}
+              .filter-extra-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+              .results-empty-title{display:block;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:6px;color:var(--white)}
+              .results-empty-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+              .results-empty-btn{border:1px solid var(--pill-border);border-radius:999px;padding:8px 12px;font-size:12px;letter-spacing:.06em;color:var(--muted-strong);background:var(--pill-bg)}
+              .results-empty-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+              .game-grid.is-loading .game-card{pointer-events:none}
+              .game-grid.is-loading .game-thumb-content,.game-grid.is-loading .game-name,.game-grid.is-loading .game-meta,.game-grid.is-loading .game-seller,.game-grid.is-loading .game-tag,.game-grid.is-loading .game-clipcount{color:transparent!important;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.18),rgba(255,255,255,.08));background-size:220% 100%;border-radius:8px;animation:marketplaceShimmer 1.1s infinite}
+              .game-grid.is-loading .game-tag{border-color:transparent}
+              @keyframes marketplaceShimmer{0%{background-position:220% 0}100%{background-position:-220% 0}}
+              .mobile-action-bar{position:fixed;left:12px;right:12px;bottom:12px;z-index:140;display:none;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(10,22,40,.96);backdrop-filter:blur(12px)}
+              .mobile-action-btn{border:1px solid var(--pill-border);border-radius:10px;padding:10px 8px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-strong);text-align:center}
+              .mobile-action-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+              @media (max-width:640px){
+                .mobile-action-bar{display:grid}
+                .results-section{padding-bottom:96px}
+                .search-bar{grid-template-columns:1fr}
+              }
+              .stripe-cta-bar{margin:0 0 16px;padding:12px;border:1px solid var(--pill-border);border-radius:12px;background:rgba(236,72,153,.06);display:grid;gap:10px}
+              .stripe-cta-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+              .stripe-cta-title{font-family:'Bebas Neue',sans-serif;letter-spacing:.12em;font-size:13px;color:var(--magenta-light);text-transform:uppercase}
+              .stripe-cta-sub{font-size:12px;color:var(--muted-strong)}
+              .stripe-cta-actions{display:flex;gap:8px;flex-wrap:wrap}
+              .stripe-cta-btn{border:1px solid var(--pill-border);border-radius:10px;padding:10px 12px;font-size:12px;letter-spacing:.08em;color:var(--white);background:rgba(10,22,40,.56)}
+              .stripe-cta-btn.primary{border-color:rgba(236,72,153,.48);background:rgba(236,72,153,.16)}
+              .stripe-cta-btn:hover{border-color:var(--magenta);color:var(--magenta-light)}
+            `;
+            document.head.appendChild(style);
+          }
+
+          // ...existing code...
+        })();
+      </script>
+<!-- END DUPLICATE CONTENT -->
+<script src="marketplace.js"></script>
+</body>
+</html>

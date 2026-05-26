@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports Demo Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050b16;
+    --panel: #0e1d33;
+    --line: rgba(255,255,255,.14);
+    --muted: rgba(255,255,255,.72);
+    --white: #fff;
+    --accent: #ec4899;
+    --accent2: #4db8ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    background:
+      radial-gradient(circle at 15% 0%, rgba(236,72,153,.16), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgba(77,184,255,.18), transparent 30%),
+      var(--bg);
+    padding: 20px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 16px; }
+  .hero {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(14,29,51,.98), rgba(7,16,29,.98));
+    padding: 24px;
+  }
+  .eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 8vw, 72px);
+    line-height: .9;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    margin-bottom: 10px;
+  }
+  .sub { color: var(--muted); max-width: 760px; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+    padding: 14px;
+  }
+  .card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+  .link-list { display: grid; gap: 8px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #050b16;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: .16em;
+  }
+  .checks { margin-top: 10px; display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+  .checks strong { color: var(--white); }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Static Demo</div>
+      <h1>GroundfloorSports Test Hub</h1>
+      <p class="sub">Use this page to run the full demo in file preview mode. All app-only routes are safely mapped to local placeholders so links do not dead-end.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Primary Flows</h2>
+        <div class="link-list">
+          <a class="btn primary" href="marketplace.html#results">Open Marketplace</a>
+          <a class="btn" href="sign-in.html">Open Sign In</a>
+          <a class="btn" href="sign-up.html">Open Sign Up</a>
+          <a class="btn" href="admin.html">Open Unified Admin (GFS + Subjectreport)</a>
+          <a class="btn" href="combine-clinic-template.html">Open CSV Builder (Standalone)</a>
+          <a class="btn" href="Subjectreport.html">Open Home</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Quick Checklist</h2>
+        <div class="checks">
+          <div>1. <strong>Marketplace:</strong> search, filters, and pagination update counts.</div>
+          <div>2. <strong>Game card:</strong> opens local game preview page.</div>
+          <div>3. <strong>Sign In:</strong> forgot-password link opens preview route page.</div>
+          <div>4. <strong>Sign Up:</strong> Terms, Privacy, NIL links open preview route page.</div>
+          <div>5. <strong>Unified Admin:</strong> one dashboard for GroundfloorSports and Subjectreport.</div>
+          <div>6. <strong>CSV Builder:</strong> standalone page remains available for direct event-day use.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>QA Artifact</h2>
+      <div class="link-list">
+        <a class="btn" href="QA-LINK-CHECK-REPORT.md">Open Link QA Report</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Live API Flows</h2>
+      <div class="checks">
+        <div><strong>Important:</strong> this file preview mode does not run Next.js API routes.</div>
+        <div>Use localhost for live Stripe checkout creation and webhook status updates.</div>
+      </div>
+      <div class="link-list" style="margin-top:10px;">
+        <a class="btn" href="http://localhost:3000/marketplace">Open Live Marketplace (localhost)</a>
+        <a class="btn" href="http://localhost:3000/api/billing/webhook/stripe">Open Live Webhook Route (localhost)</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

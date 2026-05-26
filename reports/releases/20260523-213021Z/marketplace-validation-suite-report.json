@@ -1,0 +1,664 @@
+{
+  "generatedAt": "2026-05-23T21:30:19.208Z",
+  "startedAt": "2026-05-23T21:30:11.986Z",
+  "finishedAt": "2026-05-23T21:30:19.208Z",
+  "totalDurationMs": 7222,
+  "workspace": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app",
+  "summary": {
+    "status": "fail",
+    "total": 9,
+    "passed": 6,
+    "failed": 3,
+    "failedTaskIds": [
+      "supabase_schema_contract",
+      "sr_events_health",
+      "admin_live_smoke"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "supabase_schema_contract",
+      "command": "node ./scripts/supabase-schema-contract-check.js",
+      "startedAt": "2026-05-23T21:30:11.986Z",
+      "finishedAt": "2026-05-23T21:30:13.933Z",
+      "durationMs": 1947,
+      "exitCode": 1,
+      "ok": false,
+      "stdout": "Supabase schema contract report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\supabase-schema-contract-report.json\nStatus: FAIL (6/8)",
+      "stderr": "FAIL: live_athletes_schema_contract - status 401\nFAIL: live_sr_events_contract - status 401",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:13.917Z",
+        "target": "supabase schema contract",
+        "static": {
+          "schemaPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql",
+          "migrationPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql",
+          "expectedAthletesColumns": [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "jersey_number",
+            "position",
+            "class_year",
+            "height",
+            "weight",
+            "school",
+            "state",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url",
+            "package",
+            "status",
+            "grade",
+            "transcript_url",
+            "notes",
+            "created_at",
+            "updated_at"
+          ],
+          "expectedSrEventsColumns": [
+            "id",
+            "event_name",
+            "detail",
+            "page",
+            "source",
+            "created_at"
+          ],
+          "extractedAthletesColumns": [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "jersey_number",
+            "position",
+            "class_year",
+            "height",
+            "weight",
+            "school",
+            "state",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url",
+            "package",
+            "status",
+            "grade",
+            "transcript_url",
+            "notes",
+            "created_at",
+            "updated_at"
+          ],
+          "extractedMigrationColumns": [
+            "jersey_number",
+            "height",
+            "weight",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url"
+          ]
+        },
+        "live": {
+          "enabled": true,
+          "mode": "anon_plus_auth_token",
+          "reason": "",
+          "checks": [
+            {
+              "id": "live_athletes_select",
+              "ok": false,
+              "status": 401,
+              "missingColumns": [],
+              "bodyPreview": "{\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}"
+            },
+            {
+              "id": "live_sr_events_select",
+              "ok": false,
+              "status": 401,
+              "missingColumns": [],
+              "bodyPreview": "{\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}"
+            }
+          ]
+        },
+        "summary": {
+          "total": 8,
+          "passed": 6,
+          "failed": 2,
+          "failedIds": [
+            "live_athletes_schema_contract",
+            "live_sr_events_contract"
+          ],
+          "status": "fail"
+        },
+        "checks": [
+          {
+            "id": "schema_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql"
+          },
+          {
+            "id": "migration_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql"
+          },
+          {
+            "id": "schema_has_athletes_table",
+            "ok": true,
+            "detail": "columns found: 24"
+          },
+          {
+            "id": "schema_has_required_athletes_columns",
+            "ok": true,
+            "detail": "ok"
+          },
+          {
+            "id": "migration_has_profile_columns",
+            "ok": true,
+            "detail": "ok"
+          },
+          {
+            "id": "events_schema_sql_present",
+            "ok": true,
+            "detail": "sr_events schema is defined in repository"
+          },
+          {
+            "id": "live_athletes_schema_contract",
+            "ok": false,
+            "detail": "status 401"
+          },
+          {
+            "id": "live_sr_events_contract",
+            "ok": false,
+            "detail": "status 401"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sr_events_health",
+      "command": "node ./scripts/sr-events-healthcheck.js",
+      "startedAt": "2026-05-23T21:30:13.934Z",
+      "finishedAt": "2026-05-23T21:30:14.570Z",
+      "durationMs": 636,
+      "exitCode": 3221226505,
+      "ok": false,
+      "stdout": "SR events health report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\sr-events-health-report.json\nStatus: FAIL (5/6)",
+      "stderr": "FAIL: live_sr_events_query - status 401\nAssertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:14.174Z",
+        "target": "sr_events health",
+        "summary": {
+          "total": 6,
+          "passed": 5,
+          "failed": 1,
+          "failedIds": [
+            "live_sr_events_query"
+          ],
+          "status": "fail"
+        },
+        "checks": [
+          {
+            "id": "events_schema_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-events-schema.sql"
+          },
+          {
+            "id": "sr_events_create_table_present",
+            "ok": true,
+            "detail": "create table statement"
+          },
+          {
+            "id": "sr_events_rls_enabled",
+            "ok": true,
+            "detail": "RLS enabled"
+          },
+          {
+            "id": "sr_events_insert_policy_present",
+            "ok": true,
+            "detail": "anon insert policy"
+          },
+          {
+            "id": "sr_events_select_policy_present",
+            "ok": true,
+            "detail": "authenticated select policy"
+          },
+          {
+            "id": "live_sr_events_query",
+            "ok": false,
+            "detail": "status 401"
+          }
+        ],
+        "live": {
+          "enabled": true,
+          "mode": "anon_plus_auth_token",
+          "reason": "",
+          "result": {
+            "ok": false,
+            "status": 401,
+            "bodyPreview": "{\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}"
+          }
+        }
+      }
+    },
+    {
+      "id": "regenerate_static",
+      "command": "node ./scripts/update-marketplace-static.js",
+      "startedAt": "2026-05-23T21:30:14.571Z",
+      "finishedAt": "2026-05-23T21:30:14.627Z",
+      "durationMs": 56,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "marketplace updated from marketplace.backup-20260522-171007.html",
+      "stderr": ""
+    },
+    {
+      "id": "healthcheck_static",
+      "command": "node ./scripts/marketplace-static-healthcheck.js",
+      "startedAt": "2026-05-23T21:30:14.627Z",
+      "finishedAt": "2026-05-23T21:30:14.673Z",
+      "durationMs": 46,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Static marketplace health report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\marketplace-static-health-report.json\nStatus: PASS (8/8)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:14.664Z",
+        "status": "pass",
+        "totals": {
+          "checks": 8,
+          "passed": 8,
+          "failed": 0
+        },
+        "checks": [
+          {
+            "label": "marketplace.html exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\marketplace.html"
+          },
+          {
+            "label": "static runtime exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\scripts\\marketplace-static-runtime.js"
+          },
+          {
+            "label": "copy filtered view action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "static health check action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "health report export action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "match reason rendering present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "preset quick link support present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "auto boot health check present",
+            "ok": true,
+            "detail": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "games_relevance",
+      "command": "node ./scripts/games-relevance-check.js",
+      "startedAt": "2026-05-23T21:30:14.674Z",
+      "finishedAt": "2026-05-23T21:30:14.722Z",
+      "durationMs": 48,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Games relevance checks: PASS (5/5, 100%)\nGames relevance scorecard report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\games-relevance-scorecard.json\nGames relevance markdown scorecard: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\games-relevance-scorecard.md",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:14.711Z",
+        "score": 100,
+        "summary": {
+          "total": 5,
+          "passed": 5,
+          "failed": 0,
+          "failedCases": []
+        },
+        "cases": [
+          {
+            "id": "jersey_priority",
+            "passed": true,
+            "expected": "Top result should be a #7 match with Exact jersey reason",
+            "topResult": {
+              "slug": "gamma",
+              "relevanceScore": 200,
+              "matchReasons": [
+                "Exact search",
+                "Exact jersey"
+              ]
+            },
+            "query": {
+              "q": "7",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "exact_team_priority",
+            "passed": true,
+            "expected": "Exact team should rank first with Exact team reason",
+            "topResult": {
+              "slug": "alpha",
+              "relevanceScore": 85,
+              "matchReasons": [
+                "Exact team"
+              ]
+            },
+            "query": {
+              "team": "allen",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "tag_stack_priority",
+            "passed": true,
+            "expected": "Strong tag match should rank first and include tag reason",
+            "topResult": {
+              "slug": "alpha",
+              "relevanceScore": 70,
+              "matchReasons": [
+                "2 tag matches"
+              ]
+            },
+            "query": {
+              "tags": "highlight,touchdown",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "fallback_most_clips",
+            "passed": true,
+            "expected": "No-signal fallback Most Clips should rank by clip count",
+            "topResult": {
+              "slug": "beta",
+              "relevanceScore": 0,
+              "matchReasons": []
+            },
+            "query": {
+              "sort": "Most Clips"
+            }
+          },
+          {
+            "id": "fallback_most_recent",
+            "passed": true,
+            "expected": "No-signal fallback Most Recent should rank newest first",
+            "topResult": {
+              "slug": "gamma",
+              "relevanceScore": 0,
+              "matchReasons": []
+            },
+            "query": {
+              "sort": "Most Recent"
+            }
+          }
+        ],
+        "topMisses": []
+      }
+    },
+    {
+      "id": "smoke_static",
+      "command": "node ./scripts/marketplace-static-smoke.js",
+      "startedAt": "2026-05-23T21:30:14.722Z",
+      "finishedAt": "2026-05-23T21:30:17.678Z",
+      "durationMs": 2956,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Static marketplace smoke report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\marketplace-static-smoke-report.json\nStatus: PASS (8/8)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:17.668Z",
+        "edgePath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+        "status": "pass",
+        "totals": {
+          "checks": 8,
+          "passed": 8,
+          "failed": 0
+        },
+        "checks": [
+          {
+            "label": "Marketplace DOM dump completed",
+            "ok": true,
+            "detail": "[30428:47072:0523/173015.502:ERROR:chrome\\browser\\component_updater\\edge_language_detection_model_installer.cc:97] Edge Language Detection Model: On-demand update failed with error: 5\r\n"
+          },
+          {
+            "label": "Run Health Check control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preset import control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preset payload control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Health status panel rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preview DOM dump completed",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Clip form rendered in preview",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Clip import control rendered in preview",
+            "ok": true,
+            "detail": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "admin_ops",
+      "command": "node ./scripts/admin-ops-check.js",
+      "startedAt": "2026-05-23T21:30:17.679Z",
+      "finishedAt": "2026-05-23T21:30:17.725Z",
+      "durationMs": 46,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Admin ops check report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\admin-ops-check-report.json\nStatus: PASS (11/11)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:17.715Z",
+        "target": "admin.html",
+        "summary": {
+          "total": 11,
+          "passed": 11,
+          "failed": 0,
+          "failedIds": [],
+          "status": "pass"
+        },
+        "checks": [
+          {
+            "id": "bulk_job_preview",
+            "ok": true,
+            "message": "Dry-run bulk job preview handler exists"
+          },
+          {
+            "id": "bulk_job_execute",
+            "ok": true,
+            "message": "Bulk job execute handler exists"
+          },
+          {
+            "id": "bulk_job_undo",
+            "ok": true,
+            "message": "Bulk job undo handler exists"
+          },
+          {
+            "id": "quality_scorecards",
+            "ok": true,
+            "message": "Quality scorecards renderer exists"
+          },
+          {
+            "id": "ops_inbox",
+            "ok": true,
+            "message": "Ops inbox renderer exists"
+          },
+          {
+            "id": "ops_health",
+            "ok": true,
+            "message": "Ops health renderer exists"
+          },
+          {
+            "id": "role_control",
+            "ok": true,
+            "message": "Role control handler exists"
+          },
+          {
+            "id": "approval_gate",
+            "ok": true,
+            "message": "Approval gate handler exists"
+          },
+          {
+            "id": "ops_inbox_ui",
+            "ok": true,
+            "message": "Ops inbox UI container exists"
+          },
+          {
+            "id": "quality_ui",
+            "ok": true,
+            "message": "Quality scorecards UI container exists"
+          },
+          {
+            "id": "health_ui",
+            "ok": true,
+            "message": "Health panel UI container exists"
+          }
+        ]
+      }
+    },
+    {
+      "id": "admin_live_smoke",
+      "command": "node ./scripts/admin-live-smoke.js",
+      "startedAt": "2026-05-23T21:30:17.725Z",
+      "finishedAt": "2026-05-23T21:30:19.158Z",
+      "durationMs": 1433,
+      "exitCode": 1,
+      "ok": false,
+      "stdout": "Admin live smoke report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\admin-live-smoke-report.json\nStatus: FAIL (0/3)",
+      "stderr": "FAIL: seed_create - status 401\nFAIL: flow_error - seed create failed (401): {\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}\nFAIL: cleanup_seed - status 401",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:19.150Z",
+        "target": "admin live smoke",
+        "mode": "anon_plus_auth_token",
+        "durationMs": 1386,
+        "summary": {
+          "status": "fail",
+          "total": 3,
+          "passed": 0,
+          "failed": 3,
+          "failedIds": [
+            "seed_create",
+            "flow_error",
+            "cleanup_seed"
+          ]
+        },
+        "steps": [
+          {
+            "id": "seed_create",
+            "ok": false,
+            "detail": "status 401",
+            "data": null
+          },
+          {
+            "id": "flow_error",
+            "ok": false,
+            "detail": "seed create failed (401): {\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}",
+            "data": null
+          },
+          {
+            "id": "cleanup_seed",
+            "ok": false,
+            "detail": "status 401",
+            "data": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "subjectreport_modal_focus",
+      "command": "node ./scripts/modal-focus-trap-check.js",
+      "startedAt": "2026-05-23T21:30:19.159Z",
+      "finishedAt": "2026-05-23T21:30:19.207Z",
+      "durationMs": 48,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Modal focus regression report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\subjectreport-modal-focus-report.json\nModal focus regression summary: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\subjectreport-modal-focus-report.md\nStatus: PASS (6/6)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:30:19.198Z",
+        "target": "Subjectreport.html",
+        "summary": {
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "failedIds": [],
+          "status": "pass"
+        },
+        "checks": [
+          {
+            "id": "focusable_helper",
+            "ok": true,
+            "message": "Modal focusable helper exists"
+          },
+          {
+            "id": "computed_style_gate",
+            "ok": true,
+            "message": "Computed-style visibility gate exists"
+          },
+          {
+            "id": "css_visibility_gate",
+            "ok": true,
+            "message": "Hidden display/visibility elements are excluded"
+          },
+          {
+            "id": "rendered_gate",
+            "ok": true,
+            "message": "Non-rendered elements are excluded"
+          },
+          {
+            "id": "shift_tab_wrap",
+            "ok": true,
+            "message": "Shift+Tab wrap logic exists"
+          },
+          {
+            "id": "tab_wrap",
+            "ok": true,
+            "message": "Tab wrap logic exists"
+          }
+        ]
+      }
+    }
+  ]
+}

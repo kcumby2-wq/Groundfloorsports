@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subjectreport Booking Fallback</title>
+<style>
+  :root {
+    --navy-900: #0a1729;
+    --navy-800: #0f2040;
+    --cyan: #2fa3e8;
+    --cyan-bright: #4ec4ff;
+    --cream-bright: #f8f5ec;
+    --fog: rgba(242, 238, 227, 0.72);
+    --fog-line: rgba(242, 238, 227, 0.2);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, -apple-system, Segoe UI, sans-serif;
+    background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 100%);
+    color: var(--cream-bright);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+
+  .panel {
+    width: min(720px, 100%);
+    border: 1px solid var(--fog-line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 30px;
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--fog);
+    line-height: 1.6;
+  }
+
+  form {
+    margin-top: 20px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 1fr; }
+  }
+
+  label {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+
+  input, select, textarea {
+    width: 100%;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--fog-line);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--cream-bright);
+    padding: 12px 14px;
+    font: inherit;
+  }
+
+  textarea { min-height: 100px; resize: vertical; }
+
+  .actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn.primary {
+    background: var(--cyan);
+    color: var(--navy-900);
+  }
+
+  .btn.ghost {
+    border: 1px solid var(--fog-line);
+    color: var(--cream-bright);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--fog);
+  }
+</style>
+</head>
+<body>
+  <main class="panel">
+    <h1>Book Your Call</h1>
+    <p>
+      Use this fallback form if JavaScript is disabled or the modal did not load.
+      Submissions send directly to your email client.
+    </p>
+
+    <form id="fallbackForm">
+      <div class="row">
+        <label>First Name
+          <input type="text" id="firstName" required />
+        </label>
+        <label>Last Name
+          <input type="text" id="lastName" required />
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Email
+          <input type="email" id="email" required />
+        </label>
+        <label>Phone
+          <input type="tel" id="phone" />
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Package
+          <select id="pkg">
+            <option value="Player Transcript">Player Transcript</option>
+            <option value="Recruiting Program">Recruiting Program</option>
+            <option value="Full Athlete Package">Full Athlete Package</option>
+            <option value="Coaches Database Access Membership">Coaches Database Access Membership</option>
+          </select>
+        </label>
+        <label>Class Year
+          <input type="text" id="classYear" placeholder="e.g. 2027" />
+        </label>
+      </div>
+
+      <label>Notes
+        <textarea id="notes" placeholder="Sport, position, goals, and any context for the call."></textarea>
+      </label>
+
+      <div class="actions">
+        <button class="btn primary" type="submit">Send Booking</button>
+        <a class="btn ghost" href="Subjectreport.html">Back to site</a>
+      </div>
+    </form>
+
+    <div class="note">If mail does not open, email hello@subjectreport.com with your details.</div>
+  </main>
+
+<script>
+  document.getElementById('fallbackForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const url = new URL(window.location.href);
+    const marketing = {
+      utm_source: url.searchParams.get('utm_source') || '',
+      utm_medium: url.searchParams.get('utm_medium') || '',
+      utm_campaign: url.searchParams.get('utm_campaign') || '',
+      utm_term: url.searchParams.get('utm_term') || '',
+      utm_content: url.searchParams.get('utm_content') || '',
+      gclid: url.searchParams.get('gclid') || '',
+      fbclid: url.searchParams.get('fbclid') || '',
+      msclkid: url.searchParams.get('msclkid') || ''
+    };
+
+    const body = [
+      `Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+      `Email: ${document.getElementById('email').value}`,
+      `Phone: ${document.getElementById('phone').value || 'N/A'}`,
+      `Package: ${document.getElementById('pkg').value}`,
+      `Class Year: ${document.getElementById('classYear').value || 'N/A'}`,
+      '',
+      'Notes:',
+      document.getElementById('notes').value || 'N/A',
+      '',
+      'Marketing Params:',
+      JSON.stringify(marketing)
+    ].join('\n');
+
+    const subject = 'Subjectreport Booking Request';
+    const href = `mailto:hello@subjectreport.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+  });
+</script>
+</body>
+</html>

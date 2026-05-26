@@ -1,0 +1,106 @@
+{
+  "rewrites": [
+    // GroundfloorSports.com domain
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/marketplace",
+      "has": [{ "type": "host", "value": "groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/marketplace",
+      "has": [{ "type": "host", "value": "www.groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/marketplace/:match*",
+      "has": [{ "type": "host", "value": "groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/marketplace/:match*",
+      "has": [{ "type": "host", "value": "www.groundfloorsports.com" }],
+      "destination": "/marketplace.html"
+    },
+    {
+      "source": "/sign-in",
+      "has": [ { "type": "host", "value": "groundfloorsports.com" } ],
+      "destination": "/sign-in.html"
+    },
+    {
+      "source": "/sign-in",
+      "has": [ { "type": "host", "value": "www.groundfloorsports.com" } ],
+      "destination": "/sign-in.html"
+    },
+    {
+      "source": "/sign-up",
+      "has": [ { "type": "host", "value": "groundfloorsports.com" } ],
+      "destination": "/sign-up.html"
+    },
+    {
+      "source": "/sign-up",
+      "has": [ { "type": "host", "value": "www.groundfloorsports.com" } ],
+      "destination": "/sign-up.html"
+    },
+    // Subjectreport.com domain
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/marketplace",
+      "has": [{ "type": "host", "value": "subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/marketplace",
+      "has": [{ "type": "host", "value": "www.subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/marketplace/:match*",
+      "has": [{ "type": "host", "value": "subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/marketplace/:match*",
+      "has": [{ "type": "host", "value": "www.subjectreport.com" }],
+      "destination": "/Subjectreport.html"
+    },
+    {
+      "source": "/sign-in",
+      "has": [ { "type": "host", "value": "subjectreport.com" } ],
+      "destination": "/sign-in.html"
+    },
+    {
+      "source": "/sign-in",
+      "has": [ { "type": "host", "value": "www.subjectreport.com" } ],
+      "destination": "/sign-in.html"
+    },
+    {
+      "source": "/sign-up",
+      "has": [ { "type": "host", "value": "subjectreport.com" } ],
+      "destination": "/sign-up.html"
+    },
+    {
+      "source": "/sign-up",
+      "has": [ { "type": "host", "value": "www.subjectreport.com" } ],
+      "destination": "/sign-up.html"
+    }
+  ]
+}

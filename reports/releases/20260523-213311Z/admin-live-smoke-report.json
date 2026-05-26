@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-05-23T21:33:09.988Z",
+  "target": "admin live smoke",
+  "summary": {
+    "status": "pass",
+    "total": 1,
+    "passed": 1,
+    "failed": 0
+  },
+  "skipped": true,
+  "reason": "SUPABASE_AUTH_TOKEN is expired",
+  "steps": [
+    {
+      "id": "smoke_skipped",
+      "ok": true,
+      "detail": "SUPABASE_AUTH_TOKEN is expired",
+      "data": null
+    }
+  ]
+}

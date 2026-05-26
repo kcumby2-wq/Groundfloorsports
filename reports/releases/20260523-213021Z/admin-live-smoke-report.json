@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-05-23T21:30:19.150Z",
+  "target": "admin live smoke",
+  "mode": "anon_plus_auth_token",
+  "durationMs": 1386,
+  "summary": {
+    "status": "fail",
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "failedIds": [
+      "seed_create",
+      "flow_error",
+      "cleanup_seed"
+    ]
+  },
+  "steps": [
+    {
+      "id": "seed_create",
+      "ok": false,
+      "detail": "status 401",
+      "data": null
+    },
+    {
+      "id": "flow_error",
+      "ok": false,
+      "detail": "seed create failed (401): {\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}",
+      "data": null
+    },
+    {
+      "id": "cleanup_seed",
+      "ok": false,
+      "detail": "status 401",
+      "data": null
+    }
+  ]
+}

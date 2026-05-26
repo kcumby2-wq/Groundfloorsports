@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-05-23T21:30:17.715Z",
+  "target": "admin.html",
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "failedIds": [],
+    "status": "pass"
+  },
+  "checks": [
+    {
+      "id": "bulk_job_preview",
+      "ok": true,
+      "message": "Dry-run bulk job preview handler exists"
+    },
+    {
+      "id": "bulk_job_execute",
+      "ok": true,
+      "message": "Bulk job execute handler exists"
+    },
+    {
+      "id": "bulk_job_undo",
+      "ok": true,
+      "message": "Bulk job undo handler exists"
+    },
+    {
+      "id": "quality_scorecards",
+      "ok": true,
+      "message": "Quality scorecards renderer exists"
+    },
+    {
+      "id": "ops_inbox",
+      "ok": true,
+      "message": "Ops inbox renderer exists"
+    },
+    {
+      "id": "ops_health",
+      "ok": true,
+      "message": "Ops health renderer exists"
+    },
+    {
+      "id": "role_control",
+      "ok": true,
+      "message": "Role control handler exists"
+    },
+    {
+      "id": "approval_gate",
+      "ok": true,
+      "message": "Approval gate handler exists"
+    },
+    {
+      "id": "ops_inbox_ui",
+      "ok": true,
+      "message": "Ops inbox UI container exists"
+    },
+    {
+      "id": "quality_ui",
+      "ok": true,
+      "message": "Quality scorecards UI container exists"
+    },
+    {
+      "id": "health_ui",
+      "ok": true,
+      "message": "Health panel UI container exists"
+    }
+  ]
+}

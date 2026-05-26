@@ -1,0 +1,908 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports â€” Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  GFS Marketplace Browse Page
+  Static HTML prototype for conversion to React/Next.js component.
+
+  Architecture notes for the engineer:
+  - Page route: /marketplace
+  - Component tree: <MarketplacePage> wraps <Header />, <HeroBar />, <SearchBar />, <FilterBar />, <ResultsHeader />, <GameGrid /> with <GameCard /> children, <Pagination />
+  - Data: GET /api/games?sport=&date_range=&sort=&media_type=&event_type=&page=
+  - GameCard click -> navigates to /marketplace/games/[slug]
+  - "Find My Clips" search -> /search?q=[player_or_jersey]&team=[team]
+  - Mock data here represents the SR/SM/Blu Chips/Pylon ecosystem
+-->
+<style>
+:root{
+  --navy:#0a1628;--navy-deep:#050b16;--navy-card:#0e1d33;
+  --magenta:#ec4899;--magenta-light:#f472b6;--magenta-dim:rgba(236,72,153,.18);--magenta-faint:rgba(236,72,153,.06);
+  --blue:#4db8ff;--coral:#ff7849;--gold:#d4a84a;
+  --white:#fff;--muted:rgba(255,255,255,.62);--muted-strong:rgba(255,255,255,.82);
+  --line:rgba(255,255,255,.1);--pill-bg:rgba(255,255,255,.04);--pill-border:rgba(255,255,255,.12);
+  --input-bg:rgba(255,255,255,.04);--input-border:rgba(255,255,255,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--white);background:var(--navy-deep);line-height:1.55;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit}
+
+/* NAV - consistent with landing */
+.nav{position:sticky;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,22,40,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;display:flex;align-items:center;gap:10px}
+.nav-logo span{color:var(--magenta)}
+.nav-logo-mark{width:30px;height:30px;border:2px solid var(--magenta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--magenta);font-size:13px;background:rgba(236,72,153,.08)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-link{font-size:13px;color:var(--muted-strong);letter-spacing:.02em;transition:color .2s}
+.nav-link:hover,.nav-link.active{color:var(--magenta)}
+.nav-link.active{font-weight:500}
+.nav-cta{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.15em;padding:8px 16px;border-radius:6px;text-transform:uppercase;font-weight:700}
+
+/* PAGE HEADER */
+.page-header{padding:60px 48px 40px;background:radial-gradient(ellipse 600px 300px at 30% 0%,rgba(236,72,153,.10),transparent 70%)}
+.page-header-inner{max-width:1280px;margin:0 auto}
+.page-eyebrow{font-size:11px;letter-spacing:.28em;color:var(--magenta);text-transform:uppercase;font-weight:700;margin-bottom:12px;display:inline-block}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:.95;text-transform:uppercase;letter-spacing:-.005em;margin-bottom:14px}
+.page-title .magenta{color:var(--magenta)}
+.page-sub{font-size:16px;color:var(--muted-strong);line-height:1.55;max-width:680px}
+
+/* SEARCH BAR */
+.search-section{padding:0 48px;margin-bottom:32px}
+.search-inner{max-width:1280px;margin:0 auto}
+.search-bar{background:var(--navy-card);border:1px solid var(--input-border);border-radius:14px;padding:12px;display:grid;grid-template-columns:1.5fr 1fr auto;gap:10px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.search-input{background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;padding:14px 18px;color:var(--white);font-size:14px;width:100%;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--magenta)}
+.search-input::placeholder{color:var(--muted)}
+.search-btn{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.16em;padding:14px 28px;border-radius:10px;text-transform:uppercase;font-weight:700;transition:all .2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.search-btn:hover{background:var(--magenta-light)}
+.search-btn .arrow{font-size:16px}
+
+/* FILTER BAR */
+.filter-section{padding:0 48px;margin-bottom:32px}
+.filter-inner{max-width:1280px;margin:0 auto}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.filter-row:last-child{margin-bottom:0}
+.filter-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-right:8px;min-width:60px}
+.filter-pill{background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:30px;padding:7px 14px;font-size:12px;color:var(--muted-strong);transition:all .15s;cursor:pointer;white-space:nowrap}
+.filter-pill:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.filter-pill.active{background:var(--magenta);border-color:var(--magenta);color:var(--navy-deep);font-weight:600}
+
+/* RESULTS HEADER */
+.results-section{padding:0 48px 80px}
+.results-inner{max-width:1280px;margin:0 auto}
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.results-count{font-size:14px;color:var(--muted-strong)}
+.results-count strong{color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.04em;margin-right:6px}
+.view-toggle{display:flex;gap:4px;background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:8px;padding:3px}
+.view-btn{padding:6px 12px;font-size:11px;color:var(--muted);border-radius:5px;letter-spacing:.1em;text-transform:uppercase;font-family:'Bebas Neue',sans-serif}
+.view-btn.active{background:var(--magenta);color:var(--navy-deep);font-weight:700}
+
+/* DASHBOARD ROWS */
+.market-overview{padding:0 48px 34px}
+.market-overview-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.35fr .95fr;gap:16px;align-items:stretch}
+.overview-panel,.spotlight-panel,.insights-panel{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:16px;overflow:hidden}
+.overview-panel{padding:22px 22px 20px;background:linear-gradient(145deg,rgba(14,29,51,.98),rgba(7,16,29,.98));position:relative}
+.overview-panel::before{content:'';position:absolute;inset:-1px;background:radial-gradient(circle at 82% 0%,rgba(236,72,153,.18),transparent 24%),radial-gradient(circle at 100% 100%,rgba(77,184,255,.13),transparent 30%);pointer-events:none}
+.overview-kicker{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;color:var(--magenta);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+.overview-title{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:.92;text-transform:uppercase;letter-spacing:-.01em;position:relative;z-index:1}
+.overview-title .magenta{color:var(--magenta)}
+.overview-copy{margin-top:12px;max-width:700px;color:var(--muted-strong);position:relative;z-index:1}
+.overview-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1}
+.overview-cta{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.15em;padding:10px 16px;border-radius:8px;text-transform:uppercase;font-weight:700}
+.overview-ghost{border:1px solid var(--pill-border);border-radius:8px;padding:10px 16px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;position:relative;z-index:1}
+.stat-card{background:rgba(255,255,255,.03);border:1px solid var(--pill-border);border-radius:12px;padding:14px}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.02em;color:var(--white);line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.spotlight-panel{padding:18px}
+.spotlight-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.spotlight-head h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.03em;text-transform:uppercase}
+.spotlight-pills{display:flex;gap:6px;flex-wrap:wrap}
+.spotlight-pill{background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:999px;padding:7px 12px;font-size:11px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.spotlight-pill.magenta{background:var(--magenta);color:var(--navy-deep);border-color:var(--magenta)}
+.spotlight-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.spot-card{padding:14px;border:1px solid var(--pill-border);border-radius:12px;background:rgba(255,255,255,.03)}
+.spot-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.spot-card-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.03em;text-transform:uppercase}
+.spot-card-meta{font-size:12px;color:var(--muted)}
+.spot-card-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.spot-card-value{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--magenta);line-height:1}
+.insights-panel{padding:18px;margin:0 48px 26px;max-width:1280px;overflow:hidden}
+.insights-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.insight-box{padding:16px;border:1px solid var(--pill-border);border-radius:12px;background:rgba(255,255,255,.03)}
+.insight-title{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.insight-copy{font-size:13px;color:var(--muted-strong);line-height:1.55}
+.insight-copy strong{color:var(--white)}
+.seller-list{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.seller-chip{padding:8px 12px;border-radius:999px;background:var(--pill-bg);border:1px solid var(--pill-border);font-size:12px;color:var(--muted-strong)}
+.seller-chip strong{color:var(--white)}
+
+/* GAME GRID */
+.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.game-card{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:14px;overflow:hidden;transition:all .25s;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.game-card:hover{transform:translateY(-3px);border-color:var(--magenta);box-shadow:0 12px 40px rgba(236,72,153,.15)}
+.game-thumb{aspect-ratio:16/9;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a2c4a,#0e1d33)}
+.game-thumb::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--gx,30%) 40%,rgba(236,72,153,.22) 0%,transparent 55%),radial-gradient(circle at 75% 75%,rgba(77,184,255,.15) 0%,transparent 50%)}
+.game-thumb::after{content:'';position:absolute;left:0;right:0;bottom:0;height:60%;background:linear-gradient(180deg,transparent,rgba(5,11,22,.85))}
+.game-thumb-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px;z-index:1}
+.game-tags{display:flex;gap:6px;flex-wrap:wrap}
+.game-tag{background:rgba(0,0,0,.55);backdrop-filter:blur(6px);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:5px 9px;border-radius:4px;font-family:'Bebas Neue',sans-serif;color:#fff}
+.game-tag.live{background:var(--magenta);color:var(--navy-deep);font-weight:700}
+.game-tag.hot{background:var(--gold);color:var(--navy-deep);font-weight:700}
+.game-tag.sr{background:rgba(77,184,255,.85);color:var(--navy-deep)}
+.game-tag.sm{background:rgba(255,120,73,.85);color:var(--navy-deep)}
+.game-tag.bc{background:rgba(95,217,156,.85);color:var(--navy-deep)}
+.game-clipcount{align-self:flex-end;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);padding:6px 12px;border-radius:6px}
+.game-clipcount strong{color:var(--magenta);font-size:18px;margin-right:4px}
+.game-info{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column}
+.game-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.02em;line-height:1.1;margin-bottom:6px;text-transform:uppercase}
+.game-meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+.game-meta .dot{color:var(--magenta);margin:0 6px}
+.game-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line);margin-top:auto}
+.game-seller{font-size:11px;color:var(--muted)}
+.game-seller strong{color:var(--white);font-weight:600}
+.game-arrow{font-size:18px;color:var(--magenta)}
+
+/* PAGINATION */
+.pagination{margin-top:48px;display:flex;justify-content:center;align-items:center;gap:8px}
+.pg-btn{padding:10px 16px;font-size:13px;border:1px solid var(--pill-border);border-radius:8px;background:var(--pill-bg);color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;letter-spacing:.1em;text-transform:uppercase;transition:all .2s}
+.pg-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+.pg-btn.active{background:var(--magenta);color:var(--navy-deep);border-color:var(--magenta);font-weight:700}
+.pg-btn:disabled{opacity:.4;cursor:not-allowed}
+.pg-info{font-size:12px;color:var(--muted);margin:0 12px}
+
+/* FOOTER */
+footer{background:var(--navy-deep);padding:48px 48px 30px;border-top:1px solid var(--line);margin-top:40px}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.footer-inner .magenta-text{color:var(--magenta)}
+
+@media(max-width:1024px){
+  .market-overview-inner,.insights-inner{grid-template-columns:1fr}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .game-grid{grid-template-columns:repeat(2,1fr)}
+  .page-title{font-size:48px}
+  .search-bar{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .nav{padding:14px 20px}
+  .nav-links{display:none}
+  .page-header,.search-section,.filter-section,.results-section,footer{padding-left:20px;padding-right:20px}
+  .market-overview,.insights-panel{padding-left:20px;padding-right:20px}
+  .page-title{font-size:38px}
+  .game-grid{grid-template-columns:1fr}
+  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .filter-row::-webkit-scrollbar{display:none}
+  .footer-inner{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="Subjectreport.html" class="nav-logo">
+    <span class="nav-logo-mark">G</span>
+    GROUNDFLOOR<span>SPORTS</span>
+  </a>
+  <div class="nav-links">
+    <a href="marketplace.html" class="nav-link active">Marketplace</a>
+    <a href="/athletes" class="nav-link">Athletes</a>
+    <a href="/nft" class="nav-link">NFT Drops</a>
+    <a href="/brands" class="nav-link">For Brands</a>
+    <a href="sign-in.html" class="nav-link">Sign In</a>
+    <a href="/sell" class="nav-cta">List Your Footage</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">The Marketplace</div>
+    <h1 class="page-title">Find your <span class="magenta">game.</span></h1>
+    <p class="page-sub">Browse highlights from every game on the platform. Search by team, school, jersey number, or event. Every clip is listed by the original capture brand - Subject Report, Subject Media, Blu Chips, or approved event circuits.</p>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section class="market-overview">
+  <div class="market-overview-inner">
+    <div class="overview-panel">
+      <div class="overview-kicker">Live marketplace snapshot</div>
+      <div class="overview-title">Built for coaches, parents, and athletes who need <span class="magenta">fast access</span> to the right footage.</div>
+      <p class="overview-copy">This marketplace is designed to convert browsing into clip purchases quickly. Every game card carries seller, date, and clip count details so users can move from discovery to checkout with fewer clicks.</p>
+      <div class="overview-actions">
+        <a href="#results" class="overview-cta">Browse games</a>
+        <a href="template-preview.html" class="overview-ghost">View athlete template</a>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-card">
+          <div class="stat-label">Total Clips</div>
+          <div class="stat-value">4,218</div>
+          <div class="stat-sub">Video + photo assets live</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Games Live</div>
+          <div class="stat-value">96</div>
+          <div class="stat-sub">Across all sellers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Featured Sellers</div>
+          <div class="stat-value">4</div>
+          <div class="stat-sub">Subject Report, Media, Blu Chips, Pylon</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Buy Flow</div>
+          <div class="stat-value">1 Click</div>
+          <div class="stat-sub">Find, preview, purchase</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="spotlight-panel">
+      <div class="spotlight-head">
+        <h2>Featured drops</h2>
+        <div class="spotlight-pills">
+          <span class="spotlight-pill magenta">Hot</span>
+          <span class="spotlight-pill">New</span>
+        </div>
+      </div>
+      <div class="spotlight-grid">
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">Allen vs Plano East</div>
+              <div class="spot-card-meta">Live game coverage Â· Subject Report</div>
+            </div>
+            <div class="spot-card-value">142</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">Instant clip access</span>
+            <span class="game-tag live">Live</span>
+          </div>
+        </div>
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">Blu Chips TX Combine</div>
+              <div class="spot-card-meta">High-volume athlete capture</div>
+            </div>
+            <div class="spot-card-value">342</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">180 athletes</span>
+            <span class="game-tag hot">Hot</span>
+          </div>
+        </div>
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">SR Spring Camp</div>
+              <div class="spot-card-meta">Recruiting-ready camp content</div>
+            </div>
+            <div class="spot-card-value">218</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">110 players tracked</span>
+            <span class="game-tag sr">Subject Report</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="insights-panel">
+  <div class="insights-inner">
+    <div class="insight-box">
+      <div class="insight-title">Search behavior</div>
+      <div class="insight-copy">Players and families search by <strong>jersey number</strong>, <strong>team</strong>, and <strong>school</strong> to find their exact game footage faster.</div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Seller network</div>
+      <div class="insight-copy">The marketplace supports multiple capture brands so the platform can scale with partner events while keeping every listing consistent.</div>
+      <div class="seller-list">
+        <span class="seller-chip"><strong>SR</strong> Subject Report</span>
+        <span class="seller-chip"><strong>SM</strong> Subject Media</span>
+        <span class="seller-chip"><strong>BC</strong> Blu Chips</span>
+        <span class="seller-chip"><strong>PY</strong> Pylon</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Conversion path</div>
+      <div class="insight-copy">The page is organized to move a visitor from <strong>browse</strong> to <strong>game detail</strong> to <strong>checkout</strong> with fewer friction points and a stronger featured-first layout.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<div class="search-section">
+  <div class="search-inner">
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search by jersey number or player name (e.g. #7 or Holloway)" aria-label="Player or jersey search">
+      <input type="text" class="search-input" placeholder="Team or school (e.g. Allen, Westlake)" aria-label="Team search">
+      <button class="search-btn">Find My Clips <span class="arrow">-></span></button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<section class="filter-section">
+  <div class="filter-inner">
+    <div class="filter-row">
+      <span class="filter-label">Sport</span>
+      <button class="filter-pill active">All Sports</button>
+      <button class="filter-pill">Football</button>
+      <button class="filter-pill">7v7</button>
+      <button class="filter-pill">Combines</button>
+      <button class="filter-pill">Camps</button>
+      <button class="filter-pill">Basketball</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Dates</span>
+      <button class="filter-pill active">All Dates</button>
+      <button class="filter-pill">Last 7 Days</button>
+      <button class="filter-pill">Last 30 Days</button>
+      <button class="filter-pill">This Season</button>
+      <button class="filter-pill">Upcoming</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Sort</span>
+      <button class="filter-pill active">Most Recent</button>
+      <button class="filter-pill">Most Clips</button>
+      <button class="filter-pill">Price: Low -> High</button>
+      <button class="filter-pill">Price: High -> Low</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Media</span>
+      <button class="filter-pill active">All Media</button>
+      <button class="filter-pill">Videos Only</button>
+      <button class="filter-pill">Photos Only</button>
+      <button class="filter-pill">NFTs Only</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section" id="results">
+  <div class="results-inner">
+    <div class="results-header">
+      <div class="results-count">
+        <strong>4,218</strong> clips - <strong>312</strong> photos across <strong>96</strong> games
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active">Grid</button>
+        <button class="view-btn">List</button>
+      </div>
+    </div>
+
+    <div class="game-grid">
+
+      <a href="/marketplace/games/2026-10-18-allen-vs-plano-east" class="game-card">
+        <div class="game-thumb" style="--gx:25%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag live">Live</span>
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>142</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Allen vs Plano East</div>
+          <div class="game-meta">Oct 18, 2026<span class="dot">.</span>Friday Night HS<span class="dot">.</span>District 6-6A</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-18-westlake-vs-lake-travis" class="game-card">
+        <div class="game-thumb" style="--gx:55%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag hot">Hot</span>
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>128</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Westlake vs Lake Travis</div>
+          <div class="game-meta">Oct 18, 2026<span class="dot">.</span>Battle of the Lakes</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-17-duncanville-vs-desoto" class="game-card">
+        <div class="game-thumb" style="--gx:40%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>156</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Duncanville vs DeSoto</div>
+          <div class="game-meta">Oct 17, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-12-pylon-7v7-dallas" class="game-card">
+        <div class="game-thumb" style="--gx:60%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag bc">Pylon 7v7</span>
+            </div>
+            <div class="game-clipcount"><strong>284</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Pylon 7v7 . Dallas Spring Series</div>
+          <div class="game-meta">Oct 12, 2026<span class="dot">.</span>National Circuit<span class="dot">.</span>48 Teams</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Pylon 7v7</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-11-north-shore-vs-galena-park" class="game-card">
+        <div class="game-thumb" style="--gx:35%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>119</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">North Shore vs Galena Park</div>
+          <div class="game-meta">Oct 11, 2026<span class="dot">.</span>Houston Area<span class="dot">.</span>21-6A</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-11-aledo-vs-wylie-east" class="game-card">
+        <div class="game-thumb" style="--gx:50%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>87</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Aledo vs Wylie East</div>
+          <div class="game-meta">Oct 11, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-05-blu-chips-tx-combine" class="game-card">
+        <div class="game-thumb" style="--gx:45%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag hot">Hot</span>
+              <span class="game-tag bc">Blu Chips</span>
+            </div>
+            <div class="game-clipcount"><strong>342</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Blu Chips TX Combine . Dallas</div>
+          <div class="game-meta">Oct 5, 2026<span class="dot">.</span>Combine<span class="dot">.</span>180 Athletes</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Blu Chips</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-04-highland-park-vs-mckinney" class="game-card">
+        <div class="game-thumb" style="--gx:55%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>96</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Highland Park vs McKinney</div>
+          <div class="game-meta">Oct 4, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-28-sr-spring-camp-dallas" class="game-card">
+        <div class="game-thumb" style="--gx:30%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>218</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">SR Spring Camp . Dallas</div>
+          <div class="game-meta">Sep 28, 2026<span class="dot">.</span>SR-Hosted Camp<span class="dot">.</span>110 Players</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-27-cedar-hill-vs-mansfield" class="game-card">
+        <div class="game-thumb" style="--gx:45%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>104</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Cedar Hill vs Mansfield Lake Ridge</div>
+          <div class="game-meta">Sep 27, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-21-southlake-carroll-vs-keller" class="game-card">
+        <div class="game-thumb" style="--gx:40%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>134</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Southlake Carroll vs Keller</div>
+          <div class="game-meta">Sep 21, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-20-katy-vs-katy-tompkins" class="game-card">
+        <div class="game-thumb" style="--gx:50%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>78</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Katy vs Katy Tompkins</div>
+          <div class="game-meta">Sep 20, 2026<span class="dot">.</span>Houston District</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+
+    <div class="pagination">
+      <button class="pg-btn" disabled><- Prev</button>
+      <button class="pg-btn active">1</button>
+      <button class="pg-btn">2</button>
+      <button class="pg-btn">3</button>
+      <button class="pg-btn">4</button>
+      <span class="pg-info">of 8</span>
+      <button class="pg-btn">Next -></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>&copy; 2026 GroundfloorSports . <span class="magenta-text">A Subject Ecosystem Brand</span></div>
+    <div>Terms . Privacy . NIL Policy . Help</div>
+  </div>
+</footer>
+
+
+<script>
+  (function () {
+    const searchInputs = Array.from(document.querySelectorAll('.search-input'));
+    const playerInput = searchInputs[0] || null;
+    const teamInput = searchInputs[1] || null;
+    const searchBtn = document.querySelector('.search-btn');
+    const gameGrid = document.querySelector('.game-grid');
+    const resultsCount = document.querySelector('.results-count');
+    const emptyState = document.querySelector('.results-empty');
+    const pagination = document.querySelector('.pagination');
+
+    if (!gameGrid || !resultsCount || !pagination) return;
+
+    const prevBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Prev'));
+    const nextBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Next'));
+    const pageButtons = Array.from(pagination.querySelectorAll('.pg-btn')).filter((btn) => /^\d+$/.test(btn.textContent.trim()));
+    const pageInfo = pagination.querySelector('.pg-info');
+    const cards = Array.from(gameGrid.querySelectorAll('.game-card'));
+    const isFilePreview = window.location.protocol === 'file:';
+    const pageSize = 6;
+    let currentPage = 1;
+
+    cards.forEach((card) => {
+      const name = (card.querySelector('.game-name')?.textContent || '').trim();
+      const meta = (card.querySelector('.game-meta')?.textContent || '').replace(/\s+/g, ' ').trim();
+      const seller = (card.querySelector('.game-seller strong')?.textContent || '').trim();
+      const tags = Array.from(card.querySelectorAll('.game-tag')).map((el) => el.textContent.trim()).join(' ');
+      const clips = Number((card.querySelector('.game-clipcount strong')?.textContent || '0').replace(/[^0-9]/g, '')) || 0;
+      const dateMatch = meta.match(/([A-Za-z]{3}\s+\d{1,2},\s+\d{4})/);
+      const date = dateMatch ? new Date(dateMatch[1]) : new Date('1970-01-01');
+      const source = `${name} ${meta}`.toLowerCase();
+
+      let sport = 'Football';
+      if (source.includes('7v7')) sport = '7v7';
+      if (source.includes('combine')) sport = 'Combines';
+      if (source.includes('camp')) sport = 'Camps';
+
+      card._meta = {
+        text: `${name} ${meta} ${seller} ${tags}`.toLowerCase(),
+        team: name.toLowerCase(),
+        sport,
+        media: 'Videos Only',
+        date,
+        clips,
+      };
+    });
+
+
+    function enableStaticPreviewRouting() {
+      if (!isFilePreview) return;
+
+      const navMap = {
+        '/athletes': 'preview-route.html?path=%2Fathletes',
+        '/nft': 'preview-route.html?path=%2Fnft',
+        '/brands': 'preview-route.html?path=%2Fbrands',
+        '/sell': 'preview-route.html?path=%2Fsell'
+      };
+
+      const logoLink = document.querySelector('.nav-logo');
+      if (logoLink) {
+        logoLink.setAttribute('href', 'Subjectreport.html');
+      }
+
+      document.querySelectorAll('.nav a[href^="/"]').forEach((link) => {
+        const href = link.getAttribute('href') || '';
+        if (navMap[href]) {
+          link.setAttribute('href', navMap[href]);
+        }
+      });
+
+      cards.forEach((card) => {
+        const originalHref = card.getAttribute('href') || '';
+        const slug = originalHref.split('/').filter(Boolean).pop() || '';
+        const name = (card.querySelector('.game-name')?.textContent || '').trim();
+        const meta = (card.querySelector('.game-meta')?.textContent || '').replace(/\s+/g, ' ').trim();
+        const seller = (card.querySelector('.game-seller strong')?.textContent || '').trim();
+        const clips = String(card._meta?.clips || 0);
+
+        const params = new URLSearchParams({
+          slug,
+          title: name,
+          meta,
+          seller,
+          clips
+        });
+
+        card.setAttribute('href', `marketplace-game-preview.html?${params.toString()}`);
+      });
+    }
+    function activeFilter(label) {
+      const row = Array.from(document.querySelectorAll('.filter-row')).find((node) => {
+        return node.querySelector('.filter-label')?.textContent.trim().toLowerCase() === label.toLowerCase();
+      });
+      return row?.querySelector('.filter-pill.active')?.textContent.trim() || '';
+    }
+
+    function isDateMatch(filter, date) {
+      if (!filter || filter === 'All Dates') return true;
+      const now = new Date();
+      const dayMs = 24 * 60 * 60 * 1000;
+      const diff = Math.floor((now.getTime() - date.getTime()) / dayMs);
+      if (filter === 'Last 7 Days') return diff >= 0 && diff <= 7;
+      if (filter === 'Last 30 Days') return diff >= 0 && diff <= 30;
+      if (filter === 'This Season') return date.getFullYear() === now.getFullYear();
+      if (filter === 'Upcoming') return date.getTime() > now.getTime();
+      return true;
+    }
+
+    function applyFilters() {
+      const q = (playerInput?.value || '').trim().toLowerCase();
+      const team = (teamInput?.value || '').trim().toLowerCase();
+      const sport = activeFilter('Sport');
+      const dates = activeFilter('Dates');
+      const sort = activeFilter('Sort');
+      const media = activeFilter('Media');
+
+      let filtered = cards.filter((card) => {
+        const m = card._meta;
+        const searchOk = !q || m.text.includes(q);
+        const teamOk = !team || m.team.includes(team);
+        const sportOk = !sport || sport === 'All Sports' || m.sport === sport;
+        const dateOk = isDateMatch(dates, m.date);
+        const mediaOk = !media || media === 'All Media' || m.media === media;
+        return searchOk && teamOk && sportOk && dateOk && mediaOk;
+      });
+
+      if (sort === 'Most Clips') {
+        filtered = filtered.slice().sort((a, b) => b._meta.clips - a._meta.clips);
+      } else {
+        filtered = filtered.slice().sort((a, b) => b._meta.date - a._meta.date);
+      }
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * pageSize;
+      const visible = new Set(filtered.slice(start, start + pageSize));
+
+      cards.forEach((card) => {
+        card.style.display = visible.has(card) ? '' : 'none';
+      });
+
+      filtered.forEach((card) => gameGrid.appendChild(card));
+
+      const clipTotal = filtered.reduce((sum, card) => sum + card._meta.clips, 0);
+      resultsCount.innerHTML = `<strong>${clipTotal.toLocaleString()}</strong> clips across <strong>${filtered.length}</strong> games`;
+
+      if (emptyState) {
+        emptyState.style.display = filtered.length ? 'none' : 'block';
+      }
+
+      pageButtons.forEach((btn, index) => {
+        const page = index + 1;
+        if (page <= totalPages) {
+          btn.style.display = '';
+          btn.textContent = String(page);
+          btn.classList.toggle('active', page === currentPage);
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+      if (pageInfo) pageInfo.textContent = `of ${totalPages}`;
+    }
+
+    document.querySelectorAll('.filter-row').forEach((row) => {
+      const pills = Array.from(row.querySelectorAll('.filter-pill'));
+      pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          pills.forEach((item) => item.classList.remove('active'));
+          pill.classList.add('active');
+          currentPage = 1;
+          applyFilters();
+        });
+      });
+    });
+
+    [playerInput, teamInput].forEach((input) => {
+      if (!input) return;
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          currentPage = 1;
+          applyFilters();
+        }
+      });
+    });
+
+    if (searchBtn) {
+      searchBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        currentPage = 1;
+        applyFilters();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage -= 1;
+          applyFilters();
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (!nextBtn.disabled) {
+          currentPage += 1;
+          applyFilters();
+        }
+      });
+    }
+
+    pageButtons.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        currentPage = index + 1;
+        applyFilters();
+      });
+    });
+
+    enableStaticPreviewRouting();
+    applyFilters();
+  })();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+`
+
+## Prompt For Claude
+`	ext
+Review this full HTML source (structure + CSS + JS) for the page.
+
+Please evaluate:
+1. UX clarity and conversion flow
+2. Accessibility (semantic structure, keyboard behavior, focus flow, contrast)
+3. CSS maintainability and responsiveness
+4. JavaScript reliability and edge cases
+5. Security/privacy risks (especially for auth/admin pages)
+6. Performance opportunities
+
+Return:
+1. Top 12 improvements ranked by impact
+2. Quick wins under 30 minutes
+3. Medium improvements (1-3 hours)
+4. High-risk refactors to defer
+5. Concrete code-level suggestions for top 3 issues
+`
+"@;
+
+   = @"
+# Marketplace Full Source Review Packet
+
+## Source File
+- marketplace.html
+
+## Full HTML Source
+`html
+

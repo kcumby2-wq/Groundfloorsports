@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-05-23T21:59:17.033Z",
+  "status": "pass",
+  "totals": {
+    "checks": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "label": "marketplace.html exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\marketplace.html"
+    },
+    {
+      "label": "static runtime exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\scripts\\marketplace-static-runtime.js"
+    },
+    {
+      "label": "copy filtered view action present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "static health check action present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "health report export action present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "match reason rendering present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "preset quick link support present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "auto boot health check present",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

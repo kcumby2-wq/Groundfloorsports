@@ -1,0 +1,1822 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports â€” Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  GFS Marketplace Browse Page
+  Static HTML prototype for conversion to React/Next.js component.
+
+  Architecture notes for the engineer:
+  - Page route: /marketplace
+  - Component tree: <MarketplacePage> wraps <Header />, <HeroBar />, <SearchBar />, <FilterBar />, <ResultsHeader />, <GameGrid /> with <GameCard /> children, <Pagination />
+  - Data: GET /api/games?sport=&date_range=&sort=&media_type=&event_type=&page=
+  - GameCard click -> navigates to /marketplace/games/[slug]
+  - "Find My Clips" search -> /search?q=[player_or_jersey]&team=[team]
+  - Mock data here represents the SR/SM/Blu Chips/Rated 7v7 ecosystem
+-->
+<style>
+:root{
+  --navy:#0a1628;--navy-deep:#050b16;--navy-card:#0e1d33;
+  --magenta:#ec4899;--magenta-light:#f472b6;--magenta-dim:rgba(236,72,153,.18);--magenta-faint:rgba(236,72,153,.06);
+  --blue:#4db8ff;--coral:#ff7849;--gold:#d4a84a;
+  --white:#fff;--muted:rgba(255,255,255,.62);--muted-strong:rgba(255,255,255,.82);
+  --line:rgba(255,255,255,.1);--pill-bg:rgba(255,255,255,.04);--pill-border:rgba(255,255,255,.12);
+  --input-bg:rgba(255,255,255,.04);--input-border:rgba(255,255,255,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--white);background:var(--navy-deep);line-height:1.55;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit}
+
+:focus-visible{outline:2px solid var(--magenta-light);outline-offset:2px}
+
+/* NAV - consistent with landing */
+.nav{position:sticky;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,22,40,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;display:flex;align-items:center;gap:10px}
+.nav-logo span{color:var(--magenta)}
+.nav-logo-mark{width:30px;height:30px;border:2px solid var(--magenta);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--magenta);font-size:13px;background:rgba(236,72,153,.08)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-link{font-size:13px;color:var(--muted-strong);letter-spacing:.02em;transition:color .2s}
+.nav-link:hover,.nav-link.active{color:var(--magenta)}
+.nav-link.active{font-weight:500}
+.nav-cta{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.15em;padding:8px 16px;border-radius:6px;text-transform:uppercase;font-weight:700}
+
+/* PAGE HEADER */
+.page-header{padding:60px 48px 40px;background:radial-gradient(ellipse 600px 300px at 30% 0%,rgba(236,72,153,.10),transparent 70%)}
+.page-header-inner{max-width:1280px;margin:0 auto}
+.page-eyebrow{font-size:11px;letter-spacing:.28em;color:var(--magenta);text-transform:uppercase;font-weight:700;margin-bottom:12px;display:inline-block}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:.95;text-transform:uppercase;letter-spacing:-.005em;margin-bottom:14px}
+.page-title .magenta{color:var(--magenta)}
+.page-sub{font-size:16px;color:var(--muted-strong);line-height:1.55;max-width:680px}
+
+/* SEARCH BAR */
+.search-section{padding:0 48px;margin-bottom:32px}
+.search-inner{max-width:1280px;margin:0 auto}
+.search-bar{background:var(--navy-card);border:1px solid var(--input-border);border-radius:14px;padding:12px;display:grid;grid-template-columns:1.5fr 1fr auto;gap:10px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.search-input{background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;padding:14px 18px;color:var(--white);font-size:14px;width:100%;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--magenta)}
+.search-input::placeholder{color:var(--muted)}
+.search-btn{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.16em;padding:14px 28px;border-radius:10px;text-transform:uppercase;font-weight:700;transition:all .2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.search-btn:hover{background:var(--magenta-light)}
+.search-btn .arrow{font-size:16px}
+.search-clear{background:transparent;border:1px solid var(--pill-border);border-radius:10px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.14em;padding:14px 16px;text-transform:uppercase;transition:all .2s}
+.search-clear:hover{border-color:var(--magenta);color:var(--magenta)}
+
+/* FILTER BAR */
+.filter-section{padding:0 48px;margin-bottom:32px}
+.filter-inner{max-width:1280px;margin:0 auto}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.filter-row:last-child{margin-bottom:0}
+.filter-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-right:8px;min-width:60px}
+.filter-pill{background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:30px;padding:7px 14px;font-size:12px;color:var(--muted-strong);transition:all .15s;cursor:pointer;white-space:nowrap}
+.filter-pill:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.filter-pill.active{background:var(--magenta);border-color:var(--magenta);color:var(--navy-deep);font-weight:600}
+.filter-actions{margin-top:12px;display:flex;justify-content:flex-end}
+.filter-reset{border:1px solid var(--pill-border);border-radius:8px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;padding:10px 14px;text-transform:uppercase;transition:all .2s}
+.filter-reset:hover{border-color:var(--magenta);color:var(--magenta)}
+
+/* RESULTS HEADER */
+.results-section{padding:0 48px 80px}
+.results-inner{max-width:1280px;margin:0 auto}
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.results-count{font-size:14px;color:var(--muted-strong)}
+.results-count strong{color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.04em;margin-right:6px}
+.view-toggle{display:flex;gap:4px;background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:8px;padding:3px}
+.view-btn{padding:6px 12px;font-size:11px;color:var(--muted);border-radius:5px;letter-spacing:.1em;text-transform:uppercase;font-family:'Bebas Neue',sans-serif}
+.view-btn.active{background:var(--magenta);color:var(--navy-deep);font-weight:700}
+.active-filters{margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px}
+.active-chip{border:1px solid var(--pill-border);border-radius:999px;padding:5px 10px;font-size:11px;color:var(--muted-strong);letter-spacing:.08em;text-transform:uppercase;background:var(--pill-bg)}
+.results-empty{display:none;margin-top:18px;border:1px dashed var(--pill-border);border-radius:12px;padding:18px;color:var(--muted-strong);text-align:center;background:rgba(255,255,255,.02)}
+
+/* DASHBOARD ROWS */
+.market-overview{padding:0 48px 34px}
+.market-overview-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.35fr .95fr;gap:16px;align-items:stretch}
+.overview-panel,.spotlight-panel,.insights-panel{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:16px;overflow:hidden}
+.overview-panel{padding:22px 22px 20px;background:linear-gradient(145deg,rgba(14,29,51,.98),rgba(7,16,29,.98));position:relative}
+.overview-panel::before{content:'';position:absolute;inset:-1px;background:radial-gradient(circle at 82% 0%,rgba(236,72,153,.18),transparent 24%),radial-gradient(circle at 100% 100%,rgba(77,184,255,.13),transparent 30%);pointer-events:none}
+.overview-kicker{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;color:var(--magenta);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+.overview-title{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:.92;text-transform:uppercase;letter-spacing:-.01em;position:relative;z-index:1}
+.overview-title .magenta{color:var(--magenta)}
+.overview-copy{margin-top:12px;max-width:700px;color:var(--muted-strong);position:relative;z-index:1}
+.overview-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1}
+.overview-cta{background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.15em;padding:10px 16px;border-radius:8px;text-transform:uppercase;font-weight:700}
+.overview-ghost{border:1px solid var(--pill-border);border-radius:8px;padding:10px 16px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;position:relative;z-index:1}
+.stat-card{background:rgba(255,255,255,.03);border:1px solid var(--pill-border);border-radius:12px;padding:14px}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.02em;color:var(--white);line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.spotlight-panel{padding:18px}
+.spotlight-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.spotlight-head h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.03em;text-transform:uppercase}
+.spotlight-pills{display:flex;gap:6px;flex-wrap:wrap}
+.spotlight-pill{background:var(--pill-bg);border:1px solid var(--pill-border);border-radius:999px;padding:7px 12px;font-size:11px;color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.spotlight-pill.magenta{background:var(--magenta);color:var(--navy-deep);border-color:var(--magenta)}
+.spotlight-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.spot-card{padding:14px;border:1px solid var(--pill-border);border-radius:12px;background:rgba(255,255,255,.03)}
+.spot-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.spot-card-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.03em;text-transform:uppercase}
+.spot-card-meta{font-size:12px;color:var(--muted)}
+.spot-card-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.spot-card-value{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--magenta);line-height:1}
+.insights-panel{padding:18px;margin:0 48px 26px;max-width:1280px;overflow:hidden}
+.insights-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.insight-box{padding:16px;border:1px solid var(--pill-border);border-radius:12px;background:rgba(255,255,255,.03)}
+.insight-title{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.insight-copy{font-size:13px;color:var(--muted-strong);line-height:1.55}
+.insight-copy strong{color:var(--white)}
+.seller-list{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.seller-chip{padding:8px 12px;border-radius:999px;background:var(--pill-bg);border:1px solid var(--pill-border);font-size:12px;color:var(--muted-strong)}
+.seller-chip strong{color:var(--white)}
+
+/* GAME GRID */
+.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.game-card{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:14px;overflow:hidden;transition:all .25s;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.game-card:hover{transform:translateY(-3px);border-color:var(--magenta);box-shadow:0 12px 40px rgba(236,72,153,.15)}
+.game-thumb{aspect-ratio:16/9;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a2c4a,#0e1d33)}
+.game-thumb::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--gx,30%) 40%,rgba(236,72,153,.22) 0%,transparent 55%),radial-gradient(circle at 75% 75%,rgba(77,184,255,.15) 0%,transparent 50%)}
+.game-thumb::after{content:'';position:absolute;left:0;right:0;bottom:0;height:60%;background:linear-gradient(180deg,transparent,rgba(5,11,22,.85))}
+.game-thumb-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px;z-index:1}
+.game-tags{display:flex;gap:6px;flex-wrap:wrap}
+.game-tag{background:rgba(0,0,0,.55);backdrop-filter:blur(6px);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:5px 9px;border-radius:4px;font-family:'Bebas Neue',sans-serif;color:#fff}
+.game-tag.live{background:var(--magenta);color:var(--navy-deep);font-weight:700}
+.game-tag.hot{background:var(--gold);color:var(--navy-deep);font-weight:700}
+.game-tag.sr{background:rgba(77,184,255,.85);color:var(--navy-deep)}
+.game-tag.sm{background:rgba(255,120,73,.85);color:var(--navy-deep)}
+.game-tag.bc{background:rgba(95,217,156,.85);color:var(--navy-deep)}
+.game-clipcount{align-self:flex-end;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);padding:6px 12px;border-radius:6px}
+.game-clipcount strong{color:var(--magenta);font-size:18px;margin-right:4px}
+.game-info{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column}
+.game-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.02em;line-height:1.1;margin-bottom:6px;text-transform:uppercase}
+.game-meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+.game-meta .dot{color:var(--magenta);margin:0 6px}
+.game-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line);margin-top:auto}
+.game-seller{font-size:11px;color:var(--muted)}
+.game-seller strong{color:var(--white);font-weight:600}
+.game-arrow{font-size:18px;color:var(--magenta)}
+
+/* PAGINATION */
+.pagination{margin-top:48px;display:flex;justify-content:center;align-items:center;gap:8px}
+.pg-btn{padding:10px 16px;font-size:13px;border:1px solid var(--pill-border);border-radius:8px;background:var(--pill-bg);color:var(--muted-strong);font-family:'Bebas Neue',sans-serif;letter-spacing:.1em;text-transform:uppercase;transition:all .2s}
+.pg-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+.pg-btn.active{background:var(--magenta);color:var(--navy-deep);border-color:var(--magenta);font-weight:700}
+.pg-btn:disabled{opacity:.4;cursor:not-allowed}
+.pg-info{font-size:12px;color:var(--muted);margin:0 12px}
+
+/* FOOTER */
+footer{background:var(--navy-deep);padding:48px 48px 30px;border-top:1px solid var(--line);margin-top:40px}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.footer-inner .magenta-text{color:var(--magenta)}
+
+@media(max-width:1024px){
+  .market-overview-inner,.insights-inner{grid-template-columns:1fr}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .game-grid{grid-template-columns:repeat(2,1fr)}
+  .page-title{font-size:48px}
+  .search-bar{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .nav{padding:14px 20px}
+  .nav-links{display:none}
+  .page-header,.search-section,.filter-section,.results-section,footer{padding-left:20px;padding-right:20px}
+  .market-overview,.insights-panel{padding-left:20px;padding-right:20px}
+  .page-title{font-size:38px}
+  .game-grid{grid-template-columns:1fr}
+  .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .filter-row::-webkit-scrollbar{display:none}
+  .footer-inner{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="https://groundfloorsports.com/marketplace" class="nav-logo">
+    <span class="nav-logo-mark">G</span>
+    GROUNDFLOOR<span>SPORTS</span>
+  </a>
+  <div class="nav-links">
+    <a href="https://groundfloorsports.com/marketplace" class="nav-link active">Marketplace</a>
+    <a href="https://groundfloorsports.com/athletes" class="nav-link">Athletes</a>
+    <a href="https://groundfloorsports.com/nft" class="nav-link">NFT Drops</a>
+    <a href="https://groundfloorsports.com/brands" class="nav-link">For Brands</a>
+    <a href="https://groundfloorsports.com/sign-in" class="nav-link">Sign In</a>
+    <a href="https://groundfloorsports.com/sell" class="nav-cta">List Your Footage</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">The Marketplace</div>
+    <h1 class="page-title">Find your <span class="magenta">game.</span></h1>
+    <p class="page-sub">Browse highlights from every game on the platform. Search by team, school, jersey number, or event. Every clip is listed by the original capture brand - Subject Report, Subject Media, Blu Chips, or approved event circuits.</p>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section class="market-overview">
+  <div class="market-overview-inner">
+    <div class="overview-panel">
+      <div class="overview-kicker">Live marketplace snapshot</div>
+      <div class="overview-title">Built for coaches, parents, and athletes who need <span class="magenta">fast access</span> to the right footage.</div>
+      <p class="overview-copy">This marketplace is designed to convert browsing into clip purchases quickly. Every game card carries seller, date, and clip count details so users can move from discovery to checkout with fewer clicks.</p>
+      <div class="overview-actions">
+        <a href="#results" class="overview-cta">Browse games</a>
+        <a href="template-preview.html" class="overview-ghost">View athlete template</a>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-card">
+          <div class="stat-label">Total Clips</div>
+          <div class="stat-value">4,218</div>
+          <div class="stat-sub">Video + photo assets live</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Games Live</div>
+          <div class="stat-value">96</div>
+          <div class="stat-sub">Across all sellers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Featured Sellers</div>
+          <div class="stat-value">4</div>
+          <div class="stat-sub">Subject Report, Media, Blu Chips, Rated 7v7</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Buy Flow</div>
+          <div class="stat-value">1 Click</div>
+          <div class="stat-sub">Find, preview, purchase</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="spotlight-panel">
+      <div class="spotlight-head">
+        <h2>Featured drops</h2>
+        <div class="spotlight-pills">
+          <span class="spotlight-pill magenta">Hot</span>
+          <span class="spotlight-pill">New</span>
+        </div>
+      </div>
+      <div class="spotlight-grid">
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">Allen vs Plano East</div>
+              <div class="spot-card-meta">Live game coverage Â· Subject Report</div>
+            </div>
+            <div class="spot-card-value">142</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">Instant clip access</span>
+            <span class="game-tag live">Live</span>
+          </div>
+        </div>
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">Blu Chips TX Combine</div>
+              <div class="spot-card-meta">High-volume athlete capture</div>
+            </div>
+            <div class="spot-card-value">342</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">180 athletes</span>
+            <span class="game-tag hot">Hot</span>
+          </div>
+        </div>
+        <div class="spot-card">
+          <div class="spot-card-top">
+            <div>
+              <div class="spot-card-title">SR Spring Camp</div>
+              <div class="spot-card-meta">Recruiting-ready camp content</div>
+            </div>
+            <div class="spot-card-value">218</div>
+          </div>
+          <div class="spot-card-row">
+            <span class="spot-card-meta">110 players tracked</span>
+            <span class="game-tag sr">Subject Report</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="insights-panel">
+  <div class="insights-inner">
+    <div class="insight-box">
+      <div class="insight-title">Search behavior</div>
+      <div class="insight-copy">Players and families search by <strong>jersey number</strong>, <strong>team</strong>, and <strong>school</strong> to find their exact game footage faster.</div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Seller network</div>
+      <div class="insight-copy">The marketplace supports multiple capture brands so the platform can scale with partner events while keeping every listing consistent.</div>
+      <div class="seller-list">
+        <span class="seller-chip"><strong>SR</strong> Subject Report</span>
+        <span class="seller-chip"><strong>SM</strong> Subject Media</span>
+        <span class="seller-chip"><strong>BC</strong> Blu Chips</span>
+        <span class="seller-chip"><strong>R7</strong> Rated 7v7</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">Conversion path</div>
+      <div class="insight-copy">The page is organized to move a visitor from <strong>browse</strong> to <strong>game detail</strong> to <strong>checkout</strong> with fewer friction points and a stronger featured-first layout.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<div class="search-section">
+  <div class="search-inner">
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search by jersey number or player name (e.g. #7 or Holloway)" aria-label="Player or jersey search">
+      <input type="text" class="search-input" placeholder="Team or school (e.g. Allen, Westlake)" aria-label="Team search">
+      <button class="search-btn" type="button">Find My Clips <span class="arrow">-></span></button>
+  <button class="search-clear" type="button">Clear Search</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<section class="filter-section">
+  <div class="filter-inner">
+    <div class="filter-row">
+      <span class="filter-label">Sport</span>
+      <button class="filter-pill active">All Sports</button>
+      <button class="filter-pill">Football</button>
+      <button class="filter-pill">7v7</button>
+      <button class="filter-pill">Combines</button>
+      <button class="filter-pill">Camps</button>
+      <button class="filter-pill">Basketball</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Dates</span>
+      <button class="filter-pill active">All Dates</button>
+      <button class="filter-pill">Last 7 Days</button>
+      <button class="filter-pill">Last 30 Days</button>
+      <button class="filter-pill">This Season</button>
+      <button class="filter-pill">Upcoming</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Sort</span>
+      <button class="filter-pill active">Most Recent</button>
+      <button class="filter-pill">Most Clips</button>
+      <button class="filter-pill">Price: Low -> High</button>
+      <button class="filter-pill">Price: High -> Low</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Media</span>
+      <button class="filter-pill active">All Media</button>
+      <button class="filter-pill">Videos Only</button>
+      <button class="filter-pill">Photos Only</button>
+      <button class="filter-pill">NFTs Only</button>
+    </div>
+    <div class="filter-actions">
+      <button class="filter-reset" type="button" id="clearAllFilters">Clear All Filters</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section" id="results">
+  <div class="results-inner">
+    <div class="results-header">
+      <div class="results-count" id="resultsCount" aria-live="polite">
+        <strong>4,218</strong> clips - <strong>312</strong> photos across <strong>96</strong> games
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" type="button">Grid</button>
+        <button class="view-btn" type="button">List</button>
+      </div>
+    </div>
+  <div class="active-filters" id="activeFilters" aria-live="polite"></div>
+
+  <div class="game-grid">
+
+      <a href="/marketplace/games/2026-10-18-allen-vs-plano-east" class="game-card">
+        <div class="game-thumb" style="--gx:25%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag live">Live</span>
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>142</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Allen vs Plano East</div>
+          <div class="game-meta">Oct 18, 2026<span class="dot">.</span>Friday Night HS<span class="dot">.</span>District 6-6A</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-18-westlake-vs-lake-travis" class="game-card">
+        <div class="game-thumb" style="--gx:55%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag hot">Hot</span>
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>128</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Westlake vs Lake Travis</div>
+          <div class="game-meta">Oct 18, 2026<span class="dot">.</span>Battle of the Lakes</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-17-duncanville-vs-desoto" class="game-card">
+        <div class="game-thumb" style="--gx:40%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>156</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Duncanville vs DeSoto</div>
+          <div class="game-meta">Oct 17, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-12-pylon-7v7-dallas" class="game-card">
+        <div class="game-thumb" style="--gx:60%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag bc">Rated 7v7</span>
+            </div>
+            <div class="game-clipcount"><strong>284</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Rated 7v7 . Dallas Spring Series</div>
+          <div class="game-meta">Oct 12, 2026<span class="dot">.</span>National Circuit<span class="dot">.</span>48 Teams</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Rated 7v7</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-11-north-shore-vs-galena-park" class="game-card">
+        <div class="game-thumb" style="--gx:35%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>119</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">North Shore vs Galena Park</div>
+          <div class="game-meta">Oct 11, 2026<span class="dot">.</span>Houston Area<span class="dot">.</span>21-6A</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-11-aledo-vs-wylie-east" class="game-card">
+        <div class="game-thumb" style="--gx:50%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>87</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Aledo vs Wylie East</div>
+          <div class="game-meta">Oct 11, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-05-blu-chips-tx-combine" class="game-card">
+        <div class="game-thumb" style="--gx:45%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag hot">Hot</span>
+              <span class="game-tag bc">Blu Chips</span>
+            </div>
+            <div class="game-clipcount"><strong>342</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Blu Chips TX Combine . Dallas</div>
+          <div class="game-meta">Oct 5, 2026<span class="dot">.</span>Combine<span class="dot">.</span>180 Athletes</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Blu Chips</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-10-04-highland-park-vs-mckinney" class="game-card">
+        <div class="game-thumb" style="--gx:55%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>96</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Highland Park vs McKinney</div>
+          <div class="game-meta">Oct 4, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-28-sr-spring-camp-dallas" class="game-card">
+        <div class="game-thumb" style="--gx:30%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>218</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">SR Spring Camp . Dallas</div>
+          <div class="game-meta">Sep 28, 2026<span class="dot">.</span>SR-Hosted Camp<span class="dot">.</span>110 Players</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-27-cedar-hill-vs-mansfield" class="game-card">
+        <div class="game-thumb" style="--gx:45%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>104</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Cedar Hill vs Mansfield Lake Ridge</div>
+          <div class="game-meta">Sep 27, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-21-southlake-carroll-vs-keller" class="game-card">
+        <div class="game-thumb" style="--gx:40%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sr">Subject Report</span>
+            </div>
+            <div class="game-clipcount"><strong>134</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Southlake Carroll vs Keller</div>
+          <div class="game-meta">Sep 21, 2026<span class="dot">.</span>Friday Night HS</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Report</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/marketplace/games/2026-09-20-katy-vs-katy-tompkins" class="game-card">
+        <div class="game-thumb" style="--gx:50%">
+          <div class="game-thumb-content">
+            <div class="game-tags">
+              <span class="game-tag sm">Subject Media</span>
+            </div>
+            <div class="game-clipcount"><strong>78</strong>clips</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Katy vs Katy Tompkins</div>
+          <div class="game-meta">Sep 20, 2026<span class="dot">.</span>Houston District</div>
+          <div class="game-bottom">
+            <div class="game-seller">listed by <strong>Subject Media</strong></div>
+            <span class="game-arrow">-></span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  <div class="results-empty" id="resultsEmpty">No clips matched your filters. Try clearing filters or broadening your search.</div>
+
+  <div class="pagination">
+      <button class="pg-btn" disabled><- Prev</button>
+      <button class="pg-btn active">1</button>
+      <button class="pg-btn">2</button>
+      <button class="pg-btn">3</button>
+      <button class="pg-btn">4</button>
+      <span class="pg-info">of 8</span>
+      <button class="pg-btn">Next -></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>&copy; 2026 GroundfloorSports . <span class="magenta-text">A Subject Ecosystem Brand</span></div>
+    <div>Terms . Privacy . NIL Policy . Help</div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+    const searchInputs = Array.from(document.querySelectorAll('.search-input'));
+    const playerInput = searchInputs[0] || null;
+    const teamInput = searchInputs[1] || null;
+    const searchBtn = document.querySelector('.search-btn');
+    const clearSearchBtn = document.querySelector('.search-clear');
+    const clearAllFiltersBtn = document.getElementById('clearAllFilters');
+    const gameGrid = document.querySelector('.game-grid');
+    const resultsCount = document.getElementById('resultsCount') || document.querySelector('.results-count');
+    const emptyState = document.getElementById('resultsEmpty') || document.querySelector('.results-empty');
+    const activeFilters = document.getElementById('activeFilters');
+    const pagination = document.querySelector('.pagination');
+    const filterSection = document.querySelector('.filter-section');
+    const searchBar = document.querySelector('.search-bar');
+    const filterActions = document.querySelector('.filter-actions');
+
+    if (!gameGrid || !resultsCount || !pagination) return;
+
+    const filterRows = Array.from(document.querySelectorAll('.filter-row'));
+    const prevBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Prev'));
+    const nextBtn = Array.from(pagination.querySelectorAll('.pg-btn')).find((btn) => btn.textContent.includes('Next'));
+    const pageButtons = Array.from(pagination.querySelectorAll('.pg-btn')).filter((btn) => /^\d+$/.test(btn.textContent.trim()));
+    const pageInfo = pagination.querySelector('.pg-info');
+    const cards = Array.from(gameGrid.querySelectorAll('.game-card'));
+    const pageSize = 6;
+    let currentPage = 1;
+    let loadingTimer = null;
+    const STORAGE_KEY = 'sr_event_queue';
+    const TRACKING_SOURCE = 'gfs_marketplace_static';
+    const RECENT_SEARCHES_KEY = 'gfs_marketplace_recent_searches';
+    const SAVED_FILTERS_KEY = 'gfs_marketplace_saved_filters';
+    const FILTER_PRESETS_KEY = 'gfs_marketplace_filter_presets';
+    const HEALTH_REPORT_KEY = 'gfs_marketplace_static_health_report';
+    const FUNNEL_SESSION_KEY = 'gfs_marketplace_funnel_session_id';
+
+    function injectEnhancementStyles() {
+      if (document.getElementById('marketplaceQuickWinStyles')) return;
+      const style = document.createElement('style');
+      style.id = 'marketplaceQuickWinStyles';
+      style.textContent = `
+        .search-recent{width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;padding:12px 14px;color:var(--muted-strong)}
+        .search-recent option{color:#111}
+        .filter-extra-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+        .filter-extra-btn{border:1px solid var(--pill-border);border-radius:8px;padding:10px 12px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-strong)}
+        .filter-extra-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+        .filter-extra-btn-danger{border-color:rgba(239,68,68,.45);color:#fecaca}
+        .filter-extra-btn-danger:hover{border-color:rgba(239,68,68,.8);color:#fee2e2}
+        .saved-preset-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+        .health-status{margin-top:8px;border:1px solid var(--pill-border);border-radius:10px;padding:8px 10px;background:rgba(255,255,255,.02);font-size:11px;letter-spacing:.04em;color:var(--muted-strong)}
+        .health-status strong{color:var(--white)}
+        .health-status.pass{border-color:rgba(74,222,128,.45);color:#86efac}
+        .health-status.fail{border-color:rgba(239,68,68,.45);color:#fca5a5}
+        .game-match-reasons{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+        .game-match-reason{border:1px solid rgba(236,72,153,.45);background:rgba(236,72,153,.08);color:var(--magenta-light);padding:4px 8px;border-radius:999px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+        .results-empty-title{display:block;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:6px;color:var(--white)}
+        .results-empty-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+        .results-empty-btn{border:1px solid var(--pill-border);border-radius:999px;padding:8px 12px;font-size:12px;letter-spacing:.06em;color:var(--muted-strong);background:var(--pill-bg)}
+        .results-empty-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+        .game-grid.is-loading .game-card{pointer-events:none}
+        .game-grid.is-loading .game-thumb-content,.game-grid.is-loading .game-name,.game-grid.is-loading .game-meta,.game-grid.is-loading .game-seller,.game-grid.is-loading .game-tag,.game-grid.is-loading .game-clipcount{color:transparent!important;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.18),rgba(255,255,255,.08));background-size:220% 100%;border-radius:8px;animation:marketplaceShimmer 1.1s infinite}
+        .game-grid.is-loading .game-tag{border-color:transparent}
+        @keyframes marketplaceShimmer{0%{background-position:220% 0}100%{background-position:-220% 0}}
+        .mobile-action-bar{position:fixed;left:12px;right:12px;bottom:12px;z-index:140;display:none;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(10,22,40,.96);backdrop-filter:blur(12px)}
+        .mobile-action-btn{border:1px solid var(--pill-border);border-radius:10px;padding:10px 8px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-strong);text-align:center}
+        .mobile-action-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+        @media (max-width:640px){
+          .mobile-action-bar{display:grid}
+          .results-section{padding-bottom:96px}
+          .search-bar{grid-template-columns:1fr}
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    function canFlushRemotely() {
+      return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+    }
+
+    function readQueue() {
+      try {
+        const queue = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return Array.isArray(queue) ? queue : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function writeQueue(queue) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(queue.slice(-250)));
+      } catch {
+      }
+    }
+
+    function trackEvent(eventName, detail) {
+      const funnelSessionId = getFunnelSessionId();
+      const payload = {
+        event: eventName,
+        detail: Object.assign({}, detail || {}, { funnelSessionId }),
+        source: TRACKING_SOURCE,
+        page: window.location.pathname,
+        timestamp: Date.now(),
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(payload);
+      const queue = readQueue();
+      queue.push(payload);
+      writeQueue(queue);
+    }
+
+    function getFunnelSessionId() {
+      try {
+        const existing = localStorage.getItem(FUNNEL_SESSION_KEY);
+        if (existing) return existing;
+        const nextId = 'funnel_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+        localStorage.setItem(FUNNEL_SESSION_KEY, nextId);
+        return nextId;
+      } catch {
+        return '';
+      }
+    }
+
+    function safeRead(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return parsed ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function safeWrite(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch {
+      }
+    }
+
+    function activeFilter(label) {
+      const row = filterRows.find((node) => {
+        const text = node.querySelector('.filter-label')?.textContent || '';
+        return text.trim().toLowerCase() === label.toLowerCase();
+      });
+      return row?.querySelector('.filter-pill.active')?.textContent.trim() || '';
+    }
+
+    function currentFilters() {
+      return {
+        q: (playerInput?.value || '').trim(),
+        team: (teamInput?.value || '').trim(),
+        sport: activeFilter('Sport') || 'All Sports',
+        dates: activeFilter('Dates') || 'All Dates',
+        sort: activeFilter('Sort') || 'Most Recent',
+        media: activeFilter('Media') || 'All Media',
+      };
+    }
+
+    function setActiveFilter(label, value) {
+      const row = filterRows.find((node) => {
+        const text = node.querySelector('.filter-label')?.textContent || '';
+        return text.trim().toLowerCase() === label.toLowerCase();
+      });
+      if (!row) return;
+      const pills = Array.from(row.querySelectorAll('.filter-pill'));
+      let matched = false;
+      pills.forEach((pill) => {
+        const isMatch = pill.textContent.trim() === value;
+        if (isMatch) matched = true;
+        pill.classList.toggle('active', isMatch);
+        pill.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+      });
+      if (!matched && pills[0]) {
+        pills.forEach((pill, index) => {
+          pill.classList.toggle('active', index === 0);
+          pill.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+        });
+      }
+    }
+
+    function saveRecentSearch() {
+      const q = (playerInput?.value || '').trim();
+      const team = (teamInput?.value || '').trim();
+      if (!q && !team) return;
+      let rows = safeRead(RECENT_SEARCHES_KEY, []);
+      rows = rows.filter((item) => item.q !== q || item.team !== team);
+      rows.unshift({ q, team, at: Date.now() });
+      safeWrite(RECENT_SEARCHES_KEY, rows.slice(0, 6));
+      updateRecentSearchesSelect();
+    }
+
+    function updateRecentSearchesSelect() {
+      const select = document.getElementById('recentSearches');
+      if (!select) return;
+      const rows = safeRead(RECENT_SEARCHES_KEY, []);
+      select.innerHTML = '<option value="">Recent searches</option>' + rows.map((row) => {
+        const value = encodeURIComponent(row.q || '') + '||' + encodeURIComponent(row.team || '');
+        const label = [row.q || '', row.team || ''].filter(Boolean).join(' • ') || 'Empty search';
+        return '<option value="' + value + '">' + label + '</option>';
+      }).join('');
+    }
+
+    function saveCurrentFilters() {
+      const nameInput = window.prompt('Save preset name', 'Preset ' + ((readPresetCollection().length || 0) + 1));
+      const presetName = String(nameInput || '').trim();
+      if (!presetName) return;
+
+      const filters = currentFilters();
+      const nextPreset = {
+        id: 'preset-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+        name: presetName,
+        filters,
+        createdAt: Date.now(),
+      };
+
+      const presets = readPresetCollection().filter((item) => item.name.toLowerCase() !== presetName.toLowerCase());
+      const nextPresets = [nextPreset].concat(presets).slice(0, 12);
+
+      safeWrite(SAVED_FILTERS_KEY, filters);
+      safeWrite(FILTER_PRESETS_KEY, nextPresets);
+      renderPresetControls(nextPreset.id);
+      trackEvent('marketplace_filter_preset_saved', { name: presetName, totalPresets: nextPresets.length });
+    }
+
+    function renamePreset(presetId) {
+      const presets = readPresetCollection();
+      const preset = presets.find((item) => item.id === presetId) || presets[0];
+      if (!preset) return;
+
+      const nextNameInput = window.prompt('Rename preset', preset.name);
+      const nextName = String(nextNameInput || '').trim();
+      if (!nextName || nextName === preset.name) return;
+
+      const nextPresets = presets.map((item) => {
+        if (item.id !== preset.id) return item;
+        return Object.assign({}, item, { name: nextName });
+      });
+
+      safeWrite(FILTER_PRESETS_KEY, nextPresets);
+      renderPresetControls(preset.id);
+      trackEvent('marketplace_filter_preset_renamed', { previous: preset.name, next: nextName });
+    }
+
+    function deletePreset(presetId) {
+      const presets = readPresetCollection();
+      const preset = presets.find((item) => item.id === presetId) || presets[0];
+      if (!preset) return;
+
+      const confirmed = window.confirm('Delete preset "' + preset.name + '"?');
+      if (!confirmed) return;
+
+      const nextPresets = presets.filter((item) => item.id !== preset.id);
+      safeWrite(FILTER_PRESETS_KEY, nextPresets);
+      renderPresetControls(nextPresets[0] ? nextPresets[0].id : '');
+      trackEvent('marketplace_filter_preset_deleted', { name: preset.name, remaining: nextPresets.length });
+    }
+
+    function normalizePresetCollection(raw) {
+      if (Array.isArray(raw)) {
+        return raw
+          .map((item, idx) => ({
+            id: String(item && item.id ? item.id : 'preset-' + idx),
+            name: String(item && item.name ? item.name : 'Preset ' + (idx + 1)),
+            filters: Object.assign({
+              sport: 'All Sports',
+              dates: 'All Dates',
+              sort: 'Most Recent',
+              media: 'All Media',
+              q: '',
+              team: '',
+            }, item && item.filters ? item.filters : {}),
+            createdAt: Number(item && item.createdAt ? item.createdAt : Date.now()),
+          }))
+          .filter((item) => item.name.trim());
+      }
+
+      if (raw && typeof raw === 'object') {
+        return [{
+          id: 'preset-legacy-' + Date.now(),
+          name: 'Saved Filters',
+          filters: Object.assign({
+            sport: 'All Sports',
+            dates: 'All Dates',
+            sort: 'Most Recent',
+            media: 'All Media',
+            q: '',
+            team: '',
+          }, raw),
+          createdAt: Date.now(),
+        }];
+      }
+
+      return [];
+    }
+
+    function readPresetCollection() {
+      let presets = normalizePresetCollection(safeRead(FILTER_PRESETS_KEY, []));
+      if (!presets.length) {
+        const legacy = safeRead(SAVED_FILTERS_KEY, null);
+        if (legacy) {
+          presets = normalizePresetCollection(legacy);
+          safeWrite(FILTER_PRESETS_KEY, presets);
+        }
+      }
+      return presets;
+    }
+
+    function buildQueryFromFilters(filters) {
+      const params = new URLSearchParams();
+      if (filters.q) params.set('q', filters.q);
+      if (filters.team) params.set('team', filters.team);
+      if (filters.sport && filters.sport !== 'All Sports') params.set('sport', filters.sport);
+      if (filters.dates && filters.dates !== 'All Dates') params.set('date_range', filters.dates);
+      if (filters.sort && filters.sort !== 'Most Recent') params.set('sort', filters.sort);
+      if (filters.media && filters.media !== 'All Media') params.set('media_type', filters.media);
+      return params;
+    }
+
+    function applySavedFilters(presetId) {
+      const presets = readPresetCollection();
+      const selected = presets.find((item) => item.id === presetId) || presets[0] || null;
+      const saved = selected ? selected.filters : safeRead(SAVED_FILTERS_KEY, null);
+      if (!saved) return;
+
+      if (playerInput) playerInput.value = saved.q || '';
+      if (teamInput) teamInput.value = saved.team || '';
+      setActiveFilter('Sport', saved.sport || 'All Sports');
+      setActiveFilter('Dates', saved.dates || 'All Dates');
+      setActiveFilter('Sort', saved.sort || 'Most Recent');
+      setActiveFilter('Media', saved.media || 'All Media');
+      currentPage = 1;
+      queueApply();
+      trackEvent('marketplace_filter_preset_applied', { name: selected ? selected.name : 'Saved Filters' });
+    }
+
+    function copyPresetQuickLink(presetId) {
+      const preset = readPresetCollection().find((item) => item.id === presetId);
+      if (!preset) return;
+      const query = buildQueryFromFilters(preset.filters).toString();
+      const url = window.location.href.split('?')[0] + (query ? '?' + query : '');
+
+      const onSuccess = () => trackEvent('marketplace_filter_preset_link_copy', { presetName: preset.name, hasQuery: Boolean(query) });
+      const onFailure = () => alert('Unable to copy preset quick link in this browser context.');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(onSuccess).catch(onFailure);
+        return;
+      }
+
+      const helper = document.createElement('textarea');
+      helper.value = url;
+      document.body.appendChild(helper);
+      helper.select();
+      try {
+        const copied = document.execCommand('copy');
+        if (copied) onSuccess();
+        else onFailure();
+      } catch {
+        onFailure();
+      } finally {
+        helper.remove();
+      }
+    }
+
+    function copyPresetPayload(presetId) {
+      const preset = readPresetCollection().find((item) => item.id === presetId);
+      if (!preset) return;
+
+      const payload = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        preset,
+      };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+      const sharePayload = 'gfs-preset://' + encoded;
+
+      const onSuccess = () => trackEvent('marketplace_filter_preset_payload_copy', { presetName: preset.name });
+      const onFailure = () => alert('Unable to copy preset payload in this browser context.');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(sharePayload).then(onSuccess).catch(onFailure);
+        return;
+      }
+
+      const helper = document.createElement('textarea');
+      helper.value = sharePayload;
+      document.body.appendChild(helper);
+      helper.select();
+      try {
+        const copied = document.execCommand('copy');
+        if (copied) onSuccess();
+        else onFailure();
+      } catch {
+        onFailure();
+      } finally {
+        helper.remove();
+      }
+    }
+
+    function importPresetPayload() {
+      const payloadInput = window.prompt('Paste preset payload (gfs-preset://...)');
+      const raw = String(payloadInput || '').trim();
+      if (!raw) return;
+
+      try {
+        const encoded = raw.indexOf('gfs-preset://') === 0 ? raw.slice('gfs-preset://'.length) : raw;
+        const decoded = decodeURIComponent(escape(atob(encoded)));
+        const parsed = JSON.parse(decoded);
+        const importedRaw = parsed && parsed.preset ? [parsed.preset] : [];
+        const imported = normalizePresetCollection(importedRaw);
+        if (!imported.length) {
+          throw new Error('No preset payload');
+        }
+
+        const merged = imported.concat(readPresetCollection())
+          .filter((item, idx, arr) => arr.findIndex((candidate) => candidate.name.toLowerCase() === item.name.toLowerCase()) === idx)
+          .slice(0, 12);
+
+        safeWrite(FILTER_PRESETS_KEY, merged);
+        renderPresetControls(merged[0] ? merged[0].id : '');
+        trackEvent('marketplace_filter_preset_payload_import', { imported: imported.length });
+      } catch {
+        alert('Unable to import preset payload.');
+      }
+    }
+
+    function exportPresetCollection() {
+      const presets = readPresetCollection();
+      if (!presets.length) return;
+
+      const payload = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        presets,
+      };
+
+      downloadJsonFile('gfs-marketplace-presets.json', payload);
+      trackEvent('marketplace_filter_preset_export', { count: presets.length });
+    }
+
+    function importPresetCollection(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '{}'));
+          const importedRaw = Array.isArray(parsed && parsed.presets) ? parsed.presets : (parsed && parsed.preset ? [parsed.preset] : []);
+          const imported = normalizePresetCollection(importedRaw).slice(0, 12);
+          if (!imported.length) {
+            throw new Error('No presets found in file.');
+          }
+
+          const merged = imported.concat(readPresetCollection())
+            .filter((item, idx, arr) => arr.findIndex((candidate) => candidate.name.toLowerCase() === item.name.toLowerCase()) === idx)
+            .slice(0, 12);
+
+          safeWrite(FILTER_PRESETS_KEY, merged);
+          renderPresetControls(merged[0] ? merged[0].id : '');
+          trackEvent('marketplace_filter_preset_import', { imported: imported.length, merged: merged.length });
+        } catch {
+          alert('Unable to import presets from this file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function renderPresetControls(selectedId) {
+      const select = document.getElementById('savedPresetSelect');
+      const quickLinks = document.getElementById('presetQuickLinks');
+      if (!select || !quickLinks) return;
+
+      const presets = readPresetCollection();
+      const currentSelectedId = selectedId || select.value || '';
+
+      select.innerHTML = '<option value="">Saved presets</option>' + presets.map((preset) => '<option value="' + preset.id + '">' + preset.name + '</option>').join('');
+      if (currentSelectedId) select.value = currentSelectedId;
+
+      quickLinks.innerHTML = presets.slice(0, 5).map((preset) => '<button type="button" class="search-tag-chip" data-preset-action="apply" data-preset-id="' + preset.id + '">' + preset.name + '</button>').join('');
+    }
+
+    function renderHealthStatus(report) {
+      const host = document.getElementById('healthStatus');
+      if (!host || !report) return;
+
+      const statusClass = report.passed ? 'health-status pass' : 'health-status fail';
+      const failures = Array.isArray(report.failures) ? report.failures : [];
+      const lastRun = report.timestamp ? new Date(report.timestamp).toLocaleString() : 'Unknown';
+
+      host.className = statusClass;
+      host.innerHTML = '<strong>' + (report.passed ? 'Health Check: PASS' : 'Health Check: FAIL') + '</strong>' +
+        '<div>Last run: ' + lastRun + '</div>' +
+        '<div>Source: ' + String(report.source || 'manual') + '</div>' +
+        '<div>' + (failures.length ? ('Issues: ' + failures.join(', ')) : 'No issues found') + '</div>';
+    }
+
+    async function flushQueue(reason) {
+      if (!canFlushRemotely()) return;
+      const queue = readQueue();
+      if (!queue.length) return;
+      const batch = queue.slice(0, 20).map((item) => ({ ...item, flush_reason: reason || 'interval' }));
+      try {
+        const response = await fetch('/api/analytics/events', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ events: batch }), keepalive: reason !== 'interval',
+        });
+        if (!response.ok) return;
+        writeQueue(queue.slice(batch.length));
+      } catch {
+      }
+    }
+
+    function sendBeaconFlush(reason) {
+      if (!canFlushRemotely() || !navigator.sendBeacon) return;
+      const queue = readQueue();
+      if (!queue.length) return;
+      const batch = queue.slice(0, 10).map((item) => ({ ...item, flush_reason: reason || 'beacon' }));
+      const body = new Blob([JSON.stringify({ events: batch })], { type: 'application/json' });
+      const ok = navigator.sendBeacon('/api/analytics/events', body);
+      if (ok) writeQueue(queue.slice(batch.length));
+    }
+
+    window.setTimeout(() => flushQueue('initial'), 1500);
+    window.setInterval(() => flushQueue('interval'), 30000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') sendBeaconFlush('visibility_hidden'); });
+    window.addEventListener('beforeunload', () => sendBeaconFlush('before_unload'));
+
+    if (window.location.protocol === 'file:') {
+      document.querySelectorAll('a[href^="/marketplace/games/"]').forEach((link) => {
+        const href = link.getAttribute('href') || '';
+        const slug = href.split('/').filter(Boolean).pop() || '';
+        link.setAttribute('href', 'marketplace-game-preview.html?slug=' + encodeURIComponent(slug));
+      });
+    }
+
+    cards.forEach((card) => {
+      const name = (card.querySelector('.game-name')?.textContent || '').trim();
+      const meta = (card.querySelector('.game-meta')?.textContent || '').replace(/\s+/g, ' ').trim();
+      const seller = (card.querySelector('.game-seller strong')?.textContent || '').trim();
+      const tags = Array.from(card.querySelectorAll('.game-tag')).map((el) => el.textContent.trim()).join(' ');
+      const clips = Number((card.querySelector('.game-clipcount strong')?.textContent || '0').replace(/[^0-9]/g, '')) || 0;
+      const dateMatch = meta.match(/([A-Za-z]{3}\s+\d{1,2},\s+\d{4})/);
+      const date = dateMatch ? new Date(dateMatch[1]) : new Date('1970-01-01');
+      const source = (name + ' ' + meta).toLowerCase();
+
+      let sport = 'Football';
+      if (source.includes('7v7')) sport = '7v7';
+      if (source.includes('combine')) sport = 'Combines';
+      if (source.includes('camp')) sport = 'Camps';
+      if (source.includes('basketball')) sport = 'Basketball';
+
+      let media = 'Videos Only';
+      if (source.includes('photo')) media = 'Photos Only';
+      if (source.includes('nft')) media = 'NFTs Only';
+
+      card._meta = { text: (name + ' ' + meta + ' ' + seller + ' ' + tags).toLowerCase(), team: name.toLowerCase(), sport, media, date, clips };
+      card.setAttribute('aria-label', name + ' - ' + meta);
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('click', () => {
+        const filters = currentFilters();
+        trackEvent('marketplace_game_open', {
+          slug: card.getAttribute('href') || '',
+          seller,
+          q: (filters.q || '').trim() || null,
+          team: (filters.team || '').trim() || null,
+          sport: filters.sport || null,
+          dates: filters.dates || null,
+          media: filters.media || null,
+          matchReasons: card._matchReasons || [],
+          relevanceScore: card._relevanceScore || 0,
+        });
+        trackEvent('marketplace_purchase_intent', {
+          intent: 'open_game_detail',
+          location: 'results_grid',
+          slug: card.getAttribute('href') || '',
+          q: (filters.q || '').trim() || null,
+          team: (filters.team || '').trim() || null,
+          sport: filters.sport || null,
+          dates: filters.dates || null,
+          media: filters.media || null,
+          matchReasons: card._matchReasons || [],
+          relevanceScore: card._relevanceScore || 0,
+        });
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    filterRows.forEach((row) => {
+      row.querySelectorAll('.filter-pill').forEach((pill) => {
+        pill.setAttribute('type', 'button');
+        pill.setAttribute('aria-pressed', pill.classList.contains('active') ? 'true' : 'false');
+      });
+    });
+
+    function isDateMatch(filter, date) {
+      if (!filter || filter === 'All Dates') return true;
+      const now = new Date();
+      const dayMs = 24 * 60 * 60 * 1000;
+      const diff = Math.floor((now.getTime() - date.getTime()) / dayMs);
+      if (filter === 'Last 7 Days') return diff >= 0 && diff <= 7;
+      if (filter === 'Last 30 Days') return diff >= 0 && diff <= 30;
+      if (filter === 'This Season') return date.getFullYear() === now.getFullYear();
+      if (filter === 'Upcoming') return date.getTime() > now.getTime();
+      return true;
+    }
+
+    function renderActiveFilters(filters) {
+      if (!activeFilters) return;
+      const chips = [];
+      if (filters.q) chips.push('Player: ' + filters.q);
+      if (filters.team) chips.push('Team: ' + filters.team);
+      if (filters.sport && filters.sport !== 'All Sports') chips.push(filters.sport);
+      if (filters.dates && filters.dates !== 'All Dates') chips.push(filters.dates);
+      if (filters.sort && filters.sort !== 'Most Recent') chips.push(filters.sort);
+      if (filters.media && filters.media !== 'All Media') chips.push(filters.media);
+      activeFilters.innerHTML = chips.length ? chips.map((chip) => '<span class="active-chip">' + chip + '</span>').join('') : '<span class="active-chip">No active filters</span>';
+    }
+
+    function renderEmptyActions() {
+      if (!emptyState) return;
+      emptyState.innerHTML = [
+        '<span class="results-empty-title">No results for this filter set</span>',
+        '<span>Try one of these quick recovery actions.</span>',
+        '<div class="results-empty-actions">',
+        '<button class="results-empty-btn" data-empty-action="clear-all" type="button">Clear all filters</button>',
+        '<button class="results-empty-btn" data-empty-action="last-30" type="button">Use Last 30 Days</button>',
+        '<button class="results-empty-btn" data-empty-action="video-only" type="button">Videos only</button>',
+        '</div>',
+      ].join('');
+    }
+
+    function tokenize(text) {
+      return String(text || '')
+        .toLowerCase()
+        .split(/[^a-z0-9#]+/)
+        .map((token) => token.trim())
+        .filter(Boolean);
+    }
+
+    function buildRelevanceForCard(card, filters) {
+      const reasons = [];
+      let score = 0;
+      const meta = card._meta;
+      const searchBlob = String(meta?.text || '').toLowerCase();
+
+      if (filters.q) {
+        if (searchBlob.includes(filters.q)) {
+          score += 80;
+          reasons.push('Exact search');
+        }
+
+        const jerseyToken = filters.q.match(/^#?\d{1,3}$/);
+        if (jerseyToken && searchBlob.includes(jerseyToken[0].replace(/^#/, ''))) {
+          score += 120;
+          reasons.push('Exact jersey');
+        }
+
+        const queryTokens = tokenize(filters.q).slice(0, 4);
+        queryTokens.forEach((token) => {
+          if (token.length >= 2 && searchBlob.includes(token)) {
+            score += 18;
+          }
+        });
+      }
+
+      if (filters.team) {
+        const teamText = String(meta?.team || '').toLowerCase();
+        if (teamText === filters.team) {
+          score += 85;
+          reasons.push('Exact team');
+        } else if (teamText.includes(filters.team) || searchBlob.includes(filters.team)) {
+          score += 55;
+          reasons.push('Team match');
+        }
+      }
+
+      if (filters.sport && filters.sport !== 'All Sports' && String(meta?.sport || '') === filters.sport) {
+        score += 35;
+        reasons.push('Sport match');
+      }
+
+      return {
+        score,
+        reasons: reasons.slice(0, 3),
+      };
+    }
+
+    function renderMatchReasons(card, reasons) {
+      const info = card.querySelector('.game-info');
+      if (!info) return;
+
+      let wrap = info.querySelector('.game-match-reasons');
+      if (!reasons.length) {
+        if (wrap) wrap.remove();
+        return;
+      }
+
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.className = 'game-match-reasons';
+        const bottom = info.querySelector('.game-bottom');
+        if (bottom) info.insertBefore(wrap, bottom);
+        else info.appendChild(wrap);
+      }
+
+      wrap.setAttribute('aria-label', 'Why this result matched');
+      wrap.innerHTML = reasons.map((reason) => '<span class="game-match-reason">' + reason + '</span>').join('');
+    }
+
+    function copyFilteredView() {
+      const filters = currentFilters();
+      const params = new URLSearchParams();
+      if (filters.q) params.set('q', filters.q);
+      if (filters.team) params.set('team', filters.team);
+      if (filters.sport && filters.sport !== 'All Sports') params.set('sport', filters.sport);
+      if (filters.dates && filters.dates !== 'All Dates') params.set('date_range', filters.dates);
+      if (filters.sort && filters.sort !== 'Most Recent') params.set('sort', filters.sort);
+      if (filters.media && filters.media !== 'All Media') params.set('media_type', filters.media);
+
+      const query = params.toString();
+      const url = window.location.href.split('?')[0] + (query ? '?' + query : '');
+
+      const onSuccess = () => trackEvent('marketplace_filtered_link_copy', { hasQuery: Boolean(query) });
+      const onFailure = () => alert('Unable to copy filtered link in this browser context.');
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(url).then(onSuccess).catch(onFailure);
+        return;
+      }
+
+      const helper = document.createElement('textarea');
+      helper.value = url;
+      document.body.appendChild(helper);
+      helper.select();
+      try {
+        const copied = document.execCommand('copy');
+        if (copied) onSuccess();
+        else onFailure();
+      } catch {
+        onFailure();
+      } finally {
+        helper.remove();
+      }
+    }
+
+    function downloadJsonFile(fileName, payload) {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const href = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = href;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      window.setTimeout(() => {
+        link.remove();
+        URL.revokeObjectURL(href);
+      }, 0);
+    }
+
+    function runStaticHealthCheck(options) {
+      const opts = options || {};
+      const checks = [];
+      checks.push({ label: 'Results grid present', ok: Boolean(gameGrid) });
+      checks.push({ label: 'Cards loaded', ok: cards.length > 0 });
+      checks.push({ label: 'Search inputs available', ok: Boolean(playerInput && teamInput) });
+      checks.push({ label: 'Filter rows available', ok: filterRows.length > 0 });
+
+      if (window.location.protocol === 'file:') {
+        const firstHref = cards[0]?.getAttribute('href') || '';
+        checks.push({
+          label: 'file:// game link fallback active',
+          ok: !firstHref || firstHref.includes('marketplace-game-preview.html'),
+        });
+      }
+
+      const failures = checks.filter((check) => !check.ok);
+      const summary = checks.map((check) => (check.ok ? 'PASS: ' : 'FAIL: ') + check.label).join('\n');
+      const report = {
+        timestamp: new Date().toISOString(),
+        source: opts.reason || 'manual',
+        passed: failures.length === 0,
+        checks,
+        failures: failures.map((item) => item.label),
+      };
+
+      safeWrite(HEALTH_REPORT_KEY, report);
+
+      if (!opts.silent) {
+        alert('Static Marketplace Health Check\n\n' + summary);
+      }
+
+      if (opts.exportReport) {
+        downloadJsonFile('marketplace-static-health-report.json', report);
+      }
+
+      trackEvent('marketplace_static_health_check', {
+        passed: report.passed,
+        source: report.source,
+        failures: report.failures,
+      });
+
+      return report;
+    }
+
+    function applyFilters() {
+      const q = (playerInput?.value || '').trim().toLowerCase();
+      const team = (teamInput?.value || '').trim().toLowerCase();
+      const sport = activeFilter('Sport');
+      const dates = activeFilter('Dates');
+      const sort = activeFilter('Sort');
+      const media = activeFilter('Media');
+
+      renderActiveFilters({ q, team, sport, dates, sort, media });
+      let filtered = cards.filter((card) => {
+        const m = card._meta;
+        return (!q || m.text.includes(q)) && (!team || m.team.includes(team)) && (!sport || sport === 'All Sports' || m.sport === sport) && isDateMatch(dates, m.date) && (!media || media === 'All Media' || m.media === media);
+      });
+
+      const hasSearchSignal = Boolean(q || team || (sport && sport !== 'All Sports'));
+      filtered = filtered.map((card) => {
+        const relevance = buildRelevanceForCard(card, { q, team, sport });
+        card._matchReasons = relevance.reasons;
+        card._relevanceScore = relevance.score;
+        return card;
+      });
+
+      if (hasSearchSignal) {
+        filtered = filtered.slice().sort((a, b) => {
+          if (b._relevanceScore !== a._relevanceScore) return b._relevanceScore - a._relevanceScore;
+          if (sort === 'Most Clips' && b._meta.clips !== a._meta.clips) return b._meta.clips - a._meta.clips;
+          return b._meta.date - a._meta.date;
+        });
+      } else if (sort === 'Most Clips') filtered = filtered.slice().sort((a, b) => b._meta.clips - a._meta.clips);
+      else filtered = filtered.slice().sort((a, b) => b._meta.date - a._meta.date);
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * pageSize;
+      const visible = new Set(filtered.slice(start, start + pageSize));
+      cards.forEach((card) => { card.style.display = visible.has(card) ? '' : 'none'; });
+      cards.forEach((card) => renderMatchReasons(card, visible.has(card) ? (card._matchReasons || []) : []));
+      filtered.forEach((card) => gameGrid.appendChild(card));
+
+      const clipTotal = filtered.reduce((sum, card) => sum + card._meta.clips, 0);
+      resultsCount.innerHTML = '<strong>' + clipTotal.toLocaleString() + '</strong> clips across <strong>' + filtered.length + '</strong> games';
+      if (emptyState) emptyState.style.display = filtered.length ? 'none' : 'block';
+
+      pageButtons.forEach((btn, index) => {
+        const page = index + 1;
+        if (page <= totalPages) {
+          btn.style.display = '';
+          btn.textContent = String(page);
+          btn.classList.toggle('active', page === currentPage);
+          btn.setAttribute('aria-current', page === currentPage ? 'page' : 'false');
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+      if (pageInfo) pageInfo.textContent = 'of ' + totalPages;
+    }
+
+    function queueApply() {
+      if (loadingTimer) window.clearTimeout(loadingTimer);
+      gameGrid.classList.add('is-loading');
+      loadingTimer = window.setTimeout(() => {
+        applyFilters();
+        gameGrid.classList.remove('is-loading');
+      }, 140);
+    }
+
+    function debounce(fn, delay) {
+      let timer;
+      return function () {
+        clearTimeout(timer);
+        const args = arguments;
+        timer = setTimeout(() => fn.apply(null, args), delay);
+      };
+    }
+
+    function addEnhancementControls() {
+      if (searchBar && !document.getElementById('recentSearches')) {
+        const select = document.createElement('select');
+        select.id = 'recentSearches';
+        select.className = 'search-recent';
+        select.setAttribute('aria-label', 'Recent searches');
+        searchBar.appendChild(select);
+      }
+
+      if (filterActions && !document.getElementById('saveFiltersBtn')) {
+        const wrap = document.createElement('div');
+        wrap.className = 'filter-extra-actions';
+        wrap.innerHTML = '<button class="filter-extra-btn" id="saveFiltersBtn" type="button">Save Preset</button><select class="search-recent" id="savedPresetSelect" aria-label="Saved filter presets"><option value="">Saved presets</option></select><button class="filter-extra-btn" id="loadFiltersBtn" type="button">Use Preset</button><button class="filter-extra-btn" id="copyPresetLinkBtn" type="button">Quick Link</button><button class="filter-extra-btn" id="copyPresetPayloadBtn" type="button">Copy Payload</button><button class="filter-extra-btn" id="importPresetPayloadBtn" type="button">Import Payload</button><button class="filter-extra-btn" id="exportPresetsBtn" type="button">Export Presets</button><button class="filter-extra-btn" id="importPresetsBtn" type="button">Import Presets</button><button class="filter-extra-btn" id="renamePresetBtn" type="button">Rename</button><button class="filter-extra-btn filter-extra-btn-danger" id="deletePresetBtn" type="button">Delete</button><button class="filter-extra-btn" id="copyFilteredViewBtn" type="button">Copy Filtered View</button><button class="filter-extra-btn" id="staticHealthCheckBtn" type="button">Run Health Check Now</button><button class="filter-extra-btn" id="exportHealthReportBtn" type="button">Export Health Report</button><input id="importPresetsInput" type="file" accept="application/json" style="display:none">';
+        filterActions.insertAdjacentElement('afterend', wrap);
+
+        const quickLinks = document.createElement('div');
+        quickLinks.className = 'saved-preset-links';
+        quickLinks.id = 'presetQuickLinks';
+        filterActions.insertAdjacentElement('afterend', quickLinks);
+
+        const healthStatus = document.createElement('div');
+        healthStatus.id = 'healthStatus';
+        healthStatus.className = 'health-status';
+        healthStatus.innerHTML = '<strong>Health Check: Not Run</strong><div>Run the check to validate static demo flow.</div>';
+        filterActions.insertAdjacentElement('afterend', healthStatus);
+      }
+
+      if (!document.getElementById('mobileActionBar')) {
+        const bar = document.createElement('div');
+        bar.id = 'mobileActionBar';
+        bar.className = 'mobile-action-bar';
+        bar.innerHTML = '<button class="mobile-action-btn" id="mobileFilterBtn" type="button">Filter</button><button class="mobile-action-btn" id="mobileSortBtn" type="button">Sort</button><button class="mobile-action-btn" id="mobileClearBtn" type="button">Clear</button>';
+        document.body.appendChild(bar);
+      }
+    }
+
+    injectEnhancementStyles();
+    addEnhancementControls();
+    renderEmptyActions();
+    updateRecentSearchesSelect();
+    renderPresetControls('');
+    renderHealthStatus(safeRead(HEALTH_REPORT_KEY, null));
+
+    filterRows.forEach((row) => {
+      const pills = Array.from(row.querySelectorAll('.filter-pill'));
+      const filterGroup = (row.querySelector('.filter-label')?.textContent || '').trim().toLowerCase();
+      pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          pills.forEach((item) => item.classList.remove('active'));
+          pill.classList.add('active');
+          pills.forEach((item) => item.setAttribute('aria-pressed', item.classList.contains('active') ? 'true' : 'false'));
+          trackEvent('marketplace_filter_change', { group: filterGroup, value: pill.textContent.trim() });
+          currentPage = 1;
+          queueApply();
+        });
+      });
+    });
+
+    const debouncedApply = debounce(() => { currentPage = 1; queueApply(); }, 120);
+    [playerInput, teamInput].forEach((input) => {
+      if (!input) return;
+      input.addEventListener('input', debouncedApply);
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          currentPage = 1;
+          queueApply();
+        }
+      });
+    });
+
+    if (searchBtn) {
+      searchBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        saveRecentSearch();
+        trackEvent('marketplace_search_submit', { hasPlayer: Boolean((playerInput?.value || '').trim()), hasTeam: Boolean((teamInput?.value || '').trim()) });
+        currentPage = 1;
+        queueApply();
+      });
+    }
+
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener('click', () => {
+        if (playerInput) playerInput.value = '';
+        if (teamInput) teamInput.value = '';
+        trackEvent('marketplace_search_clear', {});
+        currentPage = 1;
+        queueApply();
+      });
+    }
+
+    if (clearAllFiltersBtn) {
+      clearAllFiltersBtn.addEventListener('click', () => {
+        filterRows.forEach((row) => {
+          const pills = Array.from(row.querySelectorAll('.filter-pill'));
+          pills.forEach((pill, index) => {
+            pill.classList.toggle('active', index === 0);
+            pill.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+          });
+        });
+        if (playerInput) playerInput.value = '';
+        if (teamInput) teamInput.value = '';
+        trackEvent('marketplace_filters_clear_all', {});
+        currentPage = 1;
+        queueApply();
+      });
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage -= 1; trackEvent('marketplace_page_change', { direction: 'prev', page: currentPage }); queueApply(); } });
+    if (nextBtn) nextBtn.addEventListener('click', () => { if (!nextBtn.disabled) { currentPage += 1; trackEvent('marketplace_page_change', { direction: 'next', page: currentPage }); queueApply(); } });
+    pageButtons.forEach((btn, index) => btn.addEventListener('click', () => { currentPage = index + 1; trackEvent('marketplace_page_change', { direction: 'direct', page: currentPage }); queueApply(); }));
+
+    if (emptyState) {
+      emptyState.addEventListener('click', (event) => {
+        const action = event.target?.getAttribute('data-empty-action');
+        if (!action) return;
+        if (action === 'clear-all') return clearAllFiltersBtn?.click();
+        if (action === 'last-30') {
+          setActiveFilter('Dates', 'Last 30 Days');
+          currentPage = 1;
+          return queueApply();
+        }
+        if (action === 'video-only') {
+          setActiveFilter('Media', 'Videos Only');
+          currentPage = 1;
+          return queueApply();
+        }
+      });
+    }
+
+    const saveFiltersBtn = document.getElementById('saveFiltersBtn');
+    if (saveFiltersBtn) {
+      saveFiltersBtn.addEventListener('click', () => {
+        saveCurrentFilters();
+        saveFiltersBtn.textContent = 'Saved';
+        window.setTimeout(() => { saveFiltersBtn.textContent = 'Save Preset'; }, 1000);
+      });
+    }
+
+    const savedPresetSelect = document.getElementById('savedPresetSelect');
+
+    const loadFiltersBtn = document.getElementById('loadFiltersBtn');
+    if (loadFiltersBtn) loadFiltersBtn.addEventListener('click', () => applySavedFilters(savedPresetSelect && savedPresetSelect.value ? savedPresetSelect.value : undefined));
+
+    const copyPresetLinkBtn = document.getElementById('copyPresetLinkBtn');
+    if (copyPresetLinkBtn) {
+      copyPresetLinkBtn.addEventListener('click', () => {
+        if (!savedPresetSelect || !savedPresetSelect.value) return;
+        copyPresetQuickLink(savedPresetSelect.value);
+      });
+    }
+
+    const copyPresetPayloadBtn = document.getElementById('copyPresetPayloadBtn');
+    if (copyPresetPayloadBtn) {
+      copyPresetPayloadBtn.addEventListener('click', () => {
+        if (!savedPresetSelect || !savedPresetSelect.value) return;
+        copyPresetPayload(savedPresetSelect.value);
+      });
+    }
+
+    const importPresetPayloadBtn = document.getElementById('importPresetPayloadBtn');
+    if (importPresetPayloadBtn) {
+      importPresetPayloadBtn.addEventListener('click', () => importPresetPayload());
+    }
+
+    const exportPresetsBtn = document.getElementById('exportPresetsBtn');
+    if (exportPresetsBtn) exportPresetsBtn.addEventListener('click', () => exportPresetCollection());
+
+    const importPresetsBtn = document.getElementById('importPresetsBtn');
+    const importPresetsInput = document.getElementById('importPresetsInput');
+    if (importPresetsBtn && importPresetsInput) {
+      importPresetsBtn.addEventListener('click', () => importPresetsInput.click());
+      importPresetsInput.addEventListener('change', (event) => {
+        const file = event.target && event.target.files ? event.target.files[0] : null;
+        importPresetCollection(file);
+        event.target.value = '';
+      });
+    }
+
+    const renamePresetBtn = document.getElementById('renamePresetBtn');
+    if (renamePresetBtn) {
+      renamePresetBtn.addEventListener('click', () => {
+        const presetId = savedPresetSelect && savedPresetSelect.value ? savedPresetSelect.value : undefined;
+        renamePreset(presetId);
+      });
+    }
+
+    const deletePresetBtn = document.getElementById('deletePresetBtn');
+    if (deletePresetBtn) {
+      deletePresetBtn.addEventListener('click', () => {
+        const presetId = savedPresetSelect && savedPresetSelect.value ? savedPresetSelect.value : undefined;
+        deletePreset(presetId);
+      });
+    }
+
+    const copyFilteredViewBtn = document.getElementById('copyFilteredViewBtn');
+    if (copyFilteredViewBtn) copyFilteredViewBtn.addEventListener('click', () => copyFilteredView());
+
+    const staticHealthCheckBtn = document.getElementById('staticHealthCheckBtn');
+    if (staticHealthCheckBtn) {
+      staticHealthCheckBtn.addEventListener('click', () => {
+        const report = runStaticHealthCheck({ reason: 'manual' });
+        renderHealthStatus(report);
+      });
+    }
+
+    const exportHealthReportBtn = document.getElementById('exportHealthReportBtn');
+    if (exportHealthReportBtn) {
+      exportHealthReportBtn.addEventListener('click', () => {
+        const report = safeRead(HEALTH_REPORT_KEY, null) || runStaticHealthCheck({ silent: true, reason: 'export' });
+        renderHealthStatus(report);
+        downloadJsonFile('marketplace-static-health-report.json', report);
+      });
+    }
+
+    const presetQuickLinks = document.getElementById('presetQuickLinks');
+    if (presetQuickLinks) {
+      presetQuickLinks.addEventListener('click', (event) => {
+        const button = event.target && event.target.closest ? event.target.closest('button[data-preset-action]') : null;
+        if (!button) return;
+        const presetId = button.getAttribute('data-preset-id') || '';
+        if (!presetId) return;
+        applySavedFilters(presetId);
+        if (savedPresetSelect) savedPresetSelect.value = presetId;
+      });
+    }
+
+    const recentSearches = document.getElementById('recentSearches');
+    if (recentSearches) {
+      recentSearches.addEventListener('change', () => {
+        if (!recentSearches.value) return;
+        const [qEncoded, teamEncoded] = recentSearches.value.split('||');
+        if (playerInput) playerInput.value = decodeURIComponent(qEncoded || '');
+        if (teamInput) teamInput.value = decodeURIComponent(teamEncoded || '');
+        currentPage = 1;
+        queueApply();
+      });
+    }
+
+    const mobileFilterBtn = document.getElementById('mobileFilterBtn');
+    if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', () => filterSection?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+
+    const mobileSortBtn = document.getElementById('mobileSortBtn');
+    if (mobileSortBtn) {
+      mobileSortBtn.addEventListener('click', () => {
+        const nextSort = activeFilter('Sort') === 'Most Clips' ? 'Most Recent' : 'Most Clips';
+        setActiveFilter('Sort', nextSort);
+        currentPage = 1;
+        queueApply();
+      });
+    }
+
+    const mobileClearBtn = document.getElementById('mobileClearBtn');
+    if (mobileClearBtn) mobileClearBtn.addEventListener('click', () => clearAllFiltersBtn?.click());
+
+    document.addEventListener('keydown', (event) => {
+      const isTyping = event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'SELECT' || event.target.isContentEditable);
+      if (event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey && !isTyping) {
+        event.preventDefault();
+        playerInput?.focus();
+        playerInput?.select();
+      }
+    });
+
+    window.setTimeout(() => {
+      const report = runStaticHealthCheck({ silent: true, reason: 'auto_boot' });
+      renderHealthStatus(report);
+    }, 900);
+
+    applyFilters();
+  })();
+</script>
+</body>
+</html>
+
+
+
+
+
+

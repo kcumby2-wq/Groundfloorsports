@@ -1,0 +1,2967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subjectreport · CSV Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-900: #0a1729;
+    --navy-800: #0f2040;
+    --cyan: #2fa3e8;
+    --cyan-bright: #4ec4ff;
+    --cream: #f2eee3;
+    --cream-bright: #f8f5ec;
+    --fog: rgba(242, 238, 227, 0.7);
+    --fog-line: rgba(242, 238, 227, 0.16);
+    --glass: rgba(242, 238, 227, 0.06);
+    --glass-border: rgba(242, 238, 227, 0.2);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--cream);
+    font-family: Inter, sans-serif;
+    background:
+      radial-gradient(ellipse 70% 50% at 80% 0%, rgba(78, 196, 255, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 100%);
+  }
+
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 30px 20px 50px;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .brand {
+    font-family: Anton, sans-serif;
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cream-bright);
+  }
+
+  .brand span { color: var(--cyan-bright); }
+
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .top-actions .btn.mobile-core,
+  .top-actions .btn.mobile-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .top-actions .btn.mobile-more-btn {
+    display: none;
+  }
+
+  .top-actions .btn.quick {
+    border-style: dashed;
+  }
+
+  .btn {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(242, 238, 227, 0.04);
+    color: var(--cream-bright);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  .btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn.primary {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--navy-900);
+  }
+
+  .btn.primary:hover {
+    background: var(--cyan-bright);
+    border-color: var(--cyan-bright);
+    color: var(--navy-900);
+  }
+
+  .hero {
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    background: var(--glass);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .flow {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .flow-step {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 7px 11px;
+    color: var(--fog);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .eyebrow {
+    font: 700 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan-bright);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: Anton, sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 0.94;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .sub {
+    margin: 10px 0 0;
+    max-width: 900px;
+    color: var(--fog);
+    line-height: 1.5;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    margin: 16px 0 0;
+  }
+
+  .grid .span-2 {
+    grid-column: span 2;
+  }
+
+  .field {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+
+  .field input,
+  .field select {
+    width: 100%;
+    border: 1px solid var(--fog-line);
+    border-radius: 8px;
+    background: rgba(10, 23, 41, 0.55);
+    color: var(--cream-bright);
+    font-family: Inter, sans-serif;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .field input,
+  .field select,
+  .field button {
+    min-height: 38px;
+  }
+
+  .field input.small {
+    max-width: 130px;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    color: var(--cream-bright);
+    font-size: 13px;
+  }
+
+  .toggle-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--cyan-bright);
+  }
+
+  .panel {
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    background: var(--glass);
+    padding: 14px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .panel-title {
+    font-family: Anton, sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .meta-chip {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 6px 10px;
+    color: var(--fog);
+    font: 600 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .meta-chip.good {
+    border-color: rgba(47, 163, 232, 0.5);
+    color: var(--cyan-bright);
+  }
+
+  .meta-chip.bad {
+    border-color: rgba(245, 158, 11, 0.65);
+    color: #facc15;
+  }
+
+  .panel-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .session-status {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.44);
+    padding: 10px;
+  }
+
+  .session-status .chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .session-status .status-chip {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 6px 10px;
+    color: var(--fog);
+    font: 600 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .session-status .status-chip.good {
+    border-color: rgba(47, 163, 232, 0.5);
+    color: var(--cyan-bright);
+  }
+
+  .session-status .status-chip.bad {
+    border-color: rgba(245, 158, 11, 0.65);
+    color: #facc15;
+  }
+
+  .session-status .status-chip.exporting {
+    border-color: rgba(96, 165, 250, 0.72);
+    color: #93c5fd;
+  }
+
+  .session-status .status-label {
+    color: var(--fog);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .session-status .status-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .session-status .status-inline input {
+    border: 1px solid var(--fog-line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--cream-bright);
+    padding: 7px 8px;
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+  }
+
+  .table-wrap {
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    overflow: auto;
+    max-height: 66vh;
+    background: rgba(10, 23, 41, 0.4);
+  }
+
+  .table-wrap.required-only .optional-col {
+    display: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    min-width: 2100px;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--fog-line);
+    border-right: 1px solid rgba(242, 238, 227, 0.08);
+    padding: 8px;
+    vertical-align: top;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: rgba(10, 23, 41, 0.95);
+    color: var(--fog);
+    font: 700 10px/1.2 JetBrains Mono, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td input,
+  td select,
+  td textarea {
+    width: 100%;
+    border: 1px solid rgba(242, 238, 227, 0.14);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--cream-bright);
+    padding: 7px 8px;
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+  }
+
+  td textarea {
+    min-height: 44px;
+    resize: vertical;
+  }
+
+  .invalid-row {
+    background: rgba(239, 68, 68, 0.08);
+  }
+
+  .invalid-field {
+    border-color: #fca5a5 !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+  }
+
+  .col-sm { min-width: 96px; }
+  .col-md { min-width: 130px; }
+  .col-lg { min-width: 180px; }
+
+  .row-actions {
+    width: 74px;
+    text-align: center;
+  }
+
+  .row-select {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--cyan-bright);
+  }
+
+  .tiny {
+    width: 100%;
+    border: 1px solid var(--fog-line);
+    border-radius: 7px;
+    background: rgba(255,255,255,0.04);
+    color: var(--cream-bright);
+    padding: 8px 6px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .tiny:hover {
+    border-color: #fca5a5;
+    color: #fca5a5;
+  }
+
+  .footer-note {
+    margin-top: 12px;
+    color: var(--fog);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .ops-toolbar {
+    margin-top: 12px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.35);
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .ops-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ops-row.bulk-apply {
+    border: 1px solid rgba(78, 196, 255, 0.32);
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(78, 196, 255, 0.12), rgba(10, 23, 41, 0.5));
+    padding: 10px;
+  }
+
+  .ops-row.bulk-apply .ops-label {
+    color: var(--cyan-bright);
+  }
+
+  .ops-label {
+    color: var(--fog);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ops-select,
+  .ops-input {
+    border: 1px solid var(--fog-line);
+    border-radius: 8px;
+    background: rgba(10, 23, 41, 0.7);
+    color: var(--cream-bright);
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    min-height: 38px;
+  }
+
+  .ops-select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--cyan-bright) 50%),
+      linear-gradient(135deg, var(--cyan-bright) 50%, transparent 50%);
+    background-position:
+      calc(100% - 16px) calc(50% - 2px),
+      calc(100% - 10px) calc(50% - 2px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 30px;
+  }
+
+  .ops-select:focus,
+  .ops-input:focus {
+    outline: none;
+    border-color: var(--cyan-bright);
+    box-shadow: 0 0 0 2px rgba(78, 196, 255, 0.2);
+  }
+
+  .ops-select option {
+    background: #112743;
+    color: var(--cream-bright);
+  }
+
+  .ops-input::placeholder {
+    color: rgba(242, 238, 227, 0.62);
+  }
+
+  .ops-btn {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--cream-bright);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+
+  .ops-btn:hover {
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  .quality-panel {
+    margin-top: 12px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.35);
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .quality-title {
+    color: var(--cream-bright);
+    font: 700 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .quality-score {
+    color: var(--cyan-bright);
+    font: 700 22px/1 Anton, sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .quality-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--fog);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .activity-panel {
+    margin-top: 12px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.35);
+    padding: 12px;
+  }
+
+  .activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    max-height: 180px;
+    overflow: auto;
+  }
+
+  .activity-item {
+    border: 1px solid rgba(242, 238, 227, 0.12);
+    border-radius: 8px;
+    padding: 6px 8px;
+    color: var(--fog);
+    font-size: 12px;
+  }
+
+  .activity-empty {
+    color: var(--fog);
+    font-size: 12px;
+    border: 1px dashed rgba(242, 238, 227, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .history-panel {
+    margin-top: 14px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.35);
+    padding: 12px;
+  }
+
+  .fixes-panel {
+    margin-top: 12px;
+    border: 1px solid var(--fog-line);
+    border-radius: 12px;
+    background: rgba(10, 23, 41, 0.35);
+    padding: 12px;
+  }
+
+  .fixes-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .fixes-title {
+    color: var(--cream-bright);
+    font: 700 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .fixes-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fixes-empty {
+    color: var(--fog);
+    font-size: 12px;
+    border: 1px dashed rgba(242, 238, 227, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .fix-jump {
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    color: #fde68a;
+    padding: 8px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .fix-jump:hover {
+    border-color: rgba(245, 158, 11, 0.8);
+    color: #fef3c7;
+  }
+
+  .undo-bar {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(245, 158, 11, 0.72);
+    border-radius: 10px;
+    background: rgba(56, 35, 8, 0.95);
+    color: #fde68a;
+    padding: 10px 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  .undo-bar.show {
+    display: inline-flex;
+  }
+
+  .undo-btn {
+    border: 1px solid rgba(245, 158, 11, 0.75);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fef3c7;
+    padding: 6px 10px;
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .undo-btn:hover {
+    border-color: #facc15;
+    color: #fff7cd;
+  }
+
+  .history-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .history-title {
+    color: var(--cream-bright);
+    font: 700 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .history-clear {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    color: var(--fog);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  .history-clear:hover {
+    border-color: #fca5a5;
+    color: #fca5a5;
+  }
+
+  .history-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .history-item {
+    border: 1px solid rgba(242, 238, 227, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 8px;
+    display: grid;
+    gap: 4px;
+  }
+
+  .history-name {
+    color: var(--cream-bright);
+    font-size: 12px;
+    word-break: break-all;
+  }
+
+  .history-meta {
+    color: var(--fog);
+    font: 600 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .history-empty {
+    color: var(--fog);
+    font-size: 12px;
+    border: 1px dashed rgba(242, 238, 227, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .history-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .history-download {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    color: var(--cream-bright);
+    font: 700 10px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  .history-download:hover {
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  .history-download[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .success-panel {
+    margin-top: 12px;
+    border: 1px solid rgba(78, 196, 255, 0.38);
+    border-radius: 10px;
+    background: rgba(47, 163, 232, 0.12);
+    padding: 10px;
+    display: none;
+    gap: 8px;
+  }
+
+  .success-title {
+    color: var(--cream-bright);
+    font: 700 11px/1 JetBrains Mono, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .success-meta {
+    color: var(--fog);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .success-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .toast-stack {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    display: grid;
+    gap: 8px;
+    width: min(360px, calc(100vw - 24px));
+    pointer-events: none;
+  }
+
+  .toast {
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    background: rgba(10, 23, 41, 0.92);
+    color: var(--cream-bright);
+    padding: 10px 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toast.success {
+    border-color: rgba(47, 163, 232, 0.6);
+  }
+
+  .toast.info {
+    border-color: rgba(242, 238, 227, 0.32);
+  }
+
+  .toast.warn {
+    border-color: rgba(245, 158, 11, 0.72);
+    background: rgba(56, 35, 8, 0.92);
+  }
+
+  .toast.error {
+    border-color: rgba(239, 68, 68, 0.72);
+    background: rgba(58, 14, 14, 0.92);
+  }
+
+  .toast-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toast-icon {
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 620px) {
+    .grid { grid-template-columns: 1fr; }
+    .brand { font-size: 28px; }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      margin: 0 -8px 14px;
+      padding: 10px 8px;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(10, 23, 41, 0.95), rgba(10, 23, 41, 0.86));
+      border-bottom: 1px solid rgba(242, 238, 227, 0.1);
+    }
+    .top-actions {
+      width: 100%;
+      gap: 8px;
+      justify-content: flex-start;
+    }
+    .top-actions .btn {
+      padding-inline: 12px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+    .top-actions .btn.mobile-secondary {
+      display: none;
+    }
+    .top-actions.show-secondary .btn.mobile-secondary {
+      display: inline-flex;
+    }
+    .top-actions .btn.mobile-more-btn {
+      display: inline-flex;
+      border-color: rgba(78, 196, 255, 0.45);
+      color: var(--cyan-bright);
+    }
+    .top-actions.show-secondary .btn.mobile-more-btn {
+      border-color: rgba(242, 238, 227, 0.45);
+      color: var(--cream-bright);
+    }
+    .session-status {
+      padding: 8px;
+    }
+    .session-status .status-chip {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+    .undo-bar {
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      justify-content: space-between;
+    }
+    .ops-row {
+      align-items: stretch;
+    }
+    .ops-select,
+    .ops-input,
+    .ops-btn {
+      width: 100%;
+    }
+  }
+
+  @media print {
+    .top,
+    .hero,
+    .history-panel,
+    .toast-stack,
+    .undo-bar,
+    .ops-toolbar,
+    .activity-panel,
+    .quality-panel,
+    .fixes-panel {
+      display: none !important;
+    }
+
+    .table-wrap {
+      max-height: none;
+      overflow: visible;
+      border: none;
+    }
+
+    table {
+      min-width: 0;
+      width: 100%;
+    }
+
+    th,
+    td {
+      font-size: 11px;
+      color: #000;
+      background: #fff;
+      border-color: #ddd;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">Subject<span>report</span></div>
+      <div class="top-actions" id="mobileSecondaryActions">
+        <a class="btn mobile-secondary" href="staff-tools.html">Back To Staff Tools</a>
+        <button class="btn mobile-core" id="importCsvBtn" type="button">Import CSV</button>
+        <input id="importCsvInput" type="file" accept=".csv,text/csv" style="display:none" />
+        <button class="btn mobile-secondary" id="loadSampleBtn" type="button">Load Sample</button>
+        <button class="btn mobile-core" id="addRowBtn" type="button">Add Row</button>
+        <button class="btn quick mobile-core" id="addFiveRowsBtn" type="button">Add 5 Rows</button>
+        <button class="btn quick mobile-secondary" id="duplicateLastRowBtn" type="button">Duplicate Last</button>
+        <button class="btn quick mobile-core" id="validateRowsBtn" type="button">Validate Rows</button>
+        <button class="btn mobile-secondary" id="clearRowsBtn" type="button">Clear Rows</button>
+        <button class="btn mobile-secondary" id="downloadByDateBtn" type="button">Export By Date</button>
+        <button class="btn primary mobile-core" id="downloadCsvBtn" type="button">Export CSV</button>
+        <button class="btn mobile-more-btn mobile-core" id="mobileMoreBtn" type="button" aria-expanded="false" aria-controls="mobileSecondaryActions">More</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">Prospect Edge Intake Tool</div>
+      <h1>CSV Builder</h1>
+      <p class="sub">Enter athlete data during events, then export a Prospect Edge-ready CSV with Subjectreport template headers. Notes context and export format are configurable below.</p>
+      <div class="flow">
+        <div class="flow-step">1 · Import or Add Rows</div>
+        <div class="flow-step">2 · Set Event Context</div>
+        <div class="flow-step">3 · Export CSV</div>
+      </div>
+
+      <div class="session-status">
+        <div class="chips">
+          <div class="status-chip" id="lastSavedChip">Last Saved: --</div>
+          <div class="status-chip good" id="sessionCompletedChip">Completed: 0</div>
+          <div class="status-chip bad" id="sessionAttentionChip">Needs Attention: 0</div>
+          <div class="status-chip" id="qualityChip">Quality: 0%</div>
+          <div class="status-chip exporting" id="exportProgressChip" style="display:none">Exporting...</div>
+        </div>
+        <div class="status-inline">
+          <span class="status-label">Operator</span>
+          <input id="operatorInitials" class="small" type="text" maxlength="4" placeholder="JS" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="eventSeries">Event Series</label>
+          <input id="eventSeries" type="text" placeholder="DFW Spring Clinic Series" />
+        </div>
+        <div class="field">
+          <label for="eventType">Event Type</label>
+          <select id="eventType">
+            <option value="">Select Type</option>
+            <option>Combine</option>
+            <option>Clinic</option>
+            <option>Camp</option>
+            <option>Tryout</option>
+            <option>Showcase</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="eventDate">Event Date</label>
+          <input id="eventDate" type="date" />
+        </div>
+        <div class="field">
+          <label for="eventLocation">Location</label>
+          <input id="eventLocation" type="text" placeholder="Southlake, TX" />
+        </div>
+        <div class="field">
+          <label for="eventEvaluator">Evaluator</label>
+          <input id="eventEvaluator" type="text" placeholder="Coach J. Smith" />
+        </div>
+        <div class="field span-2">
+          <label for="appendContextToNotes">Export Notes Behavior</label>
+          <div class="toggle-row">
+            <input id="appendContextToNotes" type="checkbox" checked />
+            <span>Append event context to Notes on export</span>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label for="structuredContextFormat">Context Format</label>
+          <div class="toggle-row">
+            <input id="structuredContextFormat" type="checkbox" />
+            <span>Use structured context format (multi-line)</span>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label for="validateEmailFormat">Validation: Email</label>
+          <div class="toggle-row">
+            <input id="validateEmailFormat" type="checkbox" checked />
+            <span>Require valid email format when Email is provided</span>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label for="validateUrlFormat">Validation: Video URL</label>
+          <div class="toggle-row">
+            <input id="validateUrlFormat" type="checkbox" checked />
+            <span>Require valid URL format when Video Url is provided</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Athlete Rows</div>
+        <div class="panel-meta">
+          <div class="meta-chip" id="rowCount">0 rows</div>
+          <div class="meta-chip good" id="validRowsCount">0 valid</div>
+          <div class="meta-chip bad" id="invalidRowsCount">0 needs attention</div>
+        </div>
+      </div>
+
+      <div class="ops-toolbar">
+        <div class="ops-row">
+          <span class="ops-label">Intake Mode</span>
+          <label class="toggle-row" style="min-height:auto">
+            <input id="requiredOnlyMode" type="checkbox" />
+            <span>Required-only columns</span>
+          </label>
+          <button id="printCheckinBtn" class="ops-btn" type="button">Print Check-In View</button>
+        </div>
+        <div class="ops-row">
+          <span class="ops-label">Snapshot Recovery</span>
+          <select id="snapshotSelect" class="ops-select"></select>
+          <button id="restoreSnapshotBtn" class="ops-btn" type="button">Restore Snapshot</button>
+        </div>
+        <div class="ops-row bulk-apply">
+          <span class="ops-label">Bulk Apply To Selected</span>
+          <select id="bulkFieldSelect" class="ops-select">
+            <option value="">Choose field</option>
+            <option value="rowEventDate">Row Event Date</option>
+            <option value="status">Status</option>
+            <option value="package">Package</option>
+            <option value="grade">Grade</option>
+            <option value="transcript">Transcript</option>
+            <option value="notes">Notes</option>
+          </select>
+          <input id="bulkValueInput" class="ops-input" type="text" placeholder="Value to apply" />
+          <button id="bulkApplyBtn" class="ops-btn" type="button">Apply</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="row-actions"><input id="selectAllRows" class="row-select" type="checkbox" aria-label="Select all rows" /></th>
+              <th class="row-actions">Row</th>
+              <th class="col-md">Event Date (Row)</th>
+              <th class="col-sm optional-col">Jersey #</th>
+              <th class="col-md">First Name</th>
+              <th class="col-md">Last Name</th>
+              <th class="col-sm">Position</th>
+              <th class="col-lg optional-col">Email</th>
+              <th class="col-md optional-col">Phone</th>
+              <th class="col-sm">Class/Yr</th>
+              <th class="col-sm optional-col">Height</th>
+              <th class="col-sm optional-col">Weight</th>
+              <th class="col-md optional-col">State/Province</th>
+              <th class="col-md">School/Team</th>
+              <th class="col-md optional-col">Rec Team</th>
+              <th class="col-md optional-col">Instagram</th>
+              <th class="col-md optional-col">X (Twitter)</th>
+              <th class="col-md optional-col">TikTok</th>
+              <th class="col-lg optional-col">Video Url</th>
+              <th class="col-sm optional-col">Package</th>
+              <th class="col-sm optional-col">Status</th>
+              <th class="col-sm optional-col">Grade</th>
+              <th class="col-md optional-col">Transcript</th>
+              <th class="col-lg optional-col">Notes</th>
+              <th class="row-actions">Remove</th>
+            </tr>
+          </thead>
+          <tbody id="rowsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer-note">CSV headers are exported as: Jersey #, First Name, Last Name, Position, Email, Phone, Class/Yr, Height, Weight, State/Province, School/Team, Rec Team, Instagram, X (Twitter), TikTok, Video Url, Package, Status, Grade, Transcript, Notes.</div>
+      <div class="footer-note">Validation checks run before export and highlight rows missing required fields: First Name, Last Name, Position, Class/Yr, School/Team.</div>
+      <div class="footer-note">Optional second-pass checks can also validate Email and Video Url formats when those fields are filled.</div>
+      <div class="footer-note">Speed tips: use Add 5 Rows for batch intake, Duplicate Last for similar prospects, Validate Rows before export, Enter/Shift+Enter to move required fields, and Ctrl/Cmd + Enter to export CSV.</div>
+
+      <div class="quality-panel">
+        <div class="quality-title">CSV Quality Score</div>
+        <div id="qualityScore" class="quality-score">0% Ready</div>
+        <ol id="qualityBlockers" class="quality-list">
+          <li>Add athlete rows to generate a quality score.</li>
+        </ol>
+      </div>
+
+      <div class="fixes-panel">
+        <div class="fixes-head">
+          <div class="fixes-title">Fix List</div>
+        </div>
+        <ul id="fixesList" class="fixes-list">
+          <li class="fixes-empty">No issues detected. You are export-ready.</li>
+        </ul>
+      </div>
+
+      <div class="history-panel">
+        <div class="history-head">
+          <div class="history-title">Recent Exports</div>
+          <button id="clearHistoryBtn" class="history-clear" type="button">Clear History</button>
+        </div>
+        <div id="exportSuccessPanel" class="success-panel" role="status" aria-live="polite">
+          <div class="success-title">Export Complete</div>
+          <div id="exportSuccessMeta" class="success-meta"></div>
+          <div class="success-actions">
+            <button id="redownloadLastBtn" class="history-download" type="button">Re-download Last Export</button>
+          </div>
+        </div>
+        <ul id="exportHistoryList" class="history-list"></ul>
+      </div>
+
+      <div class="activity-panel">
+        <div class="history-head">
+          <div class="history-title">Activity Log</div>
+          <button id="clearActivityBtn" class="history-clear" type="button">Clear Log</button>
+        </div>
+        <ul id="activityList" class="activity-list">
+          <li class="activity-empty">No activity yet.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <div id="toastStack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+  <div id="undoBar" class="undo-bar" role="status" aria-live="polite">
+    <span id="undoText">Action completed.</span>
+    <button id="undoBtn" class="undo-btn" type="button">Undo</button>
+  </div>
+
+<script src="shared-preview-utils.js"></script>
+<script>
+(() => {
+  function isAdminLaunchContext() {
+    const params = new URLSearchParams(window.location.search || "");
+    const source = String(params.get("source") || "").toLowerCase();
+    return source === "admin";
+  }
+
+  function redirectToAccessRequest(reason = "csv_builder_access_required") {
+    const params = new URLSearchParams();
+    params.set("reason", reason);
+    params.set("next", "combine-clinic-template.html");
+    window.location.replace(`Subjectreport.html?${params.toString()}#tools`);
+  }
+
+  async function hasValidatedCsvBuilderAccess() {
+    if (isAdminLaunchContext()) return true;
+
+    const token = sessionStorage.getItem("sr_token");
+    if (!token) return false;
+
+    const defaultUrl = "REPLACE_WITH_YOUR_PROJECT_URL";
+    const defaultKey = "REPLACE_WITH_YOUR_ANON_KEY";
+    const supabaseUrl = String(localStorage.getItem("sr_supabase_url") || defaultUrl).trim();
+    const supabaseKey = String(localStorage.getItem("sr_supabase_anon_key") || defaultKey).trim();
+    const hasConfig = supabaseUrl.startsWith("https://")
+      && supabaseUrl.includes(".supabase.co")
+      && !supabaseUrl.includes("REPLACE")
+      && supabaseKey
+      && !supabaseKey.includes("REPLACE");
+
+    if (!hasConfig) return true;
+
+    try {
+      const res = await fetch(`${supabaseUrl}/auth/v1/user`, {
+        headers: {
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      return res.ok;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  (async () => {
+    const allowed = await hasValidatedCsvBuilderAccess();
+    if (!allowed) {
+      redirectToAccessRequest("csv_builder_auth_required");
+      return;
+    }
+
+  const headers = [
+    "Jersey #",
+    "First Name",
+    "Last Name",
+    "Position",
+    "Email",
+    "Phone",
+    "Class/Yr",
+    "Height",
+    "Weight",
+    "State/Province",
+    "School/Team",
+    "Rec Team",
+    "Instagram",
+    "X (Twitter)",
+    "TikTok",
+    "Video Url",
+    "Package",
+    "Status",
+    "Grade",
+    "Transcript",
+    "Notes"
+  ];
+
+  const keys = [
+    "rowEventDate",
+    "jersey",
+    "firstName",
+    "lastName",
+    "position",
+    "email",
+    "phone",
+    "classYear",
+    "height",
+    "weight",
+    "stateProvince",
+    "schoolTeam",
+    "recTeam",
+    "instagram",
+    "twitterX",
+    "tiktok",
+    "videoUrl",
+    "package",
+    "status",
+    "grade",
+    "transcript",
+    "notes"
+  ];
+
+  const rowsBody = document.getElementById("rowsBody");
+  const tableWrap = document.querySelector(".table-wrap");
+  const requiredOnlyMode = document.getElementById("requiredOnlyMode");
+  const printCheckinBtn = document.getElementById("printCheckinBtn");
+  const snapshotSelect = document.getElementById("snapshotSelect");
+  const restoreSnapshotBtn = document.getElementById("restoreSnapshotBtn");
+  const bulkFieldSelect = document.getElementById("bulkFieldSelect");
+  const bulkValueInput = document.getElementById("bulkValueInput");
+  const bulkApplyBtn = document.getElementById("bulkApplyBtn");
+  const selectAllRows = document.getElementById("selectAllRows");
+  const rowCount = document.getElementById("rowCount");
+  const validRowsCount = document.getElementById("validRowsCount");
+  const invalidRowsCount = document.getElementById("invalidRowsCount");
+  const lastSavedChip = document.getElementById("lastSavedChip");
+  const sessionCompletedChip = document.getElementById("sessionCompletedChip");
+  const sessionAttentionChip = document.getElementById("sessionAttentionChip");
+  const qualityChip = document.getElementById("qualityChip");
+  const exportProgressChip = document.getElementById("exportProgressChip");
+  const qualityScore = document.getElementById("qualityScore");
+  const qualityBlockers = document.getElementById("qualityBlockers");
+  const operatorInitialsInput = document.getElementById("operatorInitials");
+  const fixesList = document.getElementById("fixesList");
+  const undoBar = document.getElementById("undoBar");
+  const undoText = document.getElementById("undoText");
+  const undoBtn = document.getElementById("undoBtn");
+  const addRowBtn = document.getElementById("addRowBtn");
+  const addFiveRowsBtn = document.getElementById("addFiveRowsBtn");
+  const duplicateLastRowBtn = document.getElementById("duplicateLastRowBtn");
+  const validateRowsBtn = document.getElementById("validateRowsBtn");
+  const topActions = document.querySelector(".top-actions");
+  const mobileMoreBtn = document.getElementById("mobileMoreBtn");
+  const clearRowsBtn = document.getElementById("clearRowsBtn");
+  const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+  const loadSampleBtn = document.getElementById("loadSampleBtn");
+  const importCsvBtn = document.getElementById("importCsvBtn");
+  const importCsvInput = document.getElementById("importCsvInput");
+  const downloadCsvBtn = document.getElementById("downloadCsvBtn");
+  const downloadByDateBtn = document.getElementById("downloadByDateBtn");
+  const toastStack = document.getElementById("toastStack");
+  const exportHistoryList = document.getElementById("exportHistoryList");
+  const clearActivityBtn = document.getElementById("clearActivityBtn");
+  const activityList = document.getElementById("activityList");
+  const exportSuccessPanel = document.getElementById("exportSuccessPanel");
+  const exportSuccessMeta = document.getElementById("exportSuccessMeta");
+  const redownloadLastBtn = document.getElementById("redownloadLastBtn");
+  const exportHistoryKey = "sr_export_history_v1";
+  const draftKey = "sr_builder_draft_v1";
+  const snapshotKey = "sr_builder_draft_snapshots_v1";
+  const activityKey = "sr_builder_activity_v1";
+  const requiredFields = ["firstName", "lastName", "position", "classYear", "schoolTeam"];
+  const keyLabel = {
+    firstName: "First Name",
+    lastName: "Last Name",
+    position: "Position",
+    classYear: "Class/Yr",
+    schoolTeam: "School/Team",
+    email: "Email",
+    videoUrl: "Video Url"
+  };
+  const debounce = window.SubjectreportUtils?.debounce || ((fn) => fn);
+  let undoTimeout = null;
+  let undoAction = null;
+  let lastDraftSavedToastAt = 0;
+  let isExporting = false;
+
+  const persistedFieldIds = [
+    "eventSeries",
+    "eventType",
+    "eventDate",
+    "eventLocation",
+    "eventEvaluator",
+    "operatorInitials",
+    "appendContextToNotes",
+    "structuredContextFormat",
+    "validateEmailFormat",
+    "validateUrlFormat"
+  ];
+
+  function formatSavedTimestamp(ts) {
+    if (!ts) return "--";
+    return new Date(ts).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  function updateLastSavedChip(ts) {
+    lastSavedChip.textContent = `Last Saved: ${formatSavedTimestamp(ts)}`;
+  }
+
+  function collectCurrentRows() {
+    return Array.from(rowsBody.querySelectorAll("tr")).map((tr) => rowValuesFromElement(tr));
+  }
+
+  function collectDraftPayload() {
+    const fields = {};
+    persistedFieldIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === "checkbox") {
+        fields[id] = Boolean(el.checked);
+      } else {
+        fields[id] = String(el.value || "");
+      }
+    });
+
+    return {
+      fields,
+      rows: collectCurrentRows(),
+      at: Date.now()
+    };
+  }
+
+  function loadSnapshots() {
+    try {
+      const raw = localStorage.getItem(snapshotKey);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveSnapshots(entries) {
+    localStorage.setItem(snapshotKey, JSON.stringify(entries.slice(0, 3)));
+  }
+
+  function updateSnapshotSelect() {
+    const snapshots = loadSnapshots();
+    if (!snapshots.length) {
+      snapshotSelect.innerHTML = '<option value="">No snapshots yet</option>';
+      restoreSnapshotBtn.disabled = true;
+      return;
+    }
+
+    snapshotSelect.innerHTML = snapshots
+      .map((snap, index) => {
+        const when = new Date(snap.at).toLocaleString();
+        const rows = Array.isArray(snap.rows) ? snap.rows.length : 0;
+        return `<option value="${index}">${when} · ${rows} row(s)</option>`;
+      })
+      .join("");
+    restoreSnapshotBtn.disabled = false;
+  }
+
+  function pushSnapshot(payload) {
+    const snapshots = loadSnapshots();
+    const latest = snapshots[0];
+    if (latest && payload.at - Number(latest.at || 0) < 25000) {
+      snapshots[0] = payload;
+    } else {
+      snapshots.unshift(payload);
+    }
+    saveSnapshots(snapshots);
+    updateSnapshotSelect();
+  }
+
+  function loadActivityLog() {
+    try {
+      const raw = localStorage.getItem(activityKey);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveActivityLog(entries) {
+    localStorage.setItem(activityKey, JSON.stringify(entries.slice(0, 40)));
+  }
+
+  function renderActivityLog() {
+    const entries = loadActivityLog();
+    if (!entries.length) {
+      activityList.innerHTML = '<li class="activity-empty">No activity yet.</li>';
+      return;
+    }
+
+    activityList.innerHTML = entries
+      .map((entry) => {
+        const when = new Date(entry.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+        return `<li class="activity-item">${when} · ${entry.text}</li>`;
+      })
+      .join("");
+  }
+
+  function logActivity(text) {
+    const entries = loadActivityLog();
+    entries.unshift({ at: Date.now(), text });
+    saveActivityLog(entries);
+    renderActivityLog();
+  }
+
+  function setExportLock(locked, label = "Exporting...") {
+    isExporting = Boolean(locked);
+    exportProgressChip.style.display = locked ? "inline-flex" : "none";
+    exportProgressChip.textContent = label;
+
+    const controls = [
+      addRowBtn,
+      addFiveRowsBtn,
+      duplicateLastRowBtn,
+      validateRowsBtn,
+      clearRowsBtn,
+      importCsvBtn,
+      loadSampleBtn,
+      bulkApplyBtn,
+      downloadCsvBtn,
+      downloadByDateBtn,
+      restoreSnapshotBtn,
+      printCheckinBtn
+    ];
+
+    controls.forEach((btn) => {
+      if (!btn) return;
+      btn.disabled = locked;
+    });
+
+    rowsBody.querySelectorAll("input,select,textarea,button").forEach((el) => {
+      if (el.classList.contains("row-select")) {
+        el.disabled = locked;
+        return;
+      }
+      if (el.matches("[data-key], .tiny")) {
+        el.disabled = locked;
+      }
+    });
+  }
+
+  function saveDraftState() {
+    const payload = collectDraftPayload();
+
+    localStorage.setItem(draftKey, JSON.stringify(payload));
+    pushSnapshot(payload);
+    updateLastSavedChip(payload.at);
+
+    const now = Date.now();
+    if (now - lastDraftSavedToastAt > 18000) {
+      showToast("Draft saved", "info", 1500);
+      lastDraftSavedToastAt = now;
+    }
+  }
+
+  const queueDraftSave = debounce(saveDraftState, 350);
+
+  function flushDraftSave() {
+    if (typeof queueDraftSave.flush === "function") {
+      queueDraftSave.flush();
+      return;
+    }
+    saveDraftState();
+  }
+
+  function setButtonBusy(button, isBusy, busyText) {
+    if (!button) return;
+    if (!button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = button.textContent || "";
+    }
+    button.disabled = isBusy;
+    button.textContent = isBusy ? busyText : button.dataset.defaultLabel;
+  }
+
+  function showToast(message, kind = "success", timeoutMs = 2200) {
+    if (!toastStack) return;
+    const iconMap = {
+      success: "✓",
+      info: "i",
+      warn: "!",
+      error: "x"
+    };
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${kind}`;
+    toast.setAttribute("role", "status");
+
+    const line = document.createElement("div");
+    line.className = "toast-line";
+
+    const icon = document.createElement("span");
+    icon.className = "toast-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = iconMap[kind] || iconMap.info;
+
+    const text = document.createElement("span");
+    text.textContent = message;
+
+    line.appendChild(icon);
+    line.appendChild(text);
+    toast.appendChild(line);
+    toastStack.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.add("show");
+    });
+
+    window.setTimeout(() => {
+      toast.classList.remove("show");
+      window.setTimeout(() => toast.remove(), 220);
+    }, timeoutMs);
+  }
+
+  function refreshRowValidationState(row) {
+    if (!row) return;
+    const hasInvalid = Boolean(row.querySelector(".invalid-field"));
+    row.classList.toggle("invalid-row", hasInvalid);
+  }
+
+  function updateRowHealthChips(snapshot = null) {
+    const report = snapshot || validateRowsForExport({ markRows: false });
+    validRowsCount.textContent = `${report.validRows} valid`;
+    invalidRowsCount.textContent = `${report.invalidRows.length} needs attention`;
+    sessionCompletedChip.textContent = `Completed: ${report.validRows}`;
+    sessionAttentionChip.textContent = `Needs Attention: ${report.invalidRows.length}`;
+    const qualityPct = report.populatedRows ? Math.max(0, Math.round((report.validRows / report.populatedRows) * 100)) : 0;
+    qualityChip.textContent = `Quality: ${qualityPct}%`;
+    qualityScore.textContent = `${qualityPct}% Ready`;
+    const blockers = report.topBlockers || [];
+    if (!report.populatedRows) {
+      qualityBlockers.innerHTML = '<li>Add athlete rows to generate a quality score.</li>';
+    } else if (!blockers.length) {
+      qualityBlockers.innerHTML = '<li>No blockers detected. Export-ready.</li>';
+    } else {
+      qualityBlockers.innerHTML = blockers.map((item) => `<li>${item}</li>`).join("");
+    }
+    renderFixList(report);
+  }
+
+  function renderFixList(report) {
+    if (!report.invalidRows.length) {
+      fixesList.innerHTML = '<li class="fixes-empty">No issues detected. You are export-ready.</li>';
+      return;
+    }
+
+    fixesList.innerHTML = report.invalidRows
+      .map((row) => {
+        const issueText = row.firstIssueLabel || "Needs review";
+        const field = row.firstIssueKey || "";
+        return `<li><button class="fix-jump" type="button" data-fix-row="${row.index}" data-fix-field="${field}">Row ${row.index}: ${issueText}</button></li>`;
+      })
+      .join("");
+  }
+
+  function focusFixTarget(rowIndex, fieldKey) {
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    const targetRow = rows[Math.max(0, Number(rowIndex) - 1)];
+    if (!targetRow) return;
+    const selector = fieldKey ? `[data-key="${fieldKey}"]` : "[data-key]";
+    const targetInput = targetRow.querySelector(selector) || targetRow.querySelector("[data-key]");
+    if (!targetInput) return;
+    targetInput.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    targetInput.focus({ preventScroll: true });
+  }
+
+  function jumpToFirstDuplicate(validation) {
+    if (!validation || !Array.isArray(validation.invalidRows)) return false;
+    const duplicateRow = validation.invalidRows.find((row) => {
+      return Array.isArray(row.formatErrors) && row.formatErrors.includes("duplicate");
+    });
+    if (!duplicateRow) return false;
+    focusFixTarget(duplicateRow.index, "firstName");
+    return true;
+  }
+
+  function hideUndoBar() {
+    undoBar.classList.remove("show");
+    if (undoTimeout) {
+      clearTimeout(undoTimeout);
+      undoTimeout = null;
+    }
+    undoAction = null;
+  }
+
+  function offerUndo(label, action) {
+    if (undoTimeout) clearTimeout(undoTimeout);
+    undoAction = action;
+    undoText.textContent = label;
+    undoBar.classList.add("show");
+    undoTimeout = setTimeout(() => {
+      hideUndoBar();
+    }, 10000);
+  }
+
+  function performUndo() {
+    if (!undoAction) return;
+    try {
+      undoAction();
+      showToast("Undo complete", "success", 1800);
+      queueDraftSave();
+    } finally {
+      hideUndoBar();
+    }
+  }
+
+  function loadDraftState() {
+    try {
+      const raw = localStorage.getItem(draftKey);
+      if (!raw) return false;
+      const draft = JSON.parse(raw);
+      if (!draft || typeof draft !== "object") return false;
+
+      const fields = draft.fields || {};
+      updateLastSavedChip(Number(draft.at || 0));
+      persistedFieldIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el || !(id in fields)) return;
+        if (el.type === "checkbox") {
+          el.checked = Boolean(fields[id]);
+        } else {
+          el.value = String(fields[id] || "");
+        }
+      });
+
+      const rows = Array.isArray(draft.rows) ? draft.rows : [];
+      rowsBody.innerHTML = "";
+      rows.forEach((rowData) => appendRow(rowData));
+      updateSnapshotSelect();
+
+      if (!rows.length) {
+        appendRow();
+      }
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function clearDraftState() {
+    localStorage.removeItem(draftKey);
+  }
+
+  function loadExportHistory() {
+    try {
+      const raw = localStorage.getItem(exportHistoryKey);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveExportHistory(entries) {
+    localStorage.setItem(exportHistoryKey, JSON.stringify(entries.slice(0, 12)));
+  }
+
+  function clearValidationMarks() {
+    rowsBody.querySelectorAll("tr").forEach((tr) => tr.classList.remove("invalid-row"));
+    rowsBody.querySelectorAll(".invalid-field").forEach((el) => {
+      el.classList.remove("invalid-field");
+      el.removeAttribute("title");
+    });
+  }
+
+  function validateRowsForExport(options = {}) {
+    const markRows = options.markRows !== false;
+    if (markRows) {
+      clearValidationMarks();
+    }
+
+    const invalidRows = [];
+    let hasAnyData = false;
+    let populatedRows = 0;
+    let firstInvalidInput = null;
+    const strictEmail = Boolean(document.getElementById("validateEmailFormat")?.checked);
+    const strictUrl = Boolean(document.getElementById("validateUrlFormat")?.checked);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const duplicateByEmail = new Map();
+    const duplicateByIdentity = new Map();
+    const blockerCount = {};
+
+    function bumpBlocker(label) {
+      blockerCount[label] = (blockerCount[label] || 0) + 1;
+    }
+
+    rowsBody.querySelectorAll("tr").forEach((tr, index) => {
+      const data = rowValuesFromElement(tr);
+      if (rowIsEmpty(data)) return;
+
+      hasAnyData = true;
+      populatedRows += 1;
+      const missing = [];
+      const formatErrors = [];
+      const rowInvalidInputs = [];
+      let firstIssueKey = "";
+      let firstIssueLabel = "";
+
+      requiredFields.forEach((key) => {
+        if (String(data[key] || "").trim()) return;
+        missing.push(key);
+        const input = tr.querySelector(`[data-key="${key}"]`);
+        if (input) {
+          if (markRows) {
+            input.classList.add("invalid-field");
+            input.title = "Required for export";
+          }
+          rowInvalidInputs.push(input);
+        }
+        if (!firstIssueKey) {
+          firstIssueKey = key;
+          firstIssueLabel = `Missing ${keyLabel[key] || key}`;
+        }
+      });
+
+      if (strictEmail && data.email) {
+        const isValidEmail = emailPattern.test(String(data.email).trim());
+        if (!isValidEmail) {
+          formatErrors.push("email");
+          const emailInput = tr.querySelector('[data-key="email"]');
+          if (emailInput) {
+            if (markRows) {
+              emailInput.classList.add("invalid-field");
+              emailInput.title = "Invalid email format";
+            }
+            rowInvalidInputs.push(emailInput);
+          }
+          if (!firstIssueKey) {
+            firstIssueKey = "email";
+            firstIssueLabel = "Invalid Email format";
+          }
+        }
+      }
+
+      if (strictUrl && data.videoUrl) {
+        let isValidUrl = true;
+        try {
+          const parsed = new URL(String(data.videoUrl).trim());
+          isValidUrl = parsed.protocol === "http:" || parsed.protocol === "https:";
+        } catch (err) {
+          isValidUrl = false;
+        }
+
+        if (!isValidUrl) {
+          formatErrors.push("videoUrl");
+          const urlInput = tr.querySelector('[data-key="videoUrl"]');
+          if (urlInput) {
+            if (markRows) {
+              urlInput.classList.add("invalid-field");
+              urlInput.title = "Invalid URL format";
+            }
+            rowInvalidInputs.push(urlInput);
+          }
+          if (!firstIssueKey) {
+            firstIssueKey = "videoUrl";
+            firstIssueLabel = "Invalid Video Url format";
+          }
+        }
+      }
+
+      const emailKey = String(data.email || "").trim().toLowerCase();
+      if (emailKey) {
+        const current = duplicateByEmail.get(emailKey) || [];
+        current.push({ tr, index: index + 1 });
+        duplicateByEmail.set(emailKey, current);
+      }
+
+      const identityKey = [data.firstName, data.lastName, data.classYear].map((v) => String(v || "").trim().toLowerCase()).join("|");
+      if (identityKey !== "||") {
+        const current = duplicateByIdentity.get(identityKey) || [];
+        current.push({ tr, index: index + 1 });
+        duplicateByIdentity.set(identityKey, current);
+      }
+
+      if (missing.length || formatErrors.length) {
+        if (markRows) {
+          tr.classList.add("invalid-row");
+        }
+        if (!firstInvalidInput && rowInvalidInputs.length) {
+          firstInvalidInput = rowInvalidInputs[0];
+        }
+        if (missing.length) bumpBlocker("Missing required fields");
+        if (formatErrors.includes("email")) bumpBlocker("Invalid email format");
+        if (formatErrors.includes("videoUrl")) bumpBlocker("Invalid video url format");
+        invalidRows.push({ index: index + 1, missing, formatErrors, firstIssueKey, firstIssueLabel });
+      }
+    });
+
+    function addDuplicateIssues(map, label, fieldKey) {
+      map.forEach((items) => {
+        if (items.length < 2) return;
+        bumpBlocker(label);
+        items.forEach((item) => {
+          const input = item.tr.querySelector(`[data-key="${fieldKey}"]`) || item.tr.querySelector('[data-key="firstName"]');
+          if (markRows && input) {
+            input.classList.add("invalid-field");
+            input.title = "Potential duplicate entry";
+          }
+          if (markRows) {
+            item.tr.classList.add("invalid-row");
+          }
+          const existing = invalidRows.find((r) => r.index === item.index);
+          if (existing) return;
+          invalidRows.push({
+            index: item.index,
+            missing: [],
+            formatErrors: ["duplicate"],
+            firstIssueKey: fieldKey,
+            firstIssueLabel: label
+          });
+          if (!firstInvalidInput && input) firstInvalidInput = input;
+        });
+      });
+    }
+
+    addDuplicateIssues(duplicateByEmail, "Duplicate email found", "email");
+    addDuplicateIssues(duplicateByIdentity, "Potential duplicate athlete", "firstName");
+
+    const topBlockers = Object.entries(blockerCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([label, count]) => `${label}: ${count}`);
+
+    return {
+      hasAnyData,
+      invalidRows,
+      populatedRows,
+      validRows: Math.max(0, populatedRows - invalidRows.length),
+      firstInvalidInput,
+      topBlockers
+    };
+  }
+
+  function focusFirstInvalidInput(validation) {
+    if (!validation || !validation.firstInvalidInput) return;
+    validation.firstInvalidInput.focus({ preventScroll: false });
+  }
+
+  function showValidationToast(validation) {
+    if (!validation.hasAnyData) {
+      showToast("No athlete data yet. Add rows first.", "warn", 2600);
+      return;
+    }
+    if (validation.invalidRows.length) {
+      const rowList = validation.invalidRows.map((row) => row.index).join(", ");
+      showToast(`Needs fixes in row(s): ${rowList}`, "error", 3200);
+      focusFirstInvalidInput(validation);
+      return;
+    }
+    showToast(`All ${validation.validRows} row(s) look export-ready`, "success", 2200);
+  }
+
+  function setMobileSecondaryActionsOpen(isOpen) {
+    if (!topActions || !mobileMoreBtn) return;
+    topActions.classList.toggle("show-secondary", Boolean(isOpen));
+    mobileMoreBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    mobileMoreBtn.textContent = isOpen ? "Less" : "More";
+  }
+
+  function showExportSuccess(entry) {
+    if (!entry || !entry.filename) {
+      exportSuccessPanel.style.display = "none";
+      return;
+    }
+
+    const when = new Date(entry.at).toLocaleString();
+    exportSuccessMeta.textContent = `${entry.filename} · ${entry.mode} · ${when}`;
+    exportSuccessPanel.style.display = "grid";
+    redownloadLastBtn.disabled = !entry.csv;
+  }
+
+  function renderExportHistory() {
+    const entries = loadExportHistory();
+    if (!entries.length) {
+      exportHistoryList.innerHTML = '<li class="history-empty">No exports yet. Download a CSV to populate history.</li>';
+      return;
+    }
+
+    exportHistoryList.innerHTML = entries
+      .map((entry) => {
+        const when = new Date(entry.at).toLocaleString();
+        return `
+          <li class="history-item">
+            <div class="history-row">
+              <div class="history-name">${entry.filename}</div>
+              <button class="history-download" type="button" data-history-download="${entry.id}" ${entry.csv ? "" : "disabled"}>Re-download</button>
+            </div>
+            <div class="history-meta">${entry.mode} · ${when}</div>
+          </li>
+        `;
+      })
+      .join("");
+
+    showExportSuccess(entries[0] || null);
+  }
+
+  function recordExport(filename, mode, csv) {
+    const entries = loadExportHistory();
+    const safeCsv = typeof csv === "string" && csv.length <= 220000 ? csv : "";
+    entries.unshift({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      filename,
+      mode,
+      at: Date.now(),
+      csv: safeCsv
+    });
+    saveExportHistory(entries);
+    renderExportHistory();
+  }
+
+  function downloadSavedEntryById(entryId) {
+    const entries = loadExportHistory();
+    const entry = entries.find((item) => item.id === entryId);
+    if (!entry || !entry.csv) {
+      alert("This export is no longer available for re-download.");
+      return;
+    }
+    downloadCsvFile(entry.csv, entry.filename, `${entry.mode}-redownload`, false);
+  }
+
+  function eventSummaryText() {
+    const series = document.getElementById("eventSeries").value.trim();
+    const type = document.getElementById("eventType").value.trim();
+    const date = document.getElementById("eventDate").value.trim();
+    const location = document.getElementById("eventLocation").value.trim();
+    const evaluator = document.getElementById("eventEvaluator").value.trim();
+
+    const parts = [];
+    if (type) parts.push(`Type: ${type}`);
+    if (series) parts.push(`Series: ${series}`);
+    if (date) parts.push(`Date: ${date}`);
+    if (location) parts.push(`Location: ${location}`);
+    if (evaluator) parts.push(`Evaluator: ${evaluator}`);
+    if (!parts.length) return "";
+
+    if (isStructuredContextFormat()) {
+      return ["Event Context", ...parts.map((part) => `- ${part}`)].join("\n");
+    }
+
+    return `Event Context - ${parts.join(" | ")}`;
+  }
+
+  function shouldAppendContextToNotes() {
+    const checkbox = document.getElementById("appendContextToNotes");
+    return Boolean(checkbox && checkbox.checked);
+  }
+
+  function isStructuredContextFormat() {
+    const checkbox = document.getElementById("structuredContextFormat");
+    return Boolean(checkbox && checkbox.checked);
+  }
+
+  function appendSummaryToNotes(existingNotes, summary) {
+    if (!summary) return existingNotes;
+    if (!existingNotes) return summary;
+    const joiner = isStructuredContextFormat() ? "\n" : " | ";
+    return `${existingNotes}${joiner}${summary}`;
+  }
+
+  function updateRowCount() {
+    rowCount.textContent = `${rowsBody.querySelectorAll("tr").length} rows`;
+  }
+
+  function getDefaultRowEventDate() {
+    return String(document.getElementById("eventDate")?.value || "").trim();
+  }
+
+  function createTextCell(key, value) {
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = value || "";
+    input.dataset.key = key;
+    td.appendChild(input);
+    return td;
+  }
+
+  function createDateCell(key, value) {
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "date";
+    input.value = value || "";
+    input.dataset.key = key;
+    td.appendChild(input);
+    return td;
+  }
+
+  function createNotesCell(value) {
+    const td = document.createElement("td");
+    const area = document.createElement("textarea");
+    area.value = value || "";
+    area.dataset.key = "notes";
+    td.appendChild(area);
+    return td;
+  }
+
+  function rowValuesFromElement(tr) {
+    const data = {};
+    tr.querySelectorAll("[data-key]").forEach((el) => {
+      data[el.dataset.key] = String(el.value || "").trim();
+    });
+    return data;
+  }
+
+  function rowIsEmpty(data) {
+    return keys.every((key) => !String(data[key] || "").trim());
+  }
+
+  function renderRowIndexing() {
+    rowsBody.querySelectorAll("tr").forEach((tr, idx) => {
+      const cell = tr.querySelector(".row-index");
+      if (cell) cell.textContent = String(idx + 1);
+    });
+  }
+
+  function appendRow(seed = {}) {
+    if (!seed.rowEventDate) {
+      const fallbackDate = getDefaultRowEventDate();
+      if (fallbackDate) seed.rowEventDate = fallbackDate;
+    }
+
+    const tr = document.createElement("tr");
+
+    const idxCell = document.createElement("td");
+    const selectCell = document.createElement("td");
+    selectCell.className = "row-actions";
+    const select = document.createElement("input");
+    select.type = "checkbox";
+    select.className = "row-select";
+    select.setAttribute("aria-label", "Select row");
+    selectCell.appendChild(select);
+    tr.appendChild(selectCell);
+
+    idxCell.className = "row-actions row-index";
+    idxCell.textContent = "1";
+    tr.appendChild(idxCell);
+
+    keys.forEach((key) => {
+      if (key === "rowEventDate") {
+        tr.appendChild(createDateCell(key, seed[key] || ""));
+      } else if (key === "notes") {
+        tr.appendChild(createNotesCell(seed[key] || ""));
+      } else {
+        tr.appendChild(createTextCell(key, seed[key] || ""));
+      }
+
+      const cell = tr.lastElementChild;
+      if (!requiredFields.includes(key) && key !== "rowEventDate") {
+        cell.classList.add("optional-col");
+      }
+    });
+
+    const removeCell = document.createElement("td");
+    removeCell.className = "row-actions";
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "tiny";
+    removeBtn.textContent = "Delete";
+    removeBtn.addEventListener("click", () => {
+      const rowSnapshot = rowValuesFromElement(tr);
+      const rowPosition = Array.from(rowsBody.querySelectorAll("tr")).indexOf(tr);
+      tr.remove();
+      renderRowIndexing();
+      updateRowCount();
+      updateRowHealthChips();
+      queueDraftSave();
+      offerUndo("Row deleted", () => {
+        appendRowAt(rowSnapshot, rowPosition);
+      });
+      logActivity(`Deleted row ${rowPosition + 1}`);
+    });
+    removeCell.appendChild(removeBtn);
+    tr.appendChild(removeCell);
+
+    rowsBody.appendChild(tr);
+    renderRowIndexing();
+    updateRowCount();
+    updateRowHealthChips();
+  }
+
+  function appendRowAt(seed, index) {
+    appendRow(seed || {});
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    const inserted = rows[rows.length - 1];
+    if (!inserted) return;
+    const boundedIndex = Math.max(0, Math.min(Number(index) || 0, rows.length - 1));
+    const before = rows[boundedIndex];
+    if (before && before !== inserted) {
+      rowsBody.insertBefore(inserted, before);
+      renderRowIndexing();
+      updateRowCount();
+      updateRowHealthChips();
+    }
+  }
+
+  function focusRequiredFieldByIndex(rowIndex, fieldIndex) {
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    const row = rows[rowIndex];
+    if (!row) return false;
+    const key = requiredFields[fieldIndex];
+    if (!key) return false;
+    const input = row.querySelector(`[data-key="${key}"]`);
+    if (!input) return false;
+    input.focus({ preventScroll: false });
+    return true;
+  }
+
+  function moveRequiredFieldFocus(currentInput, direction) {
+    const row = currentInput.closest("tr");
+    if (!row) return;
+
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    let rowIndex = rows.indexOf(row);
+    let fieldIndex = requiredFields.indexOf(currentInput.dataset.key || "");
+    if (rowIndex < 0 || fieldIndex < 0) return;
+
+    fieldIndex += direction;
+
+    while (rowIndex >= 0) {
+      if (fieldIndex >= 0 && fieldIndex < requiredFields.length) {
+        if (focusRequiredFieldByIndex(rowIndex, fieldIndex)) return;
+        fieldIndex += direction;
+        continue;
+      }
+
+      if (fieldIndex >= requiredFields.length) {
+        rowIndex += 1;
+        fieldIndex = 0;
+        if (rowIndex >= rows.length) {
+          appendRow();
+          queueDraftSave();
+          focusRequiredFieldByIndex(rows.length, 0);
+          return;
+        }
+        continue;
+      }
+
+      if (fieldIndex < 0) {
+        rowIndex -= 1;
+        fieldIndex = requiredFields.length - 1;
+        if (rowIndex < 0) {
+          focusRequiredFieldByIndex(0, 0);
+          return;
+        }
+      }
+    }
+  }
+
+  function appendRows(count) {
+    const total = Number(count) || 0;
+    for (let i = 0; i < total; i += 1) {
+      appendRow();
+    }
+    if (total > 0) {
+      queueDraftSave();
+      showToast(`Added ${total} rows`, "info", 1700);
+    }
+  }
+
+  function duplicateLastRow() {
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    if (!rows.length) {
+      appendRow();
+      queueDraftSave();
+      showToast("Added first row", "info", 1600);
+      return;
+    }
+    const last = rows[rows.length - 1];
+    const seed = rowValuesFromElement(last);
+    appendRow(seed);
+    queueDraftSave();
+    showToast("Duplicated last row", "info", 1600);
+  }
+
+  function csvEscape(value) {
+    const raw = String(value == null ? "" : value);
+    const escaped = raw.replace(/"/g, '""');
+    return `"${escaped}"`;
+  }
+
+  function normalizeHeader(value) {
+    return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  }
+
+  function parseCsv(text) {
+    const rows = [];
+    let row = [];
+    let cell = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i += 1) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (inQuotes) {
+        if (ch === '"' && next === '"') {
+          cell += '"';
+          i += 1;
+        } else if (ch === '"') {
+          inQuotes = false;
+        } else {
+          cell += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(cell);
+        cell = "";
+      } else if (ch === '\n') {
+        row.push(cell);
+        rows.push(row);
+        row = [];
+        cell = "";
+      } else if (ch !== '\r') {
+        cell += ch;
+      }
+    }
+
+    if (cell.length || row.length) {
+      row.push(cell);
+      rows.push(row);
+    }
+
+    if (!rows.length) return [];
+
+    const headersRaw = rows[0].map((h) => String(h || "").trim());
+    const normalizedHeaders = headersRaw.map(normalizeHeader);
+
+    const map = {
+      jersey: ["jersey", "jerseynumber"],
+      firstName: ["firstname", "first"],
+      lastName: ["lastname", "last"],
+      position: ["position", "pos"],
+      email: ["email"],
+      phone: ["phone"],
+      classYear: ["classyr", "classyear", "class"],
+      height: ["height", "ht"],
+      weight: ["weight", "wt"],
+      stateProvince: ["stateprovince", "state", "province"],
+      schoolTeam: ["schoolteam", "school", "team"],
+      recTeam: ["recteam", "recruitteam"],
+      instagram: ["instagram", "ig"],
+      twitterX: ["xtwitter", "x", "twitter"],
+      tiktok: ["tiktok"],
+      videoUrl: ["videourl", "video", "videolink", "url"],
+      package: ["package"],
+      status: ["status"],
+      grade: ["grade"],
+      transcript: ["transcript"],
+      notes: ["notes", "note"]
+    };
+
+    function getValue(record, aliases) {
+      for (let i = 0; i < aliases.length; i += 1) {
+        const idx = normalizedHeaders.indexOf(aliases[i]);
+        if (idx >= 0) return String(record[idx] || "").trim();
+      }
+      return "";
+    }
+
+    return rows
+      .slice(1)
+      .map((record) => ({
+        rowEventDate: "",
+        jersey: getValue(record, map.jersey),
+        firstName: getValue(record, map.firstName),
+        lastName: getValue(record, map.lastName),
+        position: getValue(record, map.position),
+        email: getValue(record, map.email),
+        phone: getValue(record, map.phone),
+        classYear: getValue(record, map.classYear),
+        height: getValue(record, map.height),
+        weight: getValue(record, map.weight),
+        stateProvince: getValue(record, map.stateProvince),
+        schoolTeam: getValue(record, map.schoolTeam),
+        recTeam: getValue(record, map.recTeam),
+        instagram: getValue(record, map.instagram),
+        twitterX: getValue(record, map.twitterX),
+        tiktok: getValue(record, map.tiktok),
+        videoUrl: getValue(record, map.videoUrl),
+        package: getValue(record, map.package),
+        status: getValue(record, map.status),
+        grade: getValue(record, map.grade),
+        transcript: getValue(record, map.transcript),
+        notes: getValue(record, map.notes)
+      }))
+      .map((rowData) => {
+        const match = rowData.notes.match(/Date:\s*(\d{4}-\d{2}-\d{2})/i);
+        if (match) rowData.rowEventDate = match[1];
+        return rowData;
+      })
+      .filter((rowData) => !rowIsEmpty(rowData));
+  }
+
+  function exportCsv() {
+    if (isExporting) return;
+    setExportLock(true, "Exporting CSV...");
+    setButtonBusy(downloadCsvBtn, true, "Exporting...");
+    try {
+    const validation = validateRowsForExport();
+    updateRowHealthChips(validation);
+    if (!validation.hasAnyData) {
+      showToast("Add at least one athlete row before exporting.", "warn", 2600);
+      return;
+    }
+    if (validation.invalidRows.length) {
+      const rowList = validation.invalidRows.map((row) => row.index).join(", ");
+      const hasRequiredIssues = validation.invalidRows.some((row) => row.missing.length);
+      const hasFormatIssues = validation.invalidRows.some((row) => row.formatErrors.length);
+      const issueParts = [];
+      if (hasRequiredIssues) issueParts.push("required fields");
+      if (hasFormatIssues) issueParts.push("email/url format");
+      showToast(`Fix ${issueParts.join(" and ")} in row(s): ${rowList}.`, "error", 3400);
+      focusFirstInvalidInput(validation);
+      return;
+    }
+
+    const summary = eventSummaryText();
+    const rows = [];
+
+    rowsBody.querySelectorAll("tr").forEach((tr) => {
+      const data = rowValuesFromElement(tr);
+      if (rowIsEmpty(data)) return;
+
+      if (summary && shouldAppendContextToNotes()) {
+        data.notes = appendSummaryToNotes(data.notes, summary);
+      }
+
+      const row = [
+        data.jersey,
+        data.firstName,
+        data.lastName,
+        data.position,
+        data.email,
+        data.phone,
+        data.classYear,
+        data.height,
+        data.weight,
+        data.stateProvince,
+        data.schoolTeam,
+        data.recTeam,
+        data.instagram,
+        data.twitterX,
+        data.tiktok,
+        data.videoUrl,
+        data.package,
+        data.status,
+        data.grade,
+        data.transcript,
+        data.notes
+      ];
+
+      rows.push(row);
+    });
+
+    const csv = [
+      headers.map(csvEscape).join(","),
+      ...rows.map((row) => row.map(csvEscape).join(","))
+    ].join("\n");
+
+    const series = document.getElementById("eventSeries").value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const type = document.getElementById("eventType").value.trim().toLowerCase() || "event";
+    const date = document.getElementById("eventDate").value.trim() || new Date().toISOString().slice(0, 10);
+    const base = ["subjectreport", type, series || "series", date].join("-");
+
+    downloadCsvFile(csv, `${base}.csv`, "single");
+    showToast("CSV exported", "success");
+    logActivity(`Exported single CSV (${rows.length} rows)`);
+    } finally {
+      setTimeout(() => setButtonBusy(downloadCsvBtn, false), 120);
+      setExportLock(false);
+    }
+  }
+
+  function downloadCsvFile(csv, filename, mode, shouldRecord = true) {
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    if (shouldRecord) {
+      recordExport(filename, mode || "single", csv);
+    }
+  }
+
+  function exportCsvByDate() {
+    let groupCount = 0;
+    if (isExporting) return;
+    setExportLock(true, "Exporting by date...");
+    setButtonBusy(downloadByDateBtn, true, "Exporting...");
+    try {
+    const validation = validateRowsForExport();
+    updateRowHealthChips(validation);
+    if (!validation.hasAnyData) {
+      showToast("Add at least one athlete row before exporting.", "warn", 2600);
+      return;
+    }
+    if (validation.invalidRows.length) {
+      const rowList = validation.invalidRows.map((row) => row.index).join(", ");
+      const hasRequiredIssues = validation.invalidRows.some((row) => row.missing.length);
+      const hasFormatIssues = validation.invalidRows.some((row) => row.formatErrors.length);
+      const issueParts = [];
+      if (hasRequiredIssues) issueParts.push("required fields");
+      if (hasFormatIssues) issueParts.push("email/url format");
+      showToast(`Fix ${issueParts.join(" and ")} in row(s): ${rowList}.`, "error", 3400);
+      focusFirstInvalidInput(validation);
+      return;
+    }
+
+    const globalDate = document.getElementById("eventDate").value.trim();
+    const groups = {};
+
+    rowsBody.querySelectorAll("tr").forEach((tr) => {
+      const data = rowValuesFromElement(tr);
+      if (rowIsEmpty(data)) return;
+
+      const eventDate = (data.rowEventDate || globalDate || "undated").trim();
+      if (!groups[eventDate]) groups[eventDate] = [];
+
+      const summaryParts = [];
+      const type = document.getElementById("eventType").value.trim();
+      const series = document.getElementById("eventSeries").value.trim();
+      const location = document.getElementById("eventLocation").value.trim();
+      const evaluator = document.getElementById("eventEvaluator").value.trim();
+
+      if (type) summaryParts.push(`Type: ${type}`);
+      if (series) summaryParts.push(`Series: ${series}`);
+      if (eventDate && eventDate !== "undated") summaryParts.push(`Date: ${eventDate}`);
+      if (location) summaryParts.push(`Location: ${location}`);
+      if (evaluator) summaryParts.push(`Evaluator: ${evaluator}`);
+
+      let summary = "";
+      if (summaryParts.length) {
+        summary = isStructuredContextFormat()
+          ? ["Event Context", ...summaryParts.map((part) => `- ${part}`)].join("\n")
+          : `Event Context - ${summaryParts.join(" | ")}`;
+      }
+      if (summary && shouldAppendContextToNotes()) {
+        data.notes = appendSummaryToNotes(data.notes, summary);
+      }
+
+      const row = [
+        data.jersey,
+        data.firstName,
+        data.lastName,
+        data.position,
+        data.email,
+        data.phone,
+        data.classYear,
+        data.height,
+        data.weight,
+        data.stateProvince,
+        data.schoolTeam,
+        data.recTeam,
+        data.instagram,
+        data.twitterX,
+        data.tiktok,
+        data.videoUrl,
+        data.package,
+        data.status,
+        data.grade,
+        data.transcript,
+        data.notes
+      ];
+
+      groups[eventDate].push(row);
+    });
+
+    const dates = Object.keys(groups);
+    groupCount = dates.length;
+
+    const seriesSlug = document.getElementById("eventSeries").value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "series";
+    const typeSlug = document.getElementById("eventType").value.trim().toLowerCase() || "event";
+
+    dates.forEach((dateKey, index) => {
+      const csv = [
+        headers.map(csvEscape).join(","),
+        ...groups[dateKey].map((row) => row.map(csvEscape).join(","))
+      ].join("\n");
+
+      const safeDate = dateKey === "undated" ? "undated" : dateKey;
+      const filename = `subjectreport-${typeSlug}-${seriesSlug}-${safeDate}.csv`;
+      setTimeout(() => downloadCsvFile(csv, filename, "by-date"), index * 150);
+    });
+
+    showToast(`Exported ${dates.length} CSV file(s) by date`, "success");
+    logActivity(`Exported ${dates.length} grouped CSV file(s)`);
+    } finally {
+      const releaseDelay = Math.max(160, groupCount * 150 + 120);
+      setTimeout(() => setButtonBusy(downloadByDateBtn, false), releaseDelay);
+      setTimeout(() => setExportLock(false), releaseDelay);
+    }
+  }
+
+  function loadSampleRows() {
+    const sample = [
+      {
+        rowEventDate: "2026-05-22",
+        jersey: "7",
+        firstName: "Jayden",
+        lastName: "Carter",
+        position: "QB",
+        email: "jayden.carter@email.com",
+        phone: "555-0101",
+        classYear: "2027",
+        height: "6'1\"",
+        weight: "188",
+        stateProvince: "TX",
+        schoolTeam: "Southlake Carroll",
+        recTeam: "North DFW Elite",
+        instagram: "@jay7carter",
+        twitterX: "@jay7carter",
+        tiktok: "@jay7carter",
+        videoUrl: "https://hudl.com/video/3/123/456",
+        package: "Transcript",
+        status: "Prospect",
+        grade: "A-",
+        transcript: "Pending",
+        notes: "Strong deep ball, improving pocket movement"
+      },
+      {
+        rowEventDate: "2026-05-22",
+        jersey: "18",
+        firstName: "Kai",
+        lastName: "Howard",
+        position: "WR",
+        email: "kai.howard@email.com",
+        phone: "555-0102",
+        classYear: "2028",
+        height: "5'11\"",
+        weight: "172",
+        stateProvince: "TX",
+        schoolTeam: "Keller",
+        recTeam: "Texas Air 7v7",
+        instagram: "@kaihoward18",
+        twitterX: "@kaihoward18",
+        tiktok: "",
+        videoUrl: "https://hudl.com/video/3/999/123",
+        package: "Program",
+        status: "Evaluating",
+        grade: "B+",
+        transcript: "In Progress",
+        notes: "Top-end acceleration and route tempo"
+      },
+      {
+        rowEventDate: "2026-05-23",
+        jersey: "44",
+        firstName: "Mason",
+        lastName: "Knox",
+        position: "LB",
+        email: "mason.knox@email.com",
+        phone: "555-0103",
+        classYear: "2027",
+        height: "6'0\"",
+        weight: "210",
+        stateProvince: "TX",
+        schoolTeam: "Keller",
+        recTeam: "Keller Elite",
+        instagram: "@masonknox44",
+        twitterX: "@masonknox44",
+        tiktok: "",
+        videoUrl: "https://hudl.com/video/3/888/321",
+        package: "Transcript",
+        status: "Prospect",
+        grade: "B",
+        transcript: "Pending",
+        notes: "Pursuit angle consistency improved"
+      }
+    ];
+
+    sample.forEach((row) => appendRow(row));
+    queueDraftSave();
+    logActivity(`Loaded ${sample.length} sample row(s)`);
+  }
+
+  addRowBtn.addEventListener("click", () => {
+    appendRow();
+    queueDraftSave();
+  });
+  addFiveRowsBtn.addEventListener("click", () => appendRows(5));
+  duplicateLastRowBtn.addEventListener("click", duplicateLastRow);
+  validateRowsBtn.addEventListener("click", () => {
+    const validation = validateRowsForExport();
+    updateRowHealthChips(validation);
+    showValidationToast(validation);
+  });
+  downloadCsvBtn.addEventListener("click", exportCsv);
+  downloadByDateBtn.addEventListener("click", exportCsvByDate);
+  loadSampleBtn.addEventListener("click", loadSampleRows);
+  printCheckinBtn.addEventListener("click", () => {
+    window.print();
+    logActivity("Opened print check-in view");
+  });
+
+  requiredOnlyMode.addEventListener("change", () => {
+    tableWrap.classList.toggle("required-only", requiredOnlyMode.checked);
+    queueDraftSave();
+    logActivity(requiredOnlyMode.checked ? "Enabled required-only mode" : "Disabled required-only mode");
+  });
+
+  restoreSnapshotBtn.addEventListener("click", () => {
+    const snapshots = loadSnapshots();
+    const selected = snapshots[Number(snapshotSelect.value || 0)];
+    if (!selected) {
+      showToast("No snapshot selected", "warn", 2200);
+      return;
+    }
+    const ok = confirm("Restore selected snapshot? Current unsaved changes will be replaced.");
+    if (!ok) return;
+    const fields = selected.fields || {};
+    persistedFieldIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el || !(id in fields)) return;
+      if (el.type === "checkbox") el.checked = Boolean(fields[id]);
+      else el.value = String(fields[id] || "");
+    });
+    rowsBody.innerHTML = "";
+    (selected.rows || []).forEach((rowData) => appendRow(rowData));
+    if (!rowsBody.querySelector("tr")) appendRow();
+    saveDraftState();
+    updateRowHealthChips();
+    showToast("Snapshot restored", "success", 2000);
+    logActivity("Restored draft snapshot");
+  });
+
+  bulkApplyBtn.addEventListener("click", () => {
+    const field = bulkFieldSelect.value;
+    const value = String(bulkValueInput.value || "");
+    if (!field) {
+      showToast("Select a field for bulk apply", "warn", 2400);
+      return;
+    }
+    const rows = Array.from(rowsBody.querySelectorAll("tr"));
+    const selectedRows = rows.filter((tr) => tr.querySelector(".row-select")?.checked);
+    if (!selectedRows.length) {
+      showToast("Select at least one row", "warn", 2400);
+      return;
+    }
+
+    selectedRows.forEach((tr) => {
+      const input = tr.querySelector(`[data-key="${field}"]`);
+      if (input) input.value = value;
+    });
+    queueDraftSave();
+    updateRowHealthChips();
+    showToast(`Applied ${field} to ${selectedRows.length} row(s)`, "success", 2000);
+    logActivity(`Bulk applied ${field} to ${selectedRows.length} row(s)`);
+  });
+
+  selectAllRows.addEventListener("change", () => {
+    rowsBody.querySelectorAll(".row-select").forEach((cb) => {
+      cb.checked = selectAllRows.checked;
+    });
+  });
+  if (mobileMoreBtn) {
+    mobileMoreBtn.addEventListener("click", () => {
+      setMobileSecondaryActionsOpen(!topActions.classList.contains("show-secondary"));
+    });
+  }
+
+  document.querySelectorAll(".top-actions .mobile-secondary").forEach((button) => {
+    button.addEventListener("click", () => {
+      setMobileSecondaryActionsOpen(false);
+    });
+  });
+
+  importCsvBtn.addEventListener("click", () => {
+    importCsvInput.click();
+    setMobileSecondaryActionsOpen(false);
+  });
+
+  importCsvInput.addEventListener("change", async (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    setButtonBusy(importCsvBtn, true, "Importing...");
+    try {
+      const text = await file.text();
+      const importedRows = parseCsv(text);
+      if (!importedRows.length) {
+        showToast("No valid athlete rows found in this CSV", "warn", 2800);
+        event.target.value = "";
+        return;
+      }
+
+      const existingRows = rowsBody.querySelectorAll("tr").length;
+      if (existingRows > 0) {
+        const replace = confirm("Replace current rows with imported CSV rows? Click Cancel to append instead.");
+        if (replace) rowsBody.innerHTML = "";
+        if (replace) hideUndoBar();
+      }
+
+      importedRows.forEach((rowData) => appendRow(rowData));
+      const importValidation = validateRowsForExport();
+      updateRowHealthChips(importValidation);
+      const jumpedToDuplicate = jumpToFirstDuplicate(importValidation);
+      queueDraftSave();
+      showToast(`Imported ${importedRows.length} row(s) from ${file.name}`, "success");
+      if (jumpedToDuplicate) {
+        showToast("Potential duplicate detected. Jumped to first duplicate row.", "warn", 3200);
+      }
+      logActivity(`Imported ${importedRows.length} row(s) from ${file.name}`);
+      event.target.value = "";
+    } finally {
+      setButtonBusy(importCsvBtn, false);
+    }
+  });
+
+  clearRowsBtn.addEventListener("click", () => {
+    if (!confirm("Clear all athlete rows?")) return;
+    const rowsSnapshot = Array.from(rowsBody.querySelectorAll("tr")).map((tr) => rowValuesFromElement(tr));
+    rowsBody.innerHTML = "";
+    updateRowCount();
+    updateRowHealthChips();
+    saveDraftState();
+    if (rowsSnapshot.length) {
+      offerUndo("All rows cleared", () => {
+        rowsBody.innerHTML = "";
+        rowsSnapshot.forEach((rowData) => appendRow(rowData));
+      });
+    }
+    logActivity(`Cleared all rows (${rowsSnapshot.length})`);
+  });
+
+  clearHistoryBtn.addEventListener("click", () => {
+    if (!confirm("Clear export history?")) return;
+    saveExportHistory([]);
+    renderExportHistory();
+  });
+
+  exportHistoryList.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-history-download]");
+    if (!target) return;
+    downloadSavedEntryById(target.dataset.historyDownload);
+  });
+
+  redownloadLastBtn.addEventListener("click", () => {
+    const entries = loadExportHistory();
+    if (!entries.length || !entries[0].id) {
+      alert("No recent export available.");
+      return;
+    }
+    downloadSavedEntryById(entries[0].id);
+  });
+
+  fixesList.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-fix-row]");
+    if (!target) return;
+    focusFixTarget(target.dataset.fixRow, target.dataset.fixField || "");
+  });
+
+  undoBtn.addEventListener("click", performUndo);
+
+  clearActivityBtn.addEventListener("click", () => {
+    if (!confirm("Clear activity log?")) return;
+    saveActivityLog([]);
+    renderActivityLog();
+  });
+
+  document.addEventListener("input", (event) => {
+    if (!event.target.closest(".wrap")) return;
+    if (event.target.matches("[data-key]")) {
+      event.target.classList.remove("invalid-field");
+      const row = event.target.closest("tr");
+      refreshRowValidationState(row);
+    }
+    updateRowHealthChips();
+    queueDraftSave();
+  });
+
+  document.addEventListener("change", (event) => {
+    if (!event.target.closest(".wrap")) return;
+    if (event.target.classList.contains("row-select")) {
+      const all = Array.from(rowsBody.querySelectorAll(".row-select"));
+      selectAllRows.checked = all.length > 0 && all.every((cb) => cb.checked);
+      return;
+    }
+    updateRowHealthChips();
+    queueDraftSave();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setMobileSecondaryActionsOpen(false);
+    }
+
+    const inRowInput = event.target.matches('input[data-key], select[data-key]');
+    const withModifiers = event.ctrlKey || event.metaKey || event.altKey;
+    if (event.key === "Enter" && inRowInput && !withModifiers && !event.isComposing) {
+      const key = event.target.dataset.key || "";
+      if (requiredFields.includes(key)) {
+        event.preventDefault();
+        moveRequiredFieldFocus(event.target, event.shiftKey ? -1 : 1);
+        return;
+      }
+    }
+
+    const withCmd = event.ctrlKey || event.metaKey;
+    if (!withCmd || event.key !== "Enter") return;
+    if (event.shiftKey) {
+      event.preventDefault();
+      exportCsvByDate();
+      return;
+    }
+    event.preventDefault();
+    exportCsv();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!topActions || topActions.contains(event.target)) return;
+    setMobileSecondaryActionsOpen(false);
+  });
+
+  const restored = loadDraftState();
+  if (!restored) {
+    appendRow();
+    saveDraftState();
+    updateLastSavedChip(Date.now());
+  }
+
+  updateRowHealthChips();
+  updateSnapshotSelect();
+  renderActivityLog();
+  setMobileSecondaryActionsOpen(false);
+
+  window.addEventListener("beforeunload", flushDraftSave);
+
+  document.getElementById("clearRowsBtn").addEventListener("dblclick", () => {
+    clearDraftState();
+  });
+
+  renderExportHistory();
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+{
+  "generatedAt": "2026-05-23T21:02:59.905Z",
+  "startedAt": "2026-05-23T21:02:53.015Z",
+  "finishedAt": "2026-05-23T21:02:59.905Z",
+  "totalDurationMs": 6890,
+  "workspace": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app",
+  "summary": {
+    "status": "pass",
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "failedTaskIds": []
+  },
+  "tasks": [
+    {
+      "id": "supabase_schema_contract",
+      "command": "node ./scripts/supabase-schema-contract-check.js",
+      "startedAt": "2026-05-23T21:02:53.016Z",
+      "finishedAt": "2026-05-23T21:02:53.816Z",
+      "durationMs": 800,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Supabase schema contract report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\supabase-schema-contract-report.json\nStatus: PASS (8/8)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:53.801Z",
+        "target": "supabase schema contract",
+        "static": {
+          "schemaPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql",
+          "migrationPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql",
+          "expectedAthletesColumns": [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "jersey_number",
+            "position",
+            "class_year",
+            "height",
+            "weight",
+            "school",
+            "state",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url",
+            "package",
+            "status",
+            "grade",
+            "transcript_url",
+            "notes",
+            "created_at",
+            "updated_at"
+          ],
+          "expectedSrEventsColumns": [
+            "id",
+            "event_name",
+            "detail",
+            "page",
+            "source",
+            "created_at"
+          ],
+          "extractedAthletesColumns": [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "jersey_number",
+            "position",
+            "class_year",
+            "height",
+            "weight",
+            "school",
+            "state",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url",
+            "package",
+            "status",
+            "grade",
+            "transcript_url",
+            "notes",
+            "created_at",
+            "updated_at"
+          ],
+          "extractedMigrationColumns": [
+            "jersey_number",
+            "height",
+            "weight",
+            "rec_team",
+            "instagram",
+            "x_twitter",
+            "tiktok",
+            "video_url"
+          ]
+        },
+        "live": {
+          "enabled": true,
+          "mode": "anon_plus_auth_token",
+          "reason": "",
+          "checks": [
+            {
+              "id": "live_athletes_select",
+              "ok": true,
+              "status": 200,
+              "missingColumns": [],
+              "bodyPreview": "[]"
+            },
+            {
+              "id": "live_sr_events_select",
+              "ok": true,
+              "status": 200,
+              "missingColumns": [],
+              "bodyPreview": "[]"
+            }
+          ]
+        },
+        "summary": {
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "failedIds": [],
+          "status": "pass"
+        },
+        "checks": [
+          {
+            "id": "schema_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql"
+          },
+          {
+            "id": "migration_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql"
+          },
+          {
+            "id": "schema_has_athletes_table",
+            "ok": true,
+            "detail": "columns found: 24"
+          },
+          {
+            "id": "schema_has_required_athletes_columns",
+            "ok": true,
+            "detail": "ok"
+          },
+          {
+            "id": "migration_has_profile_columns",
+            "ok": true,
+            "detail": "ok"
+          },
+          {
+            "id": "events_schema_sql_present",
+            "ok": true,
+            "detail": "sr_events schema is defined in repository"
+          },
+          {
+            "id": "live_athletes_schema_contract",
+            "ok": true,
+            "detail": "ok"
+          },
+          {
+            "id": "live_sr_events_contract",
+            "ok": true,
+            "detail": "ok"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sr_events_health",
+      "command": "node ./scripts/sr-events-healthcheck.js",
+      "startedAt": "2026-05-23T21:02:53.816Z",
+      "finishedAt": "2026-05-23T21:02:54.200Z",
+      "durationMs": 384,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "SR events health report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\sr-events-health-report.json\nStatus: PASS (6/6)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:54.138Z",
+        "target": "sr_events health",
+        "summary": {
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "failedIds": [],
+          "status": "pass"
+        },
+        "checks": [
+          {
+            "id": "events_schema_file_exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-events-schema.sql"
+          },
+          {
+            "id": "sr_events_create_table_present",
+            "ok": true,
+            "detail": "create table statement"
+          },
+          {
+            "id": "sr_events_rls_enabled",
+            "ok": true,
+            "detail": "RLS enabled"
+          },
+          {
+            "id": "sr_events_insert_policy_present",
+            "ok": true,
+            "detail": "anon insert policy"
+          },
+          {
+            "id": "sr_events_select_policy_present",
+            "ok": true,
+            "detail": "authenticated select policy"
+          },
+          {
+            "id": "live_sr_events_query",
+            "ok": true,
+            "detail": "ok"
+          }
+        ],
+        "live": {
+          "enabled": true,
+          "mode": "anon_plus_auth_token",
+          "reason": "",
+          "result": {
+            "ok": true,
+            "status": 200,
+            "bodyPreview": "[]"
+          }
+        }
+      }
+    },
+    {
+      "id": "regenerate_static",
+      "command": "node ./scripts/update-marketplace-static.js",
+      "startedAt": "2026-05-23T21:02:54.201Z",
+      "finishedAt": "2026-05-23T21:02:54.263Z",
+      "durationMs": 62,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "marketplace updated from marketplace.backup-20260522-171007.html",
+      "stderr": ""
+    },
+    {
+      "id": "healthcheck_static",
+      "command": "node ./scripts/marketplace-static-healthcheck.js",
+      "startedAt": "2026-05-23T21:02:54.264Z",
+      "finishedAt": "2026-05-23T21:02:54.325Z",
+      "durationMs": 61,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Static marketplace health report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\marketplace-static-health-report.json\nStatus: PASS (8/8)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:54.314Z",
+        "status": "pass",
+        "totals": {
+          "checks": 8,
+          "passed": 8,
+          "failed": 0
+        },
+        "checks": [
+          {
+            "label": "marketplace.html exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\marketplace.html"
+          },
+          {
+            "label": "static runtime exists",
+            "ok": true,
+            "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\scripts\\marketplace-static-runtime.js"
+          },
+          {
+            "label": "copy filtered view action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "static health check action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "health report export action present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "match reason rendering present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "preset quick link support present",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "auto boot health check present",
+            "ok": true,
+            "detail": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "games_relevance",
+      "command": "node ./scripts/games-relevance-check.js",
+      "startedAt": "2026-05-23T21:02:54.326Z",
+      "finishedAt": "2026-05-23T21:02:54.377Z",
+      "durationMs": 51,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Games relevance checks: PASS (5/5, 100%)\nGames relevance scorecard report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\games-relevance-scorecard.json\nGames relevance markdown scorecard: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\games-relevance-scorecard.md",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:54.365Z",
+        "score": 100,
+        "summary": {
+          "total": 5,
+          "passed": 5,
+          "failed": 0,
+          "failedCases": []
+        },
+        "cases": [
+          {
+            "id": "jersey_priority",
+            "passed": true,
+            "expected": "Top result should be a #7 match with Exact jersey reason",
+            "topResult": {
+              "slug": "gamma",
+              "relevanceScore": 200,
+              "matchReasons": [
+                "Exact search",
+                "Exact jersey"
+              ]
+            },
+            "query": {
+              "q": "7",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "exact_team_priority",
+            "passed": true,
+            "expected": "Exact team should rank first with Exact team reason",
+            "topResult": {
+              "slug": "alpha",
+              "relevanceScore": 85,
+              "matchReasons": [
+                "Exact team"
+              ]
+            },
+            "query": {
+              "team": "allen",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "tag_stack_priority",
+            "passed": true,
+            "expected": "Strong tag match should rank first and include tag reason",
+            "topResult": {
+              "slug": "alpha",
+              "relevanceScore": 70,
+              "matchReasons": [
+                "2 tag matches"
+              ]
+            },
+            "query": {
+              "tags": "highlight,touchdown",
+              "sort": "Most Recent"
+            }
+          },
+          {
+            "id": "fallback_most_clips",
+            "passed": true,
+            "expected": "No-signal fallback Most Clips should rank by clip count",
+            "topResult": {
+              "slug": "beta",
+              "relevanceScore": 0,
+              "matchReasons": []
+            },
+            "query": {
+              "sort": "Most Clips"
+            }
+          },
+          {
+            "id": "fallback_most_recent",
+            "passed": true,
+            "expected": "No-signal fallback Most Recent should rank newest first",
+            "topResult": {
+              "slug": "gamma",
+              "relevanceScore": 0,
+              "matchReasons": []
+            },
+            "query": {
+              "sort": "Most Recent"
+            }
+          }
+        ],
+        "topMisses": []
+      }
+    },
+    {
+      "id": "smoke_static",
+      "command": "node ./scripts/marketplace-static-smoke.js",
+      "startedAt": "2026-05-23T21:02:54.378Z",
+      "finishedAt": "2026-05-23T21:02:58.885Z",
+      "durationMs": 4507,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Static marketplace smoke report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\marketplace-static-smoke-report.json\nStatus: PASS (8/8)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:58.862Z",
+        "edgePath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+        "status": "pass",
+        "totals": {
+          "checks": 8,
+          "passed": 8,
+          "failed": 0
+        },
+        "checks": [
+          {
+            "label": "Marketplace DOM dump completed",
+            "ok": true,
+            "detail": "[42604:10828:0523/170255.180:ERROR:chrome\\browser\\component_updater\\edge_language_detection_model_installer.cc:97] Edge Language Detection Model: On-demand update failed with error: 5\r\n"
+          },
+          {
+            "label": "Run Health Check control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preset import control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preset payload control rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Health status panel rendered",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Preview DOM dump completed",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Clip form rendered in preview",
+            "ok": true,
+            "detail": ""
+          },
+          {
+            "label": "Clip import control rendered in preview",
+            "ok": true,
+            "detail": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "admin_ops",
+      "command": "node ./scripts/admin-ops-check.js",
+      "startedAt": "2026-05-23T21:02:58.886Z",
+      "finishedAt": "2026-05-23T21:02:58.957Z",
+      "durationMs": 71,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Admin ops check report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\admin-ops-check-report.json\nStatus: PASS (11/11)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:58.945Z",
+        "target": "admin.html",
+        "summary": {
+          "total": 11,
+          "passed": 11,
+          "failed": 0,
+          "failedIds": [],
+          "status": "pass"
+        },
+        "checks": [
+          {
+            "id": "bulk_job_preview",
+            "ok": true,
+            "message": "Dry-run bulk job preview handler exists"
+          },
+          {
+            "id": "bulk_job_execute",
+            "ok": true,
+            "message": "Bulk job execute handler exists"
+          },
+          {
+            "id": "bulk_job_undo",
+            "ok": true,
+            "message": "Bulk job undo handler exists"
+          },
+          {
+            "id": "quality_scorecards",
+            "ok": true,
+            "message": "Quality scorecards renderer exists"
+          },
+          {
+            "id": "ops_inbox",
+            "ok": true,
+            "message": "Ops inbox renderer exists"
+          },
+          {
+            "id": "ops_health",
+            "ok": true,
+            "message": "Ops health renderer exists"
+          },
+          {
+            "id": "role_control",
+            "ok": true,
+            "message": "Role control handler exists"
+          },
+          {
+            "id": "approval_gate",
+            "ok": true,
+            "message": "Approval gate handler exists"
+          },
+          {
+            "id": "ops_inbox_ui",
+            "ok": true,
+            "message": "Ops inbox UI container exists"
+          },
+          {
+            "id": "quality_ui",
+            "ok": true,
+            "message": "Quality scorecards UI container exists"
+          },
+          {
+            "id": "health_ui",
+            "ok": true,
+            "message": "Health panel UI container exists"
+          }
+        ]
+      }
+    },
+    {
+      "id": "admin_live_smoke",
+      "command": "node ./scripts/admin-live-smoke.js",
+      "startedAt": "2026-05-23T21:02:58.958Z",
+      "finishedAt": "2026-05-23T21:02:59.903Z",
+      "durationMs": 945,
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Admin live smoke report: C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\admin-live-smoke-report.json\nStatus: PASS (10/10)",
+      "stderr": "",
+      "report": {
+        "generatedAt": "2026-05-23T21:02:59.877Z",
+        "target": "admin live smoke",
+        "mode": "anon_plus_auth_token",
+        "durationMs": 870,
+        "summary": {
+          "status": "pass",
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "failedIds": []
+        },
+        "steps": [
+          {
+            "id": "seed_create",
+            "ok": true,
+            "detail": "created",
+            "data": null
+          },
+          {
+            "id": "seed_verify",
+            "ok": true,
+            "detail": "seed row loaded",
+            "data": null
+          },
+          {
+            "id": "bulk_execute_simulated",
+            "ok": true,
+            "detail": "status moved to grading",
+            "data": null
+          },
+          {
+            "id": "bulk_execute_verify",
+            "ok": true,
+            "detail": "status=grading",
+            "data": null
+          },
+          {
+            "id": "bulk_undo_simulated",
+            "ok": true,
+            "detail": "status moved back to booked",
+            "data": null
+          },
+          {
+            "id": "bulk_undo_verify",
+            "ok": true,
+            "detail": "status=booked",
+            "data": null
+          },
+          {
+            "id": "snapshot_mutate",
+            "ok": true,
+            "detail": "mutated state before restore",
+            "data": null
+          },
+          {
+            "id": "snapshot_restore_simulated",
+            "ok": true,
+            "detail": "restored baseline state",
+            "data": null
+          },
+          {
+            "id": "snapshot_restore_verify",
+            "ok": true,
+            "detail": "status=booked, package=transcript",
+            "data": null
+          },
+          {
+            "id": "cleanup_seed",
+            "ok": true,
+            "detail": "deleted seed row",
+            "data": null
+          }
+        ]
+      }
+    }
+  ]
+}

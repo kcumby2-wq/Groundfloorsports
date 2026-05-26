@@ -1,0 +1,33 @@
+name: Validation Gates
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  ops-and-marketplace-validation:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ops validation (live-required)
+        run: npm run validate:ops:live
+
+      - name: Run marketplace suite (live-required)
+        run: npm run validate:marketplace-suite:live

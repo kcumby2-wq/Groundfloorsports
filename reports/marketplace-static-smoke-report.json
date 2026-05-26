@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-05-23T21:59:24.715Z",
+  "edgePath": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "status": "pass",
+  "totals": {
+    "checks": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "label": "Marketplace DOM dump completed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Run Health Check control rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Preset import control rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Preset payload control rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Health status panel rendered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Preview DOM dump completed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Clip form rendered in preview",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Clip import control rendered in preview",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

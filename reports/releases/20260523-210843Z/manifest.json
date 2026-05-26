@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-05-23T21:08:43.453Z",
+  "releaseId": "20260523-210843Z",
+  "releaseDir": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\reports\\releases\\20260523-210843Z",
+  "copied": 8,
+  "missing": [],
+  "files": [
+    {
+      "fileName": "supabase-schema-contract-report.json",
+      "copied": true
+    },
+    {
+      "fileName": "sr-events-health-report.json",
+      "copied": true
+    },
+    {
+      "fileName": "admin-live-smoke-report.json",
+      "copied": true
+    },
+    {
+      "fileName": "admin-ops-check-report.json",
+      "copied": true
+    },
+    {
+      "fileName": "marketplace-validation-suite-report.json",
+      "copied": true
+    },
+    {
+      "fileName": "marketplace-validation-suite-summary.md",
+      "copied": true
+    },
+    {
+      "fileName": "games-relevance-scorecard.json",
+      "copied": true
+    },
+    {
+      "fileName": "games-relevance-scorecard.md",
+      "copied": true
+    }
+  ]
+}

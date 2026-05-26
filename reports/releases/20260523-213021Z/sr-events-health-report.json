@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-05-23T21:30:14.174Z",
+  "target": "sr_events health",
+  "summary": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "failedIds": [
+      "live_sr_events_query"
+    ],
+    "status": "fail"
+  },
+  "checks": [
+    {
+      "id": "events_schema_file_exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-events-schema.sql"
+    },
+    {
+      "id": "sr_events_create_table_present",
+      "ok": true,
+      "detail": "create table statement"
+    },
+    {
+      "id": "sr_events_rls_enabled",
+      "ok": true,
+      "detail": "RLS enabled"
+    },
+    {
+      "id": "sr_events_insert_policy_present",
+      "ok": true,
+      "detail": "anon insert policy"
+    },
+    {
+      "id": "sr_events_select_policy_present",
+      "ok": true,
+      "detail": "authenticated select policy"
+    },
+    {
+      "id": "live_sr_events_query",
+      "ok": false,
+      "detail": "status 401"
+    }
+  ],
+  "live": {
+    "enabled": true,
+    "mode": "anon_plus_auth_token",
+    "reason": "",
+    "result": {
+      "ok": false,
+      "status": 401,
+      "bodyPreview": "{\"code\":\"PGRST303\",\"details\":null,\"hint\":null,\"message\":\"JWT expired\"}"
+    }
+  }
+}

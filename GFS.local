@@ -1,0 +1,6 @@
+﻿# GroundfloorSports Clerk keys
+# Retrieve these from Clerk Dashboard -> API Keys
+# https://dashboard.clerk.com/last-active?path=api-keys
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ZGFyaW5nLXlldGktODQuY2xlcmsuYWNjb3VudHMuZGV2JA
+CLERK_SECRET_KEY=sk_test_3CrZJvo1ULmIsPQSso7SdBowmBfxDn649vTED19WUM

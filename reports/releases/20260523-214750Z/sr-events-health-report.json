@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-05-23T21:47:33.012Z",
+  "target": "sr_events health",
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "failedIds": [],
+    "status": "pass"
+  },
+  "checks": [
+    {
+      "id": "events_schema_file_exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-events-schema.sql"
+    },
+    {
+      "id": "sr_events_create_table_present",
+      "ok": true,
+      "detail": "create table statement"
+    },
+    {
+      "id": "sr_events_rls_enabled",
+      "ok": true,
+      "detail": "RLS enabled"
+    },
+    {
+      "id": "sr_events_insert_policy_present",
+      "ok": true,
+      "detail": "anon insert policy"
+    },
+    {
+      "id": "sr_events_select_policy_present",
+      "ok": true,
+      "detail": "authenticated select policy"
+    },
+    {
+      "id": "live_sr_events_query",
+      "ok": true,
+      "detail": "ok"
+    }
+  ],
+  "live": {
+    "enabled": true,
+    "mode": "service_role",
+    "reason": "",
+    "result": {
+      "ok": true,
+      "status": 200,
+      "bodyPreview": "[]"
+    }
+  }
+}

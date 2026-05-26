@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-05-23T21:47:38.335Z",
+  "target": "Subjectreport.html",
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "failedIds": [],
+    "status": "pass"
+  },
+  "checks": [
+    {
+      "id": "focusable_helper",
+      "ok": true,
+      "message": "Modal focusable helper exists"
+    },
+    {
+      "id": "computed_style_gate",
+      "ok": true,
+      "message": "Computed-style visibility gate exists"
+    },
+    {
+      "id": "css_visibility_gate",
+      "ok": true,
+      "message": "Hidden display/visibility elements are excluded"
+    },
+    {
+      "id": "rendered_gate",
+      "ok": true,
+      "message": "Non-rendered elements are excluded"
+    },
+    {
+      "id": "shift_tab_wrap",
+      "ok": true,
+      "message": "Shift+Tab wrap logic exists"
+    },
+    {
+      "id": "tab_wrap",
+      "ok": true,
+      "message": "Tab wrap logic exists"
+    }
+  ]
+}

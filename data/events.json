@@ -1,0 +1,14 @@
+[
+  {
+    "id": "70bf069f-372f-45f6-9111-f6d220734582",
+    "eventName": "analytics_auto_flush_init",
+    "detail": {
+      "source": "gfs_marketplace_app"
+    },
+    "page": "/marketplace",
+    "timestamp": 1779613002612,
+    "marketing": {},
+    "source": "gfs_marketplace_app",
+    "receivedAt": "2026-05-24T08:56:47.467Z"
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-05-23T21:02:54.365Z",
+  "score": 100,
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "failedCases": []
+  },
+  "cases": [
+    {
+      "id": "jersey_priority",
+      "passed": true,
+      "expected": "Top result should be a #7 match with Exact jersey reason",
+      "topResult": {
+        "slug": "gamma",
+        "relevanceScore": 200,
+        "matchReasons": [
+          "Exact search",
+          "Exact jersey"
+        ]
+      },
+      "query": {
+        "q": "7",
+        "sort": "Most Recent"
+      }
+    },
+    {
+      "id": "exact_team_priority",
+      "passed": true,
+      "expected": "Exact team should rank first with Exact team reason",
+      "topResult": {
+        "slug": "alpha",
+        "relevanceScore": 85,
+        "matchReasons": [
+          "Exact team"
+        ]
+      },
+      "query": {
+        "team": "allen",
+        "sort": "Most Recent"
+      }
+    },
+    {
+      "id": "tag_stack_priority",
+      "passed": true,
+      "expected": "Strong tag match should rank first and include tag reason",
+      "topResult": {
+        "slug": "alpha",
+        "relevanceScore": 70,
+        "matchReasons": [
+          "2 tag matches"
+        ]
+      },
+      "query": {
+        "tags": "highlight,touchdown",
+        "sort": "Most Recent"
+      }
+    },
+    {
+      "id": "fallback_most_clips",
+      "passed": true,
+      "expected": "No-signal fallback Most Clips should rank by clip count",
+      "topResult": {
+        "slug": "beta",
+        "relevanceScore": 0,
+        "matchReasons": []
+      },
+      "query": {
+        "sort": "Most Clips"
+      }
+    },
+    {
+      "id": "fallback_most_recent",
+      "passed": true,
+      "expected": "No-signal fallback Most Recent should rank newest first",
+      "topResult": {
+        "slug": "gamma",
+        "relevanceScore": 0,
+        "matchReasons": []
+      },
+      "query": {
+        "sort": "Most Recent"
+      }
+    }
+  ],
+  "topMisses": []
+}

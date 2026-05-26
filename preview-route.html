@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports - Preview Route</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050b16;
+    --panel: #0e1d33;
+    --line: rgba(255,255,255,.14);
+    --muted: rgba(255,255,255,.72);
+    --white: #ffffff;
+    --accent: #ec4899;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: radial-gradient(circle at 20% 0%, rgba(236,72,153,.12), transparent 35%), var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .card {
+    width: min(720px, 100%);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .16em;
+    color: var(--accent);
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    line-height: .95;
+    margin-bottom: 12px;
+  }
+  p { color: var(--muted); line-height: 1.65; }
+  .route {
+    margin: 18px 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.03);
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 14px;
+  }
+  .actions { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--line);
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #050b16;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .14em;
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="eyebrow">Static Preview</div>
+    <h1>Route Placeholder</h1>
+    <p>This route is available in the app runtime. In static preview mode, this fallback keeps navigation working so demos do not hit dead links.</p>
+    <div class="route" id="routeValue">/</div>
+    <div class="actions">
+      <a class="btn primary" href="marketplace.html#results">Back to Marketplace</a>
+      <a class="btn" href="Subjectreport.html">Home</a>
+      <a class="btn" href="sign-in.html">Sign In</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const path = params.get('path') || '/';
+      document.getElementById('routeValue').textContent = path;
+    })();
+  </script>
+</body>
+</html>

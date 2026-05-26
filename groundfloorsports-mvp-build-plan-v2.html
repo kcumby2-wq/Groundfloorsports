@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports — MVP Build Plan v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--navy-deep:#050b16;--navy-card:#0e1d33;--magenta:#ec4899;--magenta-dim:rgba(236,72,153,.18);--blue:#4db8ff;--coral:#ff7849;--gold:#d4a84a;--green:#5fd99c;--warn:#f5b54a;--danger:#f87171;--white:#fff;--muted:rgba(255,255,255,.62);--muted-strong:rgba(255,255,255,.82);--line:rgba(255,255,255,.1);--pill-bg:rgba(255,255,255,.04);--pill-border:rgba(255,255,255,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--navy-deep)}
+body{font-family:'DM Sans',sans-serif;color:var(--white);line-height:1.55;font-size:15px}
+code,.mono{font-family:'JetBrains Mono',monospace;font-size:13px}
+.doc{max-width:1100px;margin:0 auto;padding:48px 56px 80px;background:radial-gradient(ellipse 800px 400px at 90% 0%,rgba(236,72,153,.06) 0%,transparent 60%),linear-gradient(180deg,var(--navy-deep) 0%,var(--navy) 100%);min-height:100vh}
+.doc-header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:36px}
+.header-left{display:flex;flex-direction:column;gap:12px}
+.brand-mark{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.08em}
+.brand-mark span{color:var(--magenta)}
+.doc-title{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:.95;text-transform:uppercase}
+.doc-title .magenta{color:var(--magenta)}
+.doc-meta{font-size:11px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.version-pill{display:inline-block;background:var(--magenta);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.18em;padding:4px 10px;border-radius:3px;margin-left:6px;vertical-align:3px}
+.logo-ring{width:60px;height:60px;border:2.5px solid var(--magenta);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(236,153,72,.08);box-shadow:0 0 28px rgba(236,72,153,.25);font-family:'Bebas Neue',sans-serif;color:var(--magenta);font-size:18px}
+.section{margin-bottom:52px}
+.section-header{display:flex;align-items:baseline;gap:20px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.3em;color:var(--magenta);flex-shrink:0}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:32px;text-transform:uppercase;line-height:1}
+.section-intro{color:var(--muted-strong);margin-bottom:24px;max-width:820px;font-size:14.5px}
+.callout{border-radius:12px;padding:22px 26px;margin-bottom:18px;font-size:14px;line-height:1.6}
+.callout.warn{background:rgba(245,181,74,.06);border:1px solid var(--warn);color:var(--muted-strong)}
+.callout.info{background:rgba(77,184,255,.05);border:1px solid var(--blue);color:var(--muted-strong)}
+.callout-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.25em;margin-bottom:8px;display:block}
+.callout.warn .callout-label{color:var(--warn)}
+.callout.info .callout-label{color:var(--blue)}
+.state-grid,.scope-row,.dep-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.state-card,.scope-card,.dep-card,.phase,.first-pr,.dod-list,.post-mvp{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:12px;padding:22px 26px;position:relative;overflow:hidden}
+.state-card.real::before,.scope-card.in::before,.phase::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--magenta)}
+.state-card.notyet::before,.scope-card.out::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--danger)}
+.state-tag,.scope-tag,.phase-num,.first-pr-label,.dod-label,.post-mvp-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;margin-bottom:8px}
+.state-card.real .state-tag,.scope-card.in .scope-tag,.phase-num,.first-pr-label,.dod-label,.post-mvp-label{color:var(--magenta)}
+.state-card.notyet .state-tag,.scope-card.out .scope-tag{color:var(--danger)}
+.state-title,.scope-title,.phase-title,.first-pr-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.04em;margin-bottom:10px;text-transform:uppercase}
+.state-list,.scope-list,.first-pr-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.state-list li,.scope-list li,.first-pr-list li{font-size:13px;color:var(--muted-strong);padding-left:16px;position:relative;line-height:1.5}
+.state-card.real .state-list li::before,.scope-card.in .scope-list li::before,.first-pr-list li::before{content:'→';position:absolute;left:0;color:var(--magenta)}
+.state-card.notyet .state-list li::before,.scope-card.out .scope-list li::before{content:'—';position:absolute;left:0;color:var(--muted)}
+.stack-table,.risk-table{background:var(--navy-card);border:1px solid var(--pill-border);border-radius:12px;overflow:hidden;width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px}
+.stack-table th,.risk-table th{background:rgba(236,72,153,.06);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.18em;color:var(--magenta);text-align:left;padding:13px 18px;border-bottom:1px solid var(--magenta-dim);text-transform:uppercase}
+.stack-table td,.risk-table td{padding:13px 18px;border-bottom:1px solid var(--line);color:var(--muted-strong);vertical-align:top;line-height:1.5}
+.stack-table tr:last-child td,.risk-table tr:last-child td{border-bottom:none}
+.stack-table td:first-child,.risk-table td:first-child{font-weight:700;color:var(--white);width:160px}
+.stack-table .why{color:var(--muted);font-size:12.5px}
+.phase{padding:28px 32px;margin-bottom:16px}
+.phase-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:12px}
+.phase-title{font-size:26px;line-height:1.05}
+.phase-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.phase-pill{background:rgba(255,255,255,.05);border:1px solid var(--pill-border);border-radius:30px;padding:5px 12px;font-size:11px;color:var(--muted-strong);letter-spacing:.04em}
+.phase-pill.days{background:var(--magenta);color:var(--navy-deep);border-color:var(--magenta);font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.1em}
+.phase-goal{color:var(--muted-strong);font-size:14px;margin:12px 0 18px;line-height:1.6}
+.phase-goal strong{color:var(--white)}
+.phase-tasks{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.task{font-size:13.5px;color:var(--muted-strong);padding:8px 14px;background:var(--pill-bg);border-radius:8px;line-height:1.5;border-left:2px solid var(--magenta-dim)}
+.task strong{color:var(--white);font-weight:600}
+.task .mono{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:3px;font-size:11.5px;color:var(--magenta)}
+.phase-dod{background:rgba(95,217,156,.04);border:1px solid rgba(95,217,156,.3);border-radius:8px;padding:14px 18px;font-size:13px;color:var(--muted-strong);line-height:1.55}
+.phase-dod strong{color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;display:block;margin-bottom:4px}
+.dep-name{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;color:var(--magenta);margin-bottom:4px}
+.dep-desc,.dep-action{font-size:12.5px;color:var(--muted-strong);line-height:1.5}
+.dep-action{margin-top:8px;color:var(--muted);font-style:italic}
+.dep-action strong{color:var(--white);font-style:normal;font-weight:600}
+.dod-list{border-color:var(--green)}
+.dod-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(95,217,156,.15);font-size:13.5px;color:var(--muted-strong);line-height:1.5}
+.dod-item:last-child{border-bottom:none}
+.dod-check{color:var(--green);font-weight:700;flex-shrink:0;width:18px}
+.severity{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.16em;padding:3px 8px;border-radius:3px;text-transform:uppercase}
+.severity.high{background:rgba(248,113,113,.15);color:var(--danger);border:1px solid rgba(248,113,113,.4)}
+.severity.med{background:rgba(245,181,74,.12);color:var(--warn);border:1px solid rgba(245,181,74,.4)}
+.severity.low{background:rgba(95,217,156,.1);color:var(--green);border:1px solid rgba(95,217,156,.3)}
+.post-mvp{background:rgba(77,184,255,.04);border:1px solid rgba(77,184,255,.3)}
+.post-mvp-row{display:flex;gap:14px;padding:9px 0;border-bottom:1px dashed rgba(77,184,255,.1);font-size:13.5px;color:var(--muted-strong);line-height:1.5}
+.post-mvp-row:last-child{border-bottom:none}
+.post-mvp-num{font-family:'Bebas Neue',sans-serif;color:var(--blue);font-size:14px;letter-spacing:.06em;min-width:32px}
+.doc-footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+.doc-footer .magenta-text{color:var(--magenta)}
+@media print{body{background:white}.doc{background:var(--navy-deep)!important}}
+@media(max-width:900px){.doc{padding:32px 24px}.doc-title{font-size:36px}.section-title{font-size:24px}.state-grid,.scope-row,.dep-grid{grid-template-columns:1fr}.phase-head{flex-direction:column}.risk-table,.stack-table{font-size:12px}.risk-table th,.risk-table td,.stack-table th,.stack-table td{padding:10px 12px}}
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="doc-header">
+    <div class="header-left">
+      <div class="brand-mark">GROUNDFLOOR<span>SPORTS</span></div>
+      <h1 class="doc-title">MVP Build<br><span class="magenta">Plan</span><span class="version-pill">V2</span></h1>
+      <div class="doc-meta">Engineering Roadmap · Current Workspace + True MVP Loop</div>
+    </div>
+    <div class="logo-ring">GFS</div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-label">How To Use This Document</span>
+    This keeps the original roadmap style, but it is updated to match the real workspace that already exists in <strong>subjectreport-app</strong>. Use this as the build plan going forward: preserve the current admin and marketplace tooling, and focus the MVP on the smallest live loop that proves a real seller can publish and a real buyer can purchase.
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">01</div><h2 class="section-title">Where We Actually Are</h2></div>
+    <p class="section-intro">This is not a greenfield project anymore. The app, admin, marketplace, template preview, Supabase reconnect flow, and several support tools already exist in the workspace. The MVP plan should build on that foundation instead of pretending the codebase is still empty.</p>
+
+    <div class="state-grid">
+      <div class="state-card real">
+        <div class="state-tag">REAL · EXISTS NOW</div>
+        <div class="state-title">Working Assets</div>
+        <ul class="state-list">
+          <li>Next.js app under <span class="mono">subjectreport-app</span></li>
+          <li>Live marketplace route and static preview</li>
+          <li>Admin dashboard with reconnect modal and CSV/template support</li>
+          <li>Athlete claim and Supabase persistence utilities</li>
+          <li>Template preview page for partner imports</li>
+          <li>Brand direction already locked: navy + magenta + bold uppercase treatment</li>
+        </ul>
+      </div>
+      <div class="state-card notyet">
+        <div class="state-tag">NOT YET REAL · STILL NEEDED</div>
+        <div class="state-title">True MVP Gaps</div>
+        <ul class="state-list">
+          <li>Real buyer purchase loop end-to-end</li>
+          <li>Seller upload flow for clips</li>
+          <li>Owned clip access after payment</li>
+          <li>Live Stripe checkout and webhook persistence</li>
+          <li>Real data model for games, clips, and orders</li>
+          <li>Launch-ready legal and ops readiness</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">02</div><h2 class="section-title">MVP Definition</h2></div>
+    <p class="section-intro">Keep the scope tight. The MVP is the smallest thing that proves the marketplace actually works for one seller and one buyer. Existing support tooling can stay, but the launch logic should stay centered on the transaction loop.</p>
+
+    <div class="callout info">
+      <span class="callout-label">True MVP</span>
+      One seller can publish clips. One buyer can sign up, browse games, open a clip detail page, pay in Stripe test mode, and get access to the purchased clip. That is the core product.
+    </div>
+
+    <div class="scope-row">
+      <div class="scope-card in">
+        <div class="scope-tag">IN SCOPE · MVP</div>
+        <div class="scope-title">Keep / Build</div>
+        <ul class="scope-list">
+          <li>Marketplace browse experience with real data</li>
+          <li>Game detail and clip detail pages</li>
+          <li>Seller upload flow for a first real library</li>
+          <li>Stripe-hosted checkout and order persistence</li>
+          <li>My Purchases page with owned-access gating</li>
+          <li>Role-based access for seller and buyer paths</li>
+          <li>Admin support tools for CSV, templates, and reconnect</li>
+          <li>Mobile responsive UI and strong visual hierarchy</li>
+        </ul>
+      </div>
+      <div class="scope-card out">
+        <div class="scope-tag">OUT OF SCOPE · FOR NOW</div>
+        <div class="scope-title">Hold Until Later</div>
+        <ul class="scope-list">
+          <li>NFTs, smart contracts, and Web3 wallet work</li>
+          <li>Multi-seller payout automation with Stripe Connect</li>
+          <li>AI clip tagging and advanced moderation automation</li>
+          <li>Large athlete-profile curation system</li>
+          <li>Commercial license SKU and advanced bundles</li>
+          <li>Mobile app</li>
+          <li>Deep search beyond basic query + filters</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">03</div><h2 class="section-title">Tech Stack</h2></div>
+    <p class="section-intro">This version reflects the real workspace. Keep the implementation consistent with the current app shape rather than forcing a brand-new stack rewrite.</p>
+    <table class="stack-table">
+      <thead><tr><th>Tool</th><th>Role</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Next.js App Router</td><td>Web framework</td><td class="why">Matches the current app structure and supports route-based marketplace, admin, and detail pages.</td></tr>
+        <tr><td>React client components</td><td>UI behavior</td><td class="why">Fits the current marketplace filters, admin workflows, and live browsing interactions.</td></tr>
+        <tr><td>Shared CSS / design tokens</td><td>Styling</td><td class="why">Keeps the magenta/navy dashboard language consistent across the app and the static prototypes.</td></tr>
+        <tr><td>Clerk</td><td>Auth</td><td class="why">Already part of the direction for sign-in, sign-up, and role-based flows.</td></tr>
+        <tr><td>Supabase</td><td>Database</td><td class="why">Good fit for marketplace rows, admin data, athlete claims, and order persistence.</td></tr>
+        <tr><td>Stripe</td><td>Payments</td><td class="why">Required for the real transaction loop; start with hosted checkout in test mode.</td></tr>
+        <tr><td>Cloudflare R2</td><td>Video storage</td><td class="why">Best fit for clip uploads and signed delivery in the MVP.</td></tr>
+        <tr><td>Vercel</td><td>Hosting</td><td class="why">Fastest way to ship the current app and preview route changes.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">04</div><h2 class="section-title">Build Phases</h2></div>
+    <p class="section-intro">The sequence below keeps the good MVP parts and avoids turning the product into a platform before the transaction loop works.</p>
+
+    <div class="phase">
+      <div class="phase-head"><div><div class="phase-num">PHASE 0</div><div class="phase-title">Stabilize What Exists</div></div><div class="phase-meta"><span class="phase-pill days">1-2 DAYS</span><span class="phase-pill">Align the workspace</span></div></div>
+      <div class="phase-goal"><strong>Goal:</strong> Keep the current admin and marketplace tools, confirm the live routes render cleanly, and make the plan match the actual app instead of an imaginary blank slate.</div>
+      <div class="phase-tasks">
+        <div class="task">Lock the design direction: navy, magenta, bold headings, compact dashboard cards.</div>
+        <div class="task">Keep <strong>admin.html</strong> in place and preserve reconnect, CSV, template, and refresh behavior.</div>
+        <div class="task">Keep the marketplace live route and static preview visually aligned.</div>
+        <div class="task">Document the existing support surfaces so they are treated as MVP enablers, not future fantasy work.</div>
+      </div>
+      <div class="phase-dod"><strong>Done when</strong> The plan matches the real workspace and the important support tooling is explicitly preserved.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><div><div class="phase-num">PHASE 1</div><div class="phase-title">Real Marketplace Read</div></div><div class="phase-meta"><span class="phase-pill days">3-6 DAYS</span><span class="phase-pill">Browseable inventory</span></div></div>
+      <div class="phase-goal"><strong>Goal:</strong> Buyers can browse real games and clips, filter them, and open detail pages. This is the first thing that proves the marketplace feels alive.</div>
+      <div class="phase-tasks">
+        <div class="task">Use Supabase-backed or seeded marketplace data for games and clip counts.</div>
+        <div class="task">Keep search by team, school, player, or jersey number.</div>
+        <div class="task">Keep the featured drops / dashboard-style overview section.</div>
+        <div class="task">Make game and clip detail pages the real next click, not dead ends.</div>
+      </div>
+      <div class="phase-dod"><strong>Done when</strong> The marketplace looks intentional, loads live data, and routes into real detail views.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><div><div class="phase-num">PHASE 2</div><div class="phase-title">Seller Upload Flow</div></div><div class="phase-meta"><span class="phase-pill days">6-10 DAYS</span><span class="phase-pill">First supply</span></div></div>
+      <div class="phase-goal"><strong>Goal:</strong> One seller can get footage into the system without manual database edits.</div>
+      <div class="phase-tasks">
+        <div class="task">Build the upload form for video, metadata, and preview details.</div>
+        <div class="task">Store clips in R2 or equivalent signed storage.</div>
+        <div class="task">Use the admin tooling as a backstop for imports, not as the primary path.</div>
+        <div class="task">Keep the public marketplace updated when a clip is published.</div>
+      </div>
+      <div class="phase-dod"><strong>Done when</strong> The first seller can publish a clip that appears publicly without help.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><div><div class="phase-num">PHASE 3</div><div class="phase-title">Purchase Loop</div></div><div class="phase-meta"><span class="phase-pill days">10-14 DAYS</span><span class="phase-pill">Core MVP</span></div></div>
+      <div class="phase-goal"><strong>Goal:</strong> The product closes the loop: browse → detail → pay → access.</div>
+      <div class="phase-tasks">
+        <div class="task">Stripe Checkout in test mode for clip purchase.</div>
+        <div class="task">Webhook-backed order persistence.</div>
+        <div class="task">Purchased clip access in <span class="mono">My Purchases</span>.</div>
+        <div class="task">Access gating for preview vs owned playback.</div>
+      </div>
+      <div class="phase-dod"><strong>Done when</strong> A buyer can complete a test purchase and immediately see owned content.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><div><div class="phase-num">PHASE 4</div><div class="phase-title">Launch Prep</div></div><div class="phase-meta"><span class="phase-pill days">14-18 DAYS</span><span class="phase-pill">Launchable</span></div></div>
+      <div class="phase-goal"><strong>Goal:</strong> Clean up the edges so the first real seller and buyer can use it without hand-holding.</div>
+      <div class="phase-tasks">
+        <div class="task">Make the marketplace and admin pages visually polished on mobile.</div>
+        <div class="task">Keep the reconnect flow, CSV tooling, and template preview accessible.</div>
+        <div class="task">Add the basics: analytics, error states, footer links, and launch criteria.</div>
+        <div class="task">Verify the transaction loop on real devices before launch.</div>
+      </div>
+      <div class="phase-dod"><strong>Done when</strong> The app is ready to put in front of a real seller and a real buyer.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">05</div><h2 class="section-title">External Dependencies</h2></div>
+    <p class="section-intro">These are not code tasks. They are the real-world things that have to exist for the MVP to launch cleanly.</p>
+    <div class="dep-grid">
+      <div class="dep-card"><div class="dep-name">CLERK</div><div class="dep-desc">Auth app, keys, role storage, and sign-in/sign-up configuration.</div><div class="dep-action"><strong>Owner:</strong> set up and keep aligned with the current app flow.</div></div>
+      <div class="dep-card"><div class="dep-name">SUPABASE</div><div class="dep-desc">Project, tables, and data access for marketplace and admin data.</div><div class="dep-action"><strong>Owner:</strong> app + schema persistence.</div></div>
+      <div class="dep-card"><div class="dep-name">STRIPE</div><div class="dep-desc">Checkout, webhooks, and live-mode readiness once test mode works.</div><div class="dep-action"><strong>Owner:</strong> payment loop.</div></div>
+      <div class="dep-card"><div class="dep-name">R2 / STORAGE</div><div class="dep-desc">Signed upload and playback for clips and previews.</div><div class="dep-action"><strong>Owner:</strong> media delivery.</div></div>
+      <div class="dep-card"><div class="dep-name">DOMAIN</div><div class="dep-desc">Point the live app at groundfloorsports.com once stable.</div><div class="dep-action"><strong>Owner:</strong> deployment target.</div></div>
+      <div class="dep-card"><div class="dep-name">LEGAL</div><div class="dep-desc">Consent, NIL, privacy, and terms before public clips go live.</div><div class="dep-action"><strong>Owner:</strong> real-world compliance.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">06</div><h2 class="section-title">Launch Criteria</h2></div>
+    <p class="section-intro">When these are true, the MVP is real enough to use.</p>
+    <div class="dod-list">
+      <div class="dod-label">DEFINITION OF DONE · MVP</div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Marketplace loads live games and clips.</div></div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Seller can publish at least one clip.</div></div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Buyer can sign in, buy, and access purchased content.</div></div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Admin tools stay available for reconnects, CSVs, and templates.</div></div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Mobile layout works cleanly on the core flows.</div></div>
+      <div class="dod-item"><div class="dod-check">✓</div><div>Legal and policy basics exist before public release.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">07</div><h2 class="section-title">Risk Register</h2></div>
+    <p class="section-intro">These are the real risks that matter at MVP stage.</p>
+    <table class="risk-table">
+      <thead><tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Scope creep</strong> — athlete profiles, Web3, and brand partnerships can swallow the MVP.</td><td><span class="severity high">HIGH</span></td><td>Use this document as the boundary. Anything outside the true MVP stays out.</td></tr>
+        <tr><td><strong>Auth / data mismatch</strong> — role-based flows and storage can get out of sync.</td><td><span class="severity med">MEDIUM</span></td><td>Keep Clerk, Supabase, and the app routes aligned and test the ownership path early.</td></tr>
+        <tr><td><strong>Media delivery cost</strong> — video clips become expensive if the pipeline is sloppy.</td><td><span class="severity med">MEDIUM</span></td><td>Use signed storage and keep previews small.</td></tr>
+        <tr><td><strong>Legal exposure</strong> — minors, NIL, and content rights are real.</td><td><span class="severity high">HIGH</span></td><td>Require consent and basic policy pages before public launch.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">08</div><h2 class="section-title">Post-MVP Roadmap</h2></div>
+    <p class="section-intro">Once the core loop works, the next layer can expand safely.</p>
+    <div class="post-mvp">
+      <div class="post-mvp-label">SEQUENCED NEXT STEPS</div>
+      <div class="post-mvp-row"><div class="post-mvp-num">01</div><div><strong>Multi-seller payouts</strong> once the second seller is real.</div></div>
+      <div class="post-mvp-row"><div class="post-mvp-num">02</div><div><strong>Better athlete profiles</strong> after the purchase loop proves demand.</div></div>
+      <div class="post-mvp-row"><div class="post-mvp-num">03</div><div><strong>More automation</strong> for imports, tagging, and moderation.</div></div>
+      <div class="post-mvp-row"><div class="post-mvp-num">04</div><div><strong>Brand partnerships and bundles</strong> once the marketplace is stable.</div></div>
+      <div class="post-mvp-row"><div class="post-mvp-num">05</div><div><strong>NFT / Web3 ideas</strong> only after the real product is already working.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">09</div><h2 class="section-title">First PR</h2></div>
+    <p class="section-intro">The kickoff should be boring and concrete.</p>
+    <div class="first-pr">
+      <div class="first-pr-label">PR #1 · KICKOFF</div>
+      <div class="first-pr-title">Stabilize Workspace + Preserve MVP Support Tools</div>
+      <div class="first-pr-section">
+        <div class="first-pr-section-label">Scope</div>
+        <ul class="first-pr-list">
+          <li>Keep the live marketplace and admin support flow in place.</li>
+          <li>Lock the design system so the brand stays consistent.</li>
+          <li>Make the MVP target explicit: browse, upload, buy, own.</li>
+          <li>Document what already exists vs what still needs to be built.</li>
+        </ul>
+      </div>
+      <div class="first-pr-section">
+        <div class="first-pr-section-label">Acceptance</div>
+        <ul class="first-pr-list">
+          <li>The roadmap matches the current workspace.</li>
+          <li>The true MVP is a small, shippable loop.</li>
+          <li>Support tooling is preserved instead of overwritten.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>GROUNDFLOORSPORTS · <span class="magenta-text">MVP Build Plan v2</span></div>
+    <div>Engineering Roadmap · Internal</div>
+  </div>
+</div>
+</body>
+</html>

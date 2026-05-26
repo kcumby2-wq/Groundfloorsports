@@ -1,0 +1,148 @@
+{
+  "generatedAt": "2026-05-23T21:47:32.639Z",
+  "target": "supabase schema contract",
+  "static": {
+    "schemaPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql",
+    "migrationPath": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql",
+    "expectedAthletesColumns": [
+      "id",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "jersey_number",
+      "position",
+      "class_year",
+      "height",
+      "weight",
+      "school",
+      "state",
+      "rec_team",
+      "instagram",
+      "x_twitter",
+      "tiktok",
+      "video_url",
+      "package",
+      "status",
+      "grade",
+      "transcript_url",
+      "notes",
+      "created_at",
+      "updated_at"
+    ],
+    "expectedSrEventsColumns": [
+      "id",
+      "event_name",
+      "detail",
+      "page",
+      "source",
+      "created_at"
+    ],
+    "extractedAthletesColumns": [
+      "id",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "jersey_number",
+      "position",
+      "class_year",
+      "height",
+      "weight",
+      "school",
+      "state",
+      "rec_team",
+      "instagram",
+      "x_twitter",
+      "tiktok",
+      "video_url",
+      "package",
+      "status",
+      "grade",
+      "transcript_url",
+      "notes",
+      "created_at",
+      "updated_at"
+    ],
+    "extractedMigrationColumns": [
+      "jersey_number",
+      "height",
+      "weight",
+      "rec_team",
+      "instagram",
+      "x_twitter",
+      "tiktok",
+      "video_url"
+    ]
+  },
+  "live": {
+    "enabled": true,
+    "mode": "service_role",
+    "reason": "",
+    "checks": [
+      {
+        "id": "live_athletes_select",
+        "ok": true,
+        "status": 200,
+        "missingColumns": [],
+        "bodyPreview": "[]"
+      },
+      {
+        "id": "live_sr_events_select",
+        "ok": true,
+        "status": 200,
+        "missingColumns": [],
+        "bodyPreview": "[]"
+      }
+    ]
+  },
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "failedIds": [],
+    "status": "pass"
+  },
+  "checks": [
+    {
+      "id": "schema_file_exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-schema.sql"
+    },
+    {
+      "id": "migration_file_exists",
+      "ok": true,
+      "detail": "C:\\Users\\kcumb\\OneDrive\\Documents\\subjectreport-app\\supabase-athlete-profile-columns-migration.sql"
+    },
+    {
+      "id": "schema_has_athletes_table",
+      "ok": true,
+      "detail": "columns found: 24"
+    },
+    {
+      "id": "schema_has_required_athletes_columns",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "id": "migration_has_profile_columns",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "id": "events_schema_sql_present",
+      "ok": true,
+      "detail": "sr_events schema is defined in repository"
+    },
+    {
+      "id": "live_athletes_schema_contract",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "id": "live_sr_events_contract",
+      "ok": true,
+      "detail": "ok"
+    }
+  ]
+}
