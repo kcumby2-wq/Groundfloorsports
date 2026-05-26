@@ -8,6 +8,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
+    ,
+    "validate:ops:live": "echo 'No validation implemented yet'"
   },
   "dependencies": {
     "next": "^16.2.6",
