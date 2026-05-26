@@ -1,0 +1,9 @@
+{
+  "name": "groundfloorsports-static",
+  "version": "1.0.0",
+  "description": "Static deployment for GroundfloorSports",
+  "scripts": {
+    "validate:ops:live": "echo 'No validation implemented yet'",
+    "validate:marketplace-suite:live": "echo 'No validation implemented yet'"
+  }
+}
