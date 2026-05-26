@@ -1,15 +1,3 @@
-# Security Scans
-
-This workflow runs CodeQL and Snyk on every push, pull request, and nightly schedule to ensure code and dependency security.
-- CodeQL: Static code analysis for vulnerabilities
-- Snyk: Dependency vulnerability scanning
-
-Secrets required:
-- SNYK_TOKEN (for Snyk integration)
-
----
-
-# .github/workflows/security.yml
 name: Security Scans
 
 on:
