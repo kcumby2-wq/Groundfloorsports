@@ -24,10 +24,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: cd groundfloorsports-static && npm ci
 
       - name: Run ops validation (live-required)
-        run: npm run validate:ops:live
+        run: cd groundfloorsports-static && npm run validate:ops:live
 
       - name: Run marketplace suite (live-required)
-        run: npm run validate:marketplace-suite:live
+        run: cd groundfloorsports-static && npm run validate:marketplace-suite:live
