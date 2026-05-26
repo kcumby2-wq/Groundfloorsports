@@ -5,5 +5,8 @@
   "scripts": {
     "validate:ops:live": "echo 'No validation implemented yet'",
     "validate:marketplace-suite:live": "echo 'No validation implemented yet'"
+  },
+  "devDependencies": {
+    "npm-force-resolutions": "^0.0.10"
   }
 }
