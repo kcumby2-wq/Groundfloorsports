@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import SellerAnalyticsDashboard from './SellerAnalyticsDashboard';
-import CreatorApprovalAdmin from '../admin/CreatorApprovalAdmin';
+import CreatorApprovalAdmin from '../../admin/CreatorApprovalAdmin';
 
 const initialForm = {
   sellerName: '',
