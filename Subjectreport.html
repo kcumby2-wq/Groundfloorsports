@@ -415,6 +415,157 @@
     .reel-arrow { display: none; }
   }
 
+  /* ===== MEDIA BREAK — FULL-BLEED PHOTO CAROUSEL ===== */
+  .media-break {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/7;
+    overflow: hidden;
+    background: var(--navy-800);
+  }
+  .media-break-track {
+    display: flex;
+    height: 100%;
+    will-change: transform;
+    transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .media-break-slide { min-width: 100%; height: 100%; position: relative; flex-shrink: 0; }
+  .media-break-slide img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block; opacity: 0.85;
+  }
+  .media-break-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,23,41,0.35) 0%, rgba(10,23,41,0.05) 40%, rgba(10,23,41,0.65) 100%);
+    pointer-events: none;
+  }
+  .media-break-btn {
+    position: absolute; top: 50%; z-index: 10;
+    transform: translateY(-50%);
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    color: var(--cream-bright); font-size: 22px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; backdrop-filter: blur(8px);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .media-break-btn:hover { background: rgba(78,196,255,0.16); border-color: var(--cyan-bright); color: var(--cyan-bright); }
+  .media-break-btn.mb-prev { left: 26px; }
+  .media-break-btn.mb-next { right: 26px; }
+  .media-break-dots {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 7px; z-index: 10;
+  }
+  .mb-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(242,238,227,0.32);
+    cursor: pointer; border: none; padding: 0;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .mb-dot.active { background: var(--cyan-bright); transform: scale(1.4); }
+  .media-break-label {
+    position: absolute; bottom: 30px; left: 28px; z-index: 10;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--fog);
+  }
+  @media (max-width: 760px) {
+    .media-break { aspect-ratio: 4/3; }
+    .media-break-btn { width: 36px; height: 36px; font-size: 16px; }
+    .media-break-btn.mb-prev { left: 12px; }
+    .media-break-btn.mb-next { right: 12px; }
+    .media-break-label { display: none; }
+  }
+
+  /* ===== VIDEO BREAK — FULL-BLEED VIDEO ===== */
+  .vid-break {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/7;
+    overflow: hidden;
+    background: var(--navy-800);
+  }
+  .vid-break video { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+  .vid-break-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,23,41,0.4) 0%, rgba(10,23,41,0.1) 50%, rgba(10,23,41,0.72) 100%);
+  }
+  .vid-break-label {
+    position: absolute; bottom: 30px; left: 28px; z-index: 2;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--fog);
+  }
+  @media (max-width: 760px) { .vid-break { aspect-ratio: 4/3; } }
+
+  /* ===== GAME FILM — FULL-BLEED VIDEO CAROUSEL (9 SPOTS) ===== */
+  .game-film {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--navy-800);
+  }
+  .game-film-track {
+    display: flex;
+    height: 100%;
+    will-change: transform;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .game-film-slide { min-width: 100%; height: 100%; position: relative; flex-shrink: 0; background: #000; }
+  .game-film-slide video {
+    width: 100%; height: 100%;
+    object-fit: contain; background: #000;
+    display: block;
+  }
+  .game-film-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,23,41,0.45) 0%, rgba(10,23,41,0) 22%, rgba(10,23,41,0) 78%, rgba(10,23,41,0.75) 100%);
+    pointer-events: none;
+  }
+  .game-film-btn {
+    position: absolute; top: 50%; z-index: 10;
+    transform: translateY(-50%);
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    color: var(--cream-bright); font-size: 22px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; backdrop-filter: blur(8px);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .game-film-btn:hover { background: rgba(78,196,255,0.16); border-color: var(--cyan-bright); color: var(--cyan-bright); }
+  .game-film-btn.gf-prev { left: 26px; }
+  .game-film-btn.gf-next { right: 26px; }
+  .game-film-dots {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 7px; z-index: 10;
+  }
+  .gf-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(242,238,227,0.32);
+    cursor: pointer; border: none; padding: 0;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .gf-dot.active { background: var(--cyan-bright); transform: scale(1.4); }
+  .game-film-label {
+    position: absolute; top: 24px; left: 28px; z-index: 10;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--fog);
+    background: rgba(10,23,41,0.55);
+    padding: 6px 12px; border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .game-film-head {
+    text-align: center; padding: 56px 24px 28px;
+    background: var(--navy-900);
+  }
+  @media (max-width: 760px) {
+    .game-film { aspect-ratio: 9/16; }
+    .game-film-btn { width: 36px; height: 36px; font-size: 16px; }
+    .game-film-btn.gf-prev { left: 12px; }
+    .game-film-btn.gf-next { right: 12px; }
+    .game-film-head { padding: 40px 20px 22px; }
+  }
+
   /* HOW */
   .how { padding: 140px 0; }
 
@@ -1142,9 +1293,23 @@
 
   /* FINAL CTA */
   .final-cta {
-    padding: 140px 0; text-align: center;
+    padding: 140px 0; text-align: center; position: relative; overflow: hidden;
     background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(78, 196, 255, 0.2) 0%, transparent 70%);
   }
+  .cta-media {
+    position: absolute; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+  .cta-media-video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cta-media-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,23,41,0.7) 0%, rgba(10,23,41,0.86) 60%, var(--navy-900) 100%);
+  }
+  .final-cta .wrap { position: relative; z-index: 1; }
   .final-cta h2 {
     font-family: "Anton", sans-serif;
     font-size: clamp(64px, 10vw, 140px);
@@ -1993,6 +2158,24 @@
   </div>
 </section>
 
+<!-- ░░ MEDIA — FULL-BLEED PHOTO CAROUSEL ░░
+     Real game/athlete photos, styled after the subjectmedias.com "On Site" photo break. -->
+<section class="media-break reveal" id="on-location" aria-label="Photos from athlete evaluations and events">
+  <div class="media-break-track" id="mediaBreakTrack">
+    <div class="media-break-slide"><img src="media/carousel/allen-coach.jpg" alt="Allen — coach on the sideline" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/bergen-player.jpg" alt="Bergen Catholic player evaluation" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/ant.jpg" alt="Ant — athlete evaluation" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/peters-qb.jpg" alt="Saint Peter's — QB evaluation" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/prosper-walnut-grove.jpg" alt="Prosper at Walnut Grove — on-site evaluation" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/allen-players-talking.jpg" alt="Allen players talking on the sideline" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/battle-bergen.jpg" alt="Battle at Bergen — game action" loading="lazy" /><div class="media-break-overlay"></div></div>
+  </div>
+  <button class="media-break-btn mb-prev" type="button" onclick="mediaBreakNav(-1)" aria-label="Previous photo">&#8249;</button>
+  <button class="media-break-btn mb-next" type="button" onclick="mediaBreakNav(1)" aria-label="Next photo">&#8250;</button>
+  <div class="media-break-dots" id="mediaBreakDots"></div>
+  <div class="media-break-label">On location · Verified film, every sport</div>
+</section>
+
 <!-- ░░ MEDIA SLOT — "SEE IT IN ACTION" CAROUSEL ░░
      Add photos or short video-still frames at: media/carousel-1.jpg ... media/carousel-6.jpg
      (1200x1500 portrait or 1600x1000 landscape both work — they're cropped to fill the tile.)
@@ -2009,28 +2192,28 @@
   <div class="reel-outer">
     <div class="reel-track" id="reelTrack">
       <div class="reel-slide">
-        <img src="media/carousel-1.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Film Breakdown Session</div>
+        <img src="media/event-photos/event-03-saint-peters-game.jpg" alt="Game day film capture" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">Game Day Film Capture</div>
       </div>
       <div class="reel-slide">
-        <img src="media/carousel-2.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Transcript Walkthrough</div>
+        <img src="media/athlete-photos/ath-7v7-football.png" alt="7v7 showcase film" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">7v7 Showcase Coverage</div>
       </div>
       <div class="reel-slide">
-        <img src="media/carousel-3.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Athlete Reviewing Grades</div>
+        <img src="media/event-photos/event-08-dsc01520.jpg" alt="Sideline film coverage" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">Sideline Film Coverage</div>
       </div>
       <div class="reel-slide">
-        <img src="media/carousel-4.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Recruiting Blueprint Session</div>
+        <img src="media/athlete-photos/ath-lacrosse.png" alt="Lacrosse athlete evaluation" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">Multi-Sport Evaluation</div>
       </div>
       <div class="reel-slide">
-        <img src="media/carousel-5.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Coach Reviewing Transcript</div>
+        <img src="media/event-photos/event-12-harm.jpg" alt="Verified film capture" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">Verified Film Capture</div>
       </div>
       <div class="reel-slide">
-        <img src="media/carousel-6.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        <div class="reel-caption">Signing Day</div>
+        <img src="media/athlete-photos/ath-girls-flag.jpg" alt="Flag football athlete evaluation" loading="lazy" onerror="this.style.display='none'" />
+        <div class="reel-caption">Every Sport, Every Level</div>
       </div>
     </div>
     <button class="reel-arrow prev" type="button" onclick="scrollReel(-1)" aria-label="Previous">&lsaquo;</button>
@@ -2109,6 +2292,15 @@
   </div>
 </section>
 
+<!-- ░░ MEDIA — FULL-BLEED VIDEO BREAK ░░ -->
+<div class="vid-break reveal">
+  <video autoplay muted loop playsinline>
+    <source src="media/game-film/carter-spring-game.mp4" type="video/mp4" />
+  </video>
+  <div class="vid-break-overlay"></div>
+  <div class="vid-break-label">Subject·Report · Highlight Reel</div>
+</div>
+
 <section class="rec-timeline" id="timeline">
   <div class="wrap">
     <div class="head">
@@ -2174,6 +2366,39 @@
     </div>
   </div>
 </section>
+
+<!-- ░░ GAME FILM — 9 VIDEO SPOTS ░░
+     Review each spot below, then tell Kyron's assistant which spot # should hold which game
+     so they can be reordered. Currently filled in upload order. -->
+<div class="game-film-head reveal">
+  <span class="eyebrow">On-site recaps</span>
+  <h2>Game film.<br/><span class="line2">Every spot, every sideline.</span></h2>
+</div>
+<section class="game-film reveal" id="game-film" aria-label="Game film video carousel">
+  <div class="game-film-track" id="gameFilmTrack">
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/duncanville.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 1 · Duncanville</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/carter-spring-game.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 2 · Carter Spring Game</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/melissa-vs-anna.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 3 · Melissa vs Anna</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/north-forney.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 4 · North Forney</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/jah.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 5 · Jah</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/northshore.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 6 · Northshore</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/gavin-sidwar-highlight.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 7 · Gavin Sidwar Highlight</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/one-play-clip-6.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 8 · One Play Clip 6</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/one-play-clip-3.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 9 · One Play Clip 3</div></div>
+  </div>
+  <button class="game-film-btn gf-prev" type="button" onclick="gameFilmNav(-1)" aria-label="Previous video">&#8249;</button>
+  <button class="game-film-btn gf-next" type="button" onclick="gameFilmNav(1)" aria-label="Next video">&#8250;</button>
+  <div class="game-film-dots" id="gameFilmDots"></div>
+</section>
+
+<!-- ░░ MEDIA — FULL-BLEED VIDEO BREAK ░░ -->
+<div class="vid-break reveal">
+  <video autoplay muted loop playsinline>
+    <source src="media/game-film/north-forney.mp4" type="video/mp4" />
+  </video>
+  <div class="vid-break-overlay"></div>
+  <div class="vid-break-label">Game film. Every spot, every sideline</div>
+</div>
 
 <section class="cards-section" id="what">
   <div class="wrap">
@@ -2548,6 +2773,12 @@
 </section>
 
 <section class="final-cta">
+  <div class="cta-media">
+    <video class="cta-media-video" autoplay muted loop playsinline>
+      <source src="media/game-film/northshore.mp4" type="video/mp4" />
+    </video>
+    <div class="cta-media-overlay"></div>
+  </div>
   <div class="wrap">
     <h2 class="reveal">Stop guessing.<br/><span>Start getting recruited.</span></h2>
     <p class="reveal">Book a call, tell us your story, and find out which package fits your situation.</p>
@@ -3174,6 +3405,66 @@
     const amount = slide ? slide.getBoundingClientRect().width + 20 : 300;
     track.scrollBy({ left: dir * amount, behavior: 'smooth' });
   }
+
+  /* ===== FULL-BLEED MEDIA BREAK CAROUSEL ===== */
+  let mediaBreakIdx = 0;
+  function mediaBreakNav(dir) {
+    const track = document.getElementById('mediaBreakTrack');
+    if (!track) return;
+    const slides = track.querySelectorAll('.media-break-slide');
+    const total = slides.length;
+    if (!total) return;
+    mediaBreakIdx = (mediaBreakIdx + dir + total) % total;
+    track.style.transform = 'translateX(-' + (mediaBreakIdx * 100) + '%)';
+    document.querySelectorAll('#mediaBreakDots .mb-dot').forEach((d, i) => d.classList.toggle('active', i === mediaBreakIdx));
+  }
+  (function initMediaBreakDots() {
+    const track = document.getElementById('mediaBreakTrack');
+    const dotsEl = document.getElementById('mediaBreakDots');
+    if (!track || !dotsEl) return;
+    const slides = track.querySelectorAll('.media-break-slide');
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.type = 'button';
+      d.className = 'mb-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+      d.onclick = () => { mediaBreakIdx = i - 1; mediaBreakNav(1); };
+      dotsEl.appendChild(d);
+    });
+  })();
+  (function autoAdvanceMediaBreak() {
+    const track = document.getElementById('mediaBreakTrack');
+    if (!track) return;
+    setInterval(() => { mediaBreakNav(1); }, 5500);
+  })();
+
+  /* ===== GAME FILM — 9-SPOT VIDEO CAROUSEL ===== */
+  let gameFilmIdx = 0;
+  function gameFilmNav(dir) {
+    const track = document.getElementById('gameFilmTrack');
+    if (!track) return;
+    const slides = track.querySelectorAll('.game-film-slide');
+    const total = slides.length;
+    if (!total) return;
+    slides[gameFilmIdx].querySelectorAll('video').forEach(v => v.pause());
+    gameFilmIdx = (gameFilmIdx + dir + total) % total;
+    track.style.transform = 'translateX(-' + (gameFilmIdx * 100) + '%)';
+    document.querySelectorAll('#gameFilmDots .gf-dot').forEach((d, i) => d.classList.toggle('active', i === gameFilmIdx));
+  }
+  (function initGameFilmDots() {
+    const track = document.getElementById('gameFilmTrack');
+    const dotsEl = document.getElementById('gameFilmDots');
+    if (!track || !dotsEl) return;
+    const slides = track.querySelectorAll('.game-film-slide');
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.type = 'button';
+      d.className = 'gf-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to video spot ' + (i + 1));
+      d.onclick = () => { gameFilmIdx = i - 1; gameFilmNav(1); };
+      dotsEl.appendChild(d);
+    });
+  })();
 
   function openBookingIntakeModal() {
     lastModalTrigger = document.activeElement;
