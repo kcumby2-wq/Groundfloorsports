@@ -1,0 +1,3 @@
+@echo off
+powershell -ExecutionPolicy Bypass -Command "$src='C:\Users\kcumb\Downloads'; $dest='C:\Users\kcumb\OneDrive\Documents\subjectreport-app\media\event-photos'; $files=@('DSC03825_ARW.jpg','DSC03794_ARW.jpg','DSC02829.jpg','DSC01875.jpg','DSC01846.jpg'); foreach($f in $files){ $p=Join-Path $src $f; if(Test-Path $p){ Copy-Item $p $dest -Force; Add-Content 'C:\Users\kcumb\OneDrive\Documents\subjectreport-app\copy-log.txt' ('COPIED: '+$f) } else { Add-Content 'C:\Users\kcumb\OneDrive\Documents\subjectreport-app\copy-log.txt' ('NOT FOUND: '+$f) } }"
+echo Done > "C:\Users\kcumb\OneDrive\Documents\subjectreport-app\bat-ran.txt"

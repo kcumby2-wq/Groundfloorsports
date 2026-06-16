@@ -109,7 +109,138 @@
       <article class="card">
         <h2>Primary Flows</h2>
         <div class="link-list">
-          <a class="btn primary" href="marketplace.html#results">Open Marketplace</a>
+          <button class="btn primary" id="showMarketplaceDemo">Open Marketplace</button>
+            <div id="marketplaceDemoContainer" style="display:none;margin-top:32px;"></div>
+            <!-- Purchase Modal -->
+            <div id="purchaseModalOverlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(10,22,40,.88);z-index:9999;align-items:center;justify-content:center;">
+              <div id="purchaseModal" style="background:var(--panel);border-radius:18px;box-shadow:0 8px 48px rgba(0,0,0,.45);max-width:420px;width:100%;padding:32px 28px 24px 28px;position:relative;display:flex;flex-direction:column;align-items:center;">
+                <button id="closePurchaseModal" style="position:absolute;top:18px;right:18px;font-size:28px;color:var(--accent);background:none;border:none;cursor:pointer;z-index:2;">&times;</button>
+                <div id="purchaseModalContent"></div>
+              </div>
+            </div>
+            <script>
+              // Marketplace Demo HTML
+              const marketplaceHTML = `
+                <div style=\"display:flex;gap:24px;flex-wrap:wrap;\">
+                  <div style=\"background:var(--bg);padding:18px 14px;border-radius:12px;min-width:260px;flex:1;\">
+                    <h3 style=\"color:var(--accent2);font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;\">Katy vs Katy Tompkins</h3>
+                    <div style=\"color:var(--muted);margin-bottom:8px;\">Sep 20, 2026 · Houston District</div>
+                    <video src=\"https://www.w3schools.com/html/mov_bbb.mp4\" controls poster=\"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80\" style=\"width:100%;max-height:160px;border-radius:8px;margin-bottom:8px;background:#111;object-fit:cover;\"></video>
+                    <div style=\"margin-bottom:10px;\">78 clips · listed by <strong>Subject Media</strong></div>
+                    <div style=\"margin-bottom:10px;\"><strong>Roster:</strong> <a href=\"#\" class=\"roster-link\" data-player=\"Tre'Sean Holloway\" data-game=\"Katy vs Katy Tompkins\">Tre'Sean Holloway</a>, <a href=\"#\" class=\"roster-link\" data-player=\"Jalen Smith\" data-game=\"Katy vs Katy Tompkins\">Jalen Smith</a></div>
+                    <button class=\"buy-btn\" data-title=\"Katy vs Katy Tompkins\" data-price=\"9.99\" style=\"background:var(--accent);color:#fff;padding:10px 0;border-radius:8px;width:100%;border:none;font-weight:600;font-size:15px;\">Buy Clip $9.99</button>
+                  </div>
+                  <div style=\"background:var(--bg);padding:18px 14px;border-radius:12px;min-width:260px;flex:1;\">
+                    <h3 style=\"color:var(--accent2);font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;\">Rated 7v7 Camp</h3>
+                    <div style=\"color:var(--muted);margin-bottom:8px;\">Spring 2026 · Dallas</div>
+                    <video src=\"https://www.w3schools.com/html/movie.mp4\" controls poster=\"https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=400&q=80\" style=\"width:100%;max-height:160px;border-radius:8px;margin-bottom:8px;background:#111;object-fit:cover;\"></video>
+                    <div style=\"margin-bottom:10px;\">112 clips · listed by <strong>Rated Sports</strong></div>
+                    <div style=\"margin-bottom:10px;\"><strong>Roster:</strong> <a href=\"#\" class=\"roster-link\" data-player=\"Chris Johnson\" data-game=\"Rated 7v7 Camp\">Chris Johnson</a>, <a href=\"#\" class=\"roster-link\" data-player=\"Malik Brown\" data-game=\"Rated 7v7 Camp\">Malik Brown</a></div>
+                    <button class=\"buy-btn\" data-title=\"Rated 7v7 Camp\" data-price=\"14.99\" style=\"background:var(--accent);color:#fff;padding:10px 0;border-radius:8px;width:100%;border:none;font-weight:600;font-size:15px;\">Buy Clip $14.99</button>
+                  </div>
+                </div>
+              `;
+              // Purchase Modal Logic
+              function openPurchaseModal(title, price) {
+                const overlay = document.getElementById('purchaseModalOverlay');
+                const content = document.getElementById('purchaseModalContent');
+                if (!overlay || !content) return;
+                content.innerHTML = `
+                  <h2 style=\"font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:10px;\">Purchase Clip</h2>
+                  <div style=\"margin-bottom:12px;\"><strong>Game/Event:</strong> ${title}</div>
+                  <div style=\"margin-bottom:18px;\"><strong>Price:</strong> $${price}</div>
+                  <button id=\"confirmPurchaseBtn\" style=\"background:var(--accent2);color:#fff;padding:10px 0;border-radius:8px;width:100%;border:none;font-weight:700;font-size:16px;\">Confirm Purchase</button>
+                `;
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                  const confirmBtn = document.getElementById('confirmPurchaseBtn');
+                  if (confirmBtn) confirmBtn.onclick = function() {
+                    content.innerHTML = `
+                      <h2 style=\"font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:10px;\">Thank You!</h2>
+                      <div style=\"margin-bottom:12px;\">Your purchase for <strong>${title}</strong> was successful.</div>
+                      <div style=\"margin-bottom:18px;\">Receipt #: <span style=\"color:var(--accent2);\">SR-DEMO-${Math.floor(Math.random()*100000)}</span></div>
+                      <button id=\"closeReceiptBtn\" style=\"background:var(--accent);color:#fff;padding:10px 0;border-radius:8px;width:100%;border:none;font-weight:700;font-size:16px;\">Close</button>
+                    `;
+                    setTimeout(() => {
+                      const closeReceiptBtn = document.getElementById('closeReceiptBtn');
+                      if (closeReceiptBtn) closeReceiptBtn.onclick = function() {
+                        overlay.style.display = 'none';
+                      };
+                    }, 10);
+                  };
+                }, 10);
+              }
+              // Close modal logic
+              document.getElementById('closePurchaseModal').onclick = function() {
+                document.getElementById('purchaseModalOverlay').style.display = 'none';
+              };
+              document.getElementById('purchaseModalOverlay').onclick = function(e) {
+                if (e.target === this) this.style.display = 'none';
+              };
+              // Show marketplace demo and attach buy/roster logic using event delegation
+              let marketplaceListenerAttached = false;
+              document.getElementById('showMarketplaceDemo').onclick = function() {
+                const container = document.getElementById('marketplaceDemoContainer');
+                container.innerHTML = marketplaceHTML;
+                container.style.display = 'block';
+                if (!marketplaceListenerAttached) {
+                  container.addEventListener('click', function(e) {
+                    const buyBtn = e.target.closest('.buy-btn');
+                    if (buyBtn) {
+                      openPurchaseModal(buyBtn.getAttribute('data-title'), buyBtn.getAttribute('data-price'));
+                      return;
+                    }
+                    const rosterLink = e.target.closest('.roster-link');
+                    if (rosterLink) {
+                      e.preventDefault();
+                      const player = rosterLink.getAttribute('data-player');
+                      const game = rosterLink.getAttribute('data-game');
+                      // Demo: show 1-2 sample clips per player
+                      let clips = [];
+                      if (player === "Tre'Sean Holloway") {
+                        clips = [
+                          { title: "TD Pass - 2nd Qtr", price: "4.99", src: "https://www.w3schools.com/html/mov_bbb.mp4", poster: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" },
+                          { title: "Scramble Highlight", price: "3.99", src: "https://www.w3schools.com/html/movie.mp4", poster: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=400&q=80" }
+                        ];
+                      } else if (player === "Jalen Smith") {
+                        clips = [
+                          { title: "Interception", price: "5.99", src: "https://www.w3schools.com/html/movie.mp4", poster: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=400&q=80" }
+                        ];
+                      } else if (player === "Chris Johnson") {
+                        clips = [
+                          { title: "Game Winner", price: "6.99", src: "https://www.w3schools.com/html/mov_bbb.mp4", poster: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" }
+                        ];
+                      } else if (player === "Malik Brown") {
+                        clips = [
+                          { title: "Big Tackle", price: "3.49", src: "https://www.w3schools.com/html/movie.mp4", poster: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=400&q=80" }
+                        ];
+                      }
+                      const overlay = document.getElementById('purchaseModalOverlay');
+                      const content = document.getElementById('purchaseModalContent');
+                      if (!overlay || !content) return;
+                      let html = `<h2 style=\"font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:10px;\">${player} - Tagged Clips</h2>`;
+                      if (clips.length === 0) {
+                        html += `<div>No clips found for this player.</div>`;
+                      } else {
+                        clips.forEach(clip => {
+                          html += `
+                            <div style=\"margin-bottom:18px;\">
+                              <div style=\"font-weight:600;margin-bottom:4px;\">${clip.title}</div>
+                              <video src=\"${clip.src}\" controls poster=\"${clip.poster}\" style=\"width:100%;max-height:120px;border-radius:8px;background:#111;object-fit:cover;\"></video>
+                              <div style=\"margin:6px 0 0 0;\"><strong>Price:</strong> $${clip.price}</div>
+                              <button class=\"buy-btn\" data-title=\"${player} - ${clip.title}\" data-price=\"${clip.price}\" style=\"background:var(--accent);color:#fff;padding:7px 0;border-radius:8px;width:100%;border:none;font-weight:600;font-size:14px;margin-top:4px;\">Buy Clip $${clip.price}</button>
+                            </div>
+                          `;
+                        });
+                      }
+                      content.innerHTML = html;
+                      overlay.style.display = 'flex';
+                    }
+                  });
+                  marketplaceListenerAttached = true;
+                }
+              };
+            </script>
           <a class="btn" href="sign-in.html">Open Sign In</a>
           <a class="btn" href="sign-up.html">Open Sign Up</a>
           <a class="btn" href="admin.html">Open Unified Admin (GFS + Subjectreport)</a>

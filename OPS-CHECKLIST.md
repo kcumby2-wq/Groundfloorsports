@@ -2,8 +2,6 @@
 
 Use this as your recurring operations runbook for the booking site + admin dashboard.
 
-Detailed incident playbooks and command references are in `OPS-RUNBOOK.md`.
-
 ## Daily (10-15 minutes)
 
 - Open `index.html` and submit 1 test booking with your own email.
@@ -52,18 +50,6 @@ Run this whenever you modify `index.html`, `admin.html`, or database policies.
   - Signed in + healthy -> `Supabase connected`
   - Network/API issue -> error state
 
-### Command gate before shipping
-
-- Run `npm run validate:ops`.
-- Run `npm run validate:marketplace-suite`.
-- Run `npm run evidence:archive`.
-- Proceed only when both pass.
-
-### Post-live-test hygiene
-
-- Run `npm run security:clear-testing-env`.
-- Sign out of admin browser sessions used for testing.
-
 ## Incident Quick Response
 
 ### If bookings stop saving
@@ -102,17 +88,3 @@ Run this whenever you modify `index.html`, `admin.html`, or database policies.
 - Keep one source of truth in Supabase.
 - Do not put secret/service keys in frontend files.
 - Keep this checklist updated as your process changes.
-
-## GroundfloorSports Auth Smoke Test (Clerk)
-
-Run after auth, middleware, or env key changes.
-
-- Open `/marketplace` and confirm page + API data load.
-- Open `/seller/onboarding` while signed out and confirm redirect to Clerk sign-in.
-- Open `/athletes/claim-profile` while signed out and confirm redirect to Clerk sign-in.
-- Sign in with a test user and confirm redirect completes without errors.
-- Open `/seller/onboarding` while signed in with seller role and confirm seller page renders.
-- Open `/athletes/claim-profile` while signed in with athlete role and confirm athlete page renders.
-- Open `/seller/onboarding` while signed in as non-seller and confirm role-gate message is shown.
-- Open `/athletes/claim-profile` while signed in as non-athlete and confirm role-gate message is shown.
-- Confirm no missing key or keyless warnings appear in local app pages.

@@ -6,8 +6,12 @@ outside `/public/` is NOT served, so always add new files in here, not in
 the root-level `media/` folder).
 
 ## Hero background video — LIVE
-- `media/hero-bg.mp4` — currently your `hero-bg-new.mp4` (7MB, compressed).
-  Plays full-bleed, muted, looping, behind the hero headline.
+- `media/hero-bg.mp4` — now your "Subject report Duncanville" clip
+  (21 sec, downscaled to 1280x720 H.264, ~7.1MB compressed from the
+  original 336MB 4K source). Plays full-bleed, muted, looping, behind the
+  hero headline.
+- `media/hero-bg-poster.jpg` — fallback poster frame grabbed from the same
+  clip, shown while the video loads.
 - To swap it: replace this file (keep the same name) and push. Keep it
   short (5–15 sec loops well) and under ~20MB so it loads fast.
 

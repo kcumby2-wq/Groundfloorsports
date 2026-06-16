@@ -17,18 +17,10 @@ create table if not exists athletes (
   phone          text,
 
   -- Sport profile
-  jersey_number   text,
   position       text,
   class_year     text,
-  height         text,
-  weight         text,
   school         text,
   state          text,
-  rec_team       text,
-  instagram      text,
-  x_twitter      text,
-  tiktok         text,
-  video_url      text,
 
   -- Commerce
   package        text,                    -- 'transcript' | 'program' | 'full' | 'prospect'

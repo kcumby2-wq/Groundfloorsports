@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
-    ,
-    "validate:ops:live": "echo 'No validation implemented yet'"
+    "start": "next start",
+    "validate:ops:live": "echo 'No validation implemented yet'",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "next": "^16.2.6",
@@ -17,5 +17,11 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "redis": "^4.6.7"
+  },
+  "devDependencies": {
+    "npm-force-resolutions": "^0.0.10"
+  },
+  "resolutions": {
+    "postcss": "8.5.15"
   }
 }

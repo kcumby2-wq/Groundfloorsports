@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { getRedisClient } from '@/lib/redisClient';
 import { writeAuditLog } from '@/lib/auditLog';
 import { checkAnomaly } from '@/lib/anomalyDetection';
-import rateLimit from '@/lib/rateLimit';
+import { rateLimit } from '@/lib/rateLimit';
 import { auditLog } from '@/lib/auditLog';
 
 export const runtime = 'nodejs';

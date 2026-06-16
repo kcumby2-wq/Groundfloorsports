@@ -1,0 +1,235 @@
+<section class="offer toj-campaign3-offer" id="toj-campaign3-offer">
+  <div class="wrap">
+    <div class="panel reveal" style="margin: 48px 0; background: #eaf6ff; border-radius: 18px; box-shadow: 0 2px 16px rgba(47,163,232,0.08); padding: 40px 32px; text-align: center;">
+      <span class="eyebrow" style="color: #2fa3e8;">New: Campaign & Email Capture</span>
+      <h2 style="color: #0a1729; margin: 18px 0 10px;">TOJ Campaign 3.0 Offer</h2>
+      <p style="color: #1a4082; font-size: 18px; max-width: 600px; margin: 0 auto 24px;">Run your own recruiting campaign, capture athlete emails, and sync to Mailchimp — all with one tool. Perfect for combines, clinics, and team events. Export clean CSVs, automate follow-ups, and never lose a lead.</p>
+      <ul style="text-align:left; display:inline-block; margin:0 auto 18px; color:#0a1729; font-size:16px; line-height:1.7; text-align:left;">
+        <li>✓ CSV export for all captured leads</li>
+        <li>✓ Mailchimp sync (auto or manual)</li>
+        <li>✓ No spreadsheet cleanup</li>
+        <li>✓ Works for combines, clinics, teams</li>
+        <li>✓ Fast event-day intake</li>
+      </ul>
+      <button id="toj-campaign3-btn" class="btn-primary" style="background: #2fa3e8; color: #fff; padding: 16px 36px; border-radius: 999px; font-size: 16px; font-weight: 700; border:0; margin-top: 10px; cursor:pointer;">Try TOJ Campaign 3.0 →</button>
+      <!-- Marketing phrase removed as requested -->
+      <div style="margin-top: 18px; color: #1a4082; font-size: 15px; font-style:italic;">“The fastest way we’ve ever captured and followed up with athletes at our events.”</div>
+    </div>
+  </div>
+</section>
+
+<!-- TOJ Campaign 3.0 Modal -->
+<div class="modal-backdrop" id="toj-campaign3-modal" style="display:none;z-index:2000;align-items:center;justify-content:center;animation:fadeIn 0.3s;">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tojCampaign3Title" style="max-width:420px;box-shadow:0 8px 32px rgba(47,163,232,0.18);border-radius:20px;animation:slideUp 0.3s;">
+    <button class="close-x" onclick="closeTojCampaign3Modal()" aria-label="Close" style="font-size:28px;top:18px;right:18px;position:absolute;background:none;border:none;cursor:pointer;">×</button>
+    <div id="toj-campaign3-modal-body">
+      <div class="mod-eyebrow" style="color:#2fa3e8;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">Get Early Access</div>
+      <h3 id="tojCampaign3Title" style="color:#0a1729;font-size:2rem;margin-bottom:8px;">Try TOJ Campaign 3.0</h3>
+      <p class="sub" style="color:#1a4082;font-size:15px;margin-bottom:18px;">Fill out the form below to get instant access and start capturing leads at your next event.</p>
+      <form id="toj-campaign3-form" autocomplete="off" style="margin-top:10px;display:flex;flex-direction:column;gap:14px;" novalidate>
+        <div class="mod-field">
+          <label for="tojName">Your Name</label>
+          <input type="text" id="tojName" required autocomplete="name" placeholder="Full name" aria-required="true" style="font-size:16px;padding:10px 12px;border-radius:8px;">
+          <div class="field-error" id="tojName-error" style="color:#e11d48;font-size:13px;display:none;"></div>
+        </div>
+        <div class="mod-field">
+          <label for="tojEmail">Email</label>
+          <input type="email" id="tojEmail" required autocomplete="email" placeholder="you@example.com" aria-required="true" style="font-size:16px;padding:10px 12px;border-radius:8px;">
+          <div class="field-error" id="tojEmail-error" style="color:#e11d48;font-size:13px;display:none;"></div>
+        </div>
+        <div class="mod-field">
+          <label for="tojOrg">Organization / Event</label>
+          <input type="text" id="tojOrg" required placeholder="e.g. Spring Combine, Team Name" aria-required="true" style="font-size:16px;padding:10px 12px;border-radius:8px;">
+          <div class="field-error" id="tojOrg-error" style="color:#e11d48;font-size:13px;display:none;"></div>
+        </div>
+        <div class="mod-field">
+          <label for="tojUsage">How will you use this?</label>
+          <textarea id="tojUsage" required placeholder="Describe your event or use case" aria-required="true" style="min-height:60px;font-size:16px;padding:10px 12px;border-radius:8px;"></textarea>
+          <div class="field-error" id="tojUsage-error" style="color:#e11d48;font-size:13px;display:none;"></div>
+        </div>
+        <button type="submit" class="mod-submit" id="toj-campaign3-submit" style="margin-top:10px;font-size:17px;padding:12px 0;border-radius:8px;background:#2fa3e8;color:#fff;font-weight:700;">Request Access</button>
+        <div id="toj-campaign3-error" style="color:#e11d48; font-size:15px; margin-top:6px; display:none;"></div>
+      </form>
+      <div class="modal-footer" style="margin-top:22px;text-align:center;border-top:1px solid #e0f0fa;padding-top:16px;">
+        <p style="color:#1a4082;font-size:14px;margin:0 0 10px;">Prefer to talk it through first?</p>
+        <button type="button" onclick="Calendly.initPopupWidget({url:'https://calendly.com/kcumby2/30min'});return false;" style="background:#0a1729;color:#fff;border:2px solid #2fa3e8;border-radius:999px;padding:10px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-bottom:10px;">📅 Book a 30-Min Call</button>
+        <a href="mailto:admin@subjectreport.com" style="color:#2fa3e8;font-size:14px;text-decoration:underline;">Need help? Contact Admin</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Calendly widget script -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+<style>
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes slideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.modal-backdrop { transition: background 0.2s; background:rgba(10,23,41,0.72); }
+.modal { transition: box-shadow 0.2s; }
+.mod-success .check { animation: popIn 0.4s; }
+@keyframes popIn { from { transform:scale(0.7); opacity:0; } to { transform:scale(1); opacity:1; } }
+</style>
+
+<script>
+  // TOJ Campaign 3.0 Modal & Form Logic
+  document.addEventListener('DOMContentLoaded', function() {
+    const offerBtn = document.getElementById('toj-campaign3-btn');
+    const modal = document.getElementById('toj-campaign3-modal');
+    const closeBtn = modal.querySelector('.close-x');
+    const form = document.getElementById('toj-campaign3-form');
+    const errorDiv = document.getElementById('toj-campaign3-error');
+    let lastFocus = null;
+
+    function openTojCampaign3Modal() {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      lastFocus = document.activeElement;
+      document.getElementById('tojName').focus();
+      if (window.trackEvent) trackEvent('toj_campaign3_modal_open');
+    }
+    window.closeTojCampaign3Modal = function() {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    };
+
+    offerBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      openTojCampaign3Modal();
+    });
+
+    closeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.closeTojCampaign3Modal();
+    });
+
+    // Keyboard accessibility
+    document.addEventListener('keydown', function(e) {
+      if (modal.style.display === 'flex' && e.key === 'Escape') {
+        window.closeTojCampaign3Modal();
+      }
+    });
+
+    // Form submit
+    // Real-time validation helpers
+    function validateField(id, validator, message) {
+      const input = document.getElementById(id);
+      const error = document.getElementById(id + '-error');
+      if (!validator(input.value.trim())) {
+        error.textContent = message;
+        error.style.display = 'block';
+        input.setAttribute('aria-invalid', 'true');
+        return false;
+      } else {
+        error.textContent = '';
+        error.style.display = 'none';
+        input.removeAttribute('aria-invalid');
+        return true;
+      }
+    }
+
+    function validateAllFields() {
+      let valid = true;
+      valid &= validateField('tojName', v => v.length > 1, 'Please enter your name.');
+      valid &= validateField('tojEmail', v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), 'Enter a valid email.');
+      valid &= validateField('tojOrg', v => v.length > 1, 'Enter your organization or event.');
+      valid &= validateField('tojUsage', v => v.length > 5, 'Describe your use case.');
+      return !!valid;
+    }
+
+    ['tojName','tojEmail','tojOrg','tojUsage'].forEach(id => {
+      document.getElementById(id).addEventListener('input', validateAllFields);
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
+
+      if (!validateAllFields()) {
+        errorDiv.textContent = 'Please fix the errors above.';
+        errorDiv.style.display = 'block';
+        if (window.trackEvent) trackEvent('toj_campaign3_validation_error');
+        return;
+      }
+
+      // Analytics
+      if (window.trackEvent) trackEvent('toj_campaign3_submit', {
+        name: document.getElementById('tojName').value.trim(),
+        email: document.getElementById('tojEmail').value.trim(),
+        org: document.getElementById('tojOrg').value.trim()
+      });
+
+      // API call with loading state
+      const submitBtn = document.getElementById('toj-campaign3-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      try {
+        const res = await fetch('/api/tojcampaign3/capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pageId: 'toj-campaign3-offer',
+            email: document.getElementById('tojEmail').value.trim(),
+            name: document.getElementById('tojName').value.trim(),
+            org: document.getElementById('tojOrg').value.trim(),
+            usage: document.getElementById('tojUsage').value.trim()
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Submission failed');
+        }
+        form.style.display = 'none';
+        document.getElementById('toj-campaign3-modal-body').innerHTML = `
+          <div class="mod-success" style="text-align:center;">
+            <div class="check" style="margin:0 auto 18px;width:54px;height:54px;border-radius:50%;background:#e0f7fa;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 24 24" style="width:28px;height:28px;stroke:#2fa3e8;fill:none;stroke-width:3;"><polyline points="4,12 10,18 20,6"/></svg>
+            </div>
+            <h4 style="color:#0a1729;">You're on the list!</h4>
+            <p style="color:#1a4082;">Check your email for next steps. You’ll get instant access to the TOJ Campaign 3.0 tool.</p>
+            <button type="button" onclick="Calendly.initPopupWidget({url:'https://calendly.com/kcumby2/30min'});return false;" style="background:#2fa3e8;color:#fff;border:none;border-radius:999px;padding:12px 28px;font-size:16px;font-weight:700;cursor:pointer;width:100%;margin-top:16px;">📅 Book a Call with Admin</button>
+            <a href="mailto:admin@subjectreport.com" style="color:#2fa3e8;font-size:14px;text-decoration:underline;display:block;margin:10px 0 0;">Or email the admin</a>
+            <button class="mod-submit" onclick="closeTojCampaign3Modal()" style="margin-top:12px;background:#e0f0fa;color:#0a1729;">Done</button>
+          </div>
+        `;
+      } catch (err) {
+        errorDiv.textContent = err.message || 'Submission failed. Please try again.';
+        errorDiv.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Request Access';
+      }
+    });
+    // Accessibility: trap focus in modal
+    function trapFocus(e) {
+      if (modal.style.display !== 'flex') return;
+      const focusable = modal.querySelectorAll('input,textarea,button,a[href]');
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
+    }
+    modal.addEventListener('keydown', trapFocus);
+    // Responsive: modal width and padding
+    const modalEl = modal.querySelector('.modal');
+    function adjustModalForMobile() {
+      if (window.innerWidth < 520) {
+        modalEl.style.maxWidth = '98vw';
+        modalEl.style.padding = '10px 2vw';
+      } else {
+        modalEl.style.maxWidth = '420px';
+        modalEl.style.padding = '';
+      }
+    }
+    window.addEventListener('resize', adjustModalForMobile);
+    adjustModalForMobile();
+  });
+</script>

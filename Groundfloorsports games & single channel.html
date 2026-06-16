@@ -1,0 +1,1299 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GroundfloorSports - Game Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050b16;
+    --panel: #0e1d33;
+    --line: rgba(255,255,255,.14);
+    --muted: rgba(255,255,255,.72);
+    --white: #ffffff;
+    --accent: #ec4899;
+    --accent2: #4db8ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    padding: 28px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(77,184,255,.18), transparent 30%),
+      radial-gradient(circle at 15% 0%, rgba(236,72,153,.16), transparent 35%),
+      var(--bg);
+  }
+  .shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    gap: 18px;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .08em;
+    font-size: 26px;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .brand span { color: var(--accent); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--line);
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #050b16;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .14em;
+  }
+  .hero {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    background: linear-gradient(145deg, rgba(14,29,51,.98), rgba(7,16,29,.98));
+  }
+  .eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    font-size: clamp(34px, 7vw, 68px);
+    line-height: .95;
+    margin-bottom: 8px;
+  }
+  .meta { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+  .info {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+    padding: 14px;
+  }
+  .label {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  .value {
+    font-size: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .03em;
+    color: var(--accent2);
+  }
+  .workspace {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 14px;
+  }
+  .panel {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(255,255,255,.03);
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: 20px;
+    color: var(--accent2);
+  }
+  .search {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.03);
+    color: var(--white);
+    font-family: inherit;
+  }
+  .scroll-list {
+    max-height: 360px;
+    overflow: auto;
+    display: grid;
+    gap: 8px;
+    padding-right: 4px;
+  }
+  .item {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255,255,255,.03);
+    padding: 10px;
+    display: grid;
+    gap: 4px;
+  }
+  .item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .item-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn-mini {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    background: rgba(255,255,255,.03);
+    cursor: pointer;
+  }
+  .btn-mini:hover {
+    color: var(--white);
+    border-color: var(--accent2);
+  }
+  .btn-mini.danger:hover {
+    border-color: #f87171;
+    color: #fca5a5;
+  }
+  .item-title {
+    font-weight: 700;
+    color: var(--white);
+    font-size: 14px;
+  }
+  .item-meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .form {
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+    display: grid;
+    gap: 8px;
+  }
+  .import-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .hint {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 8px;
+  }
+  .input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.03);
+    color: var(--white);
+    font-family: inherit;
+  }
+  .btn-action {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #050b16;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .empty {
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  @media (max-width: 900px) {
+    body { padding: 16px; }
+    .cards { grid-template-columns: 1fr; }
+    .workspace { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top">
+      <a class="brand" href="Subjectreport.html">GROUNDFLOOR <span>SPORTS</span></a>
+      <div class="actions">
+        <a class="btn primary" href="marketplace.html#results">Back to Marketplace</a>
+        <a class="btn" href="sign-in.html">Sign In</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">Game Preview</div>
+      <h1 id="gameTitle">Marketplace Game</h1>
+      <div class="meta" id="gameMeta">Details unavailable.</div>
+      <div class="cards">
+        <div class="info">
+          <div class="label">Seller</div>
+          <div class="value" id="gameSeller">Unknown</div>
+        </div>
+        <div class="info">
+          <div class="label">Clips</div>
+          <div class="value" id="gameClips">0</div>
+        </div>
+        <div class="info">
+          <div class="label">Slug</div>
+          <div class="value" id="gameSlug">n/a</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <article class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Game Clips</div>
+          <div class="chip" id="uploadedCount">0 uploaded clips</div>
+        </div>
+        <div class="import-bar">
+          <div class="hint">Import clips CSV headers: title,player,jersey,tag,file</div>
+          <div>
+            <button id="clipImportBtn" class="btn-mini" type="button">Import CSV</button>
+            <button id="clipLoadSampleBtn" class="btn-mini" type="button">Load Sample Clips</button>
+            <input id="clipImportInput" type="file" accept=".csv,text/csv" style="display:none">
+          </div>
+        </div>
+        <div class="hint" id="duplicateScoreHint">Duplicate guard: exact/high >= 92%, medium 72-91% confidence.</div>
+        <input id="clipSearch" class="search" type="text" placeholder="Search clips by player, jersey, title, or tag">
+        <div id="clipList" class="scroll-list"></div>
+
+        <form id="clipForm" class="form">
+          <div id="clipFormTitle" class="panel-title" style="font-size:16px;color:var(--white)">Add Clip To This Game</div>
+          <div class="form-grid">
+            <input id="clipTitle" class="input" type="text" placeholder="Clip title (required)" required>
+            <input id="clipPlayer" class="input" type="text" placeholder="Player name">
+            <input id="clipJersey" class="input" type="text" placeholder="Jersey #">
+            <input id="clipTag" class="input" type="text" placeholder="Tag (TD, INT, Sack)">
+          </div>
+          <input id="clipFile" class="input" type="file" accept="video/*">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="clipSubmitBtn" class="btn-action" type="submit">Add Clip</button>
+            <button id="clipCancelEditBtn" class="btn" type="button" style="display:none">Cancel Edit</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Player Roster</div>
+          <div class="chip" id="playerCount">0 players</div>
+        </div>
+        <div class="import-bar">
+          <div class="hint">Import players CSV headers: name,jersey,position,school (or team)</div>
+          <div>
+            <button id="playerImportBtn" class="btn-mini" type="button">Import CSV</button>
+            <button id="playerLoadSampleBtn" class="btn-mini" type="button">Load Sample Players</button>
+            <input id="playerImportInput" type="file" accept=".csv,text/csv" style="display:none">
+          </div>
+        </div>
+        <input id="playerSearch" class="search" type="text" placeholder="Search players by name, jersey, or position">
+        <div id="playerList" class="scroll-list"></div>
+
+        <form id="playerForm" class="form">
+          <div id="playerFormTitle" class="panel-title" style="font-size:16px;color:var(--white)">Add Player To Roster</div>
+          <div class="form-grid">
+            <input id="playerName" class="input" type="text" placeholder="Player name (required)" required>
+            <input id="playerJersey" class="input" type="text" placeholder="Jersey #">
+            <input id="playerPosition" class="input" type="text" placeholder="Position">
+            <input id="playerTeam" class="input" type="text" placeholder="School">
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="playerSubmitBtn" class="btn-action" type="submit">Add Player</button>
+            <button id="playerCancelEditBtn" class="btn" type="button" style="display:none">Cancel Edit</button>
+          </div>
+        </form>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const rawSlug = params.get('slug') || '';
+
+      const GAME_PRESETS = {
+        '2026-10-18-allen-vs-plano-east': {
+          title: 'Allen vs Plano East',
+          meta: 'Oct 18, 2026 Â· Friday Night HS Â· District 6-6A',
+          seller: 'Subject Report',
+          clips: '142',
+          homeTeam: 'Allen',
+          awayTeam: 'Plano East',
+        },
+        '2026-10-18-westlake-vs-lake-travis': {
+          title: 'Westlake vs Lake Travis',
+          meta: 'Oct 18, 2026 Â· Battle of the Lakes',
+          seller: 'Subject Media',
+          clips: '128',
+          homeTeam: 'Westlake',
+          awayTeam: 'Lake Travis',
+        },
+        '2026-10-17-duncanville-vs-desoto': {
+          title: 'Duncanville vs DeSoto',
+          meta: 'Oct 17, 2026 Â· Friday Night HS',
+          seller: 'Subject Report',
+          clips: '156',
+          homeTeam: 'Duncanville',
+          awayTeam: 'DeSoto',
+        },
+        '2026-10-12-pylon-7v7-dallas': {
+          title: 'Rated 7v7 Â· Dallas Spring Series',
+          meta: 'Oct 12, 2026 Â· National Circuit Â· 48 Teams',
+          seller: 'Rated 7v7',
+          clips: '284',
+          homeTeam: 'Rated 7v7 Select',
+          awayTeam: 'Dallas Circuit Select',
+        },
+        '2026-10-11-north-shore-vs-galena-park': {
+          title: 'North Shore vs Galena Park',
+          meta: 'Oct 11, 2026 Â· Houston Area Â· 21-6A',
+          seller: 'Subject Report',
+          clips: '119',
+          homeTeam: 'North Shore',
+          awayTeam: 'Galena Park',
+        },
+        '2026-10-11-aledo-vs-wylie-east': {
+          title: 'Aledo vs Wylie East',
+          meta: 'Oct 11, 2026 Â· Friday Night HS',
+          seller: 'Subject Media',
+          clips: '87',
+          homeTeam: 'Aledo',
+          awayTeam: 'Wylie East',
+        },
+        '2026-10-05-blu-chips-tx-combine': {
+          title: 'Blu Chips TX Combine Â· Dallas',
+          meta: 'Oct 5, 2026 Â· Combine Â· 180 Athletes',
+          seller: 'Blu Chips',
+          clips: '342',
+          homeTeam: 'Blu Chips Invite',
+          awayTeam: 'Combine Challengers',
+        },
+        '2026-10-04-highland-park-vs-mckinney': {
+          title: 'Highland Park vs McKinney',
+          meta: 'Oct 4, 2026 Â· Friday Night HS',
+          seller: 'Subject Report',
+          clips: '96',
+          homeTeam: 'Highland Park',
+          awayTeam: 'McKinney',
+        },
+        '2026-09-28-sr-spring-camp-dallas': {
+          title: 'SR Spring Camp Â· Dallas',
+          meta: 'Sep 28, 2026 Â· SR-Hosted Camp Â· 110 Players',
+          seller: 'Subject Report',
+          clips: '218',
+          homeTeam: 'SR Spring Camp',
+          awayTeam: 'Camp Invitees',
+        },
+        '2026-09-27-cedar-hill-vs-mansfield': {
+          title: 'Cedar Hill vs Mansfield Lake Ridge',
+          meta: 'Sep 27, 2026 Â· Friday Night HS',
+          seller: 'Subject Media',
+          clips: '104',
+          homeTeam: 'Cedar Hill',
+          awayTeam: 'Mansfield Lake Ridge',
+        },
+        '2026-09-21-southlake-carroll-vs-keller': {
+          title: 'Southlake Carroll vs Keller',
+          meta: 'Sep 21, 2026 Â· Friday Night HS',
+          seller: 'Subject Report',
+          clips: '134',
+          homeTeam: 'Southlake Carroll',
+          awayTeam: 'Keller',
+        },
+        '2026-09-20-katy-vs-katy-tompkins': {
+          title: 'Katy vs Katy Tompkins',
+          meta: 'Sep 20, 2026 Â· Houston District',
+          seller: 'Subject Media',
+          clips: '78',
+          homeTeam: 'Katy',
+          awayTeam: 'Katy Tompkins',
+        },
+      };
+
+      function titleCaseWord(word) {
+        if (!word) return '';
+        if (word.toLowerCase() === 'vs') return 'vs';
+        if (/^[0-9]+$/.test(word)) return word;
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      function buildFallbackTitle(slug) {
+        if (!slug) return 'Marketplace Game';
+        const withoutDate = slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+        const text = withoutDate
+          .split('-')
+          .map(titleCaseWord)
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        return text || 'Marketplace Game';
+      }
+
+      const preset = rawSlug ? (GAME_PRESETS[rawSlug] || null) : null;
+      const slug = rawSlug || (params.get('title') ? params.get('title').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : 'n-a');
+      const title = params.get('title') || (preset ? preset.title : buildFallbackTitle(slug));
+      const meta = params.get('meta') || (preset ? preset.meta : `Demo preview for ${title}`);
+      const seller = params.get('seller') || (preset ? preset.seller : 'GroundfloorSports');
+      const clips = params.get('clips') || (preset ? preset.clips : '0');
+      const storageKey = `gfs-demo-${slug || 'n-a'}`;
+
+      function defaultTeams() {
+        if (preset?.homeTeam || preset?.awayTeam) {
+          return {
+            home: preset?.homeTeam || 'Home Team',
+            away: preset?.awayTeam || 'Visitor Team',
+          };
+        }
+
+        const bits = title.split(' vs ').map((part) => part.trim()).filter(Boolean);
+        if (bits.length >= 2) {
+          return {
+            home: bits[0],
+            away: bits[1],
+          };
+        }
+
+        const sellerLabel = seller && seller !== 'Unknown' ? seller : 'Marketplace';
+        return {
+          home: `${sellerLabel} Select`,
+          away: `${sellerLabel} Opponent`
+        };
+      }
+
+      function createSeedState() {
+        const teams = defaultTeams();
+        return {
+          clips: [
+            { title: 'Opening Drive TD', player: 'J. Carter', jersey: '7', tag: 'TD', fileName: '', addedAt: Date.now() - 800000 },
+            { title: 'Third Down Stop', player: 'M. Knox', jersey: '44', tag: 'Tackle', fileName: '', addedAt: Date.now() - 700000 },
+            { title: 'Red Zone Pick', player: 'D. Shaw', jersey: '2', tag: 'INT', fileName: '', addedAt: Date.now() - 600000 },
+            { title: 'Sideline Catch', player: 'T. Rivers', jersey: '11', tag: 'Catch', fileName: '', addedAt: Date.now() - 500000 }
+          ],
+          players: [
+            { name: 'J. Carter', jersey: '7', position: 'QB', school: teams.home },
+            { name: 'T. Rivers', jersey: '11', position: 'WR', school: teams.home },
+            { name: 'M. Knox', jersey: '44', position: 'LB', school: teams.away },
+            { name: 'D. Shaw', jersey: '2', position: 'DB', school: teams.away }
+          ]
+        };
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(storageKey);
+          if (!raw) return createSeedState();
+          const parsed = JSON.parse(raw);
+          return {
+            clips: Array.isArray(parsed.clips) ? parsed.clips : [],
+            players: Array.isArray(parsed.players) ? parsed.players : []
+          };
+        } catch (err) {
+          return createSeedState();
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(storageKey, JSON.stringify(state));
+      }
+
+      function normalizeSchool(player) {
+        return String(player.school || player.team || '').trim();
+      }
+
+      function parseCsv(text) {
+        const rows = [];
+        let row = [];
+        let cell = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i += 1) {
+          const ch = text[i];
+          const next = text[i + 1];
+
+          if (inQuotes) {
+            if (ch === '"' && next === '"') {
+              cell += '"';
+              i += 1;
+            } else if (ch === '"') {
+              inQuotes = false;
+            } else {
+              cell += ch;
+            }
+          } else if (ch === '"') {
+            inQuotes = true;
+          } else if (ch === ',') {
+            row.push(cell);
+            cell = '';
+          } else if (ch === '\n') {
+            row.push(cell);
+            rows.push(row);
+            row = [];
+            cell = '';
+          } else if (ch !== '\r') {
+            cell += ch;
+          }
+        }
+
+        if (cell.length || row.length) {
+          row.push(cell);
+          rows.push(row);
+        }
+
+        if (!rows.length) return [];
+        const headers = rows[0].map((h) => String(h || '').trim().toLowerCase());
+        return rows.slice(1).filter((r) => r.some((v) => String(v || '').trim())).map((r) => {
+          const obj = {};
+          headers.forEach((h, idx) => {
+            obj[h] = String(r[idx] || '').trim();
+          });
+          return obj;
+        });
+      }
+
+      function sampleClipRows() {
+        const teams = defaultTeams();
+        const homeShort = teams.home.split(' ').slice(0, 2).join(' ');
+        const awayShort = teams.away.split(' ').slice(0, 2).join(' ');
+        const now = Date.now();
+
+        return [
+          {
+            title: `${homeShort} Opening Drive TD`,
+            player: 'A. Monroe',
+            jersey: '3',
+            tag: 'TD',
+            fileName: `${slug || 'game'}-opening-drive-td.mp4`,
+            addedAt: now,
+          },
+          {
+            title: `${awayShort} Goal Line Stand`,
+            player: 'R. Daniels',
+            jersey: '52',
+            tag: 'Tackle',
+            fileName: `${slug || 'game'}-goal-line-stand.mp4`,
+            addedAt: now,
+          },
+          {
+            title: `${homeShort} Deep Corner Shot`,
+            player: 'E. Price',
+            jersey: '10',
+            tag: 'Catch',
+            fileName: `${slug || 'game'}-deep-corner-shot.mp4`,
+            addedAt: now,
+          },
+          {
+            title: `${awayShort} Third Down Sack`,
+            player: 'L. Bishop',
+            jersey: '45',
+            tag: 'Sack',
+            fileName: `${slug || 'game'}-third-down-sack.mp4`,
+            addedAt: now,
+          },
+          {
+            title: `${homeShort} Sideline Interception`,
+            player: 'N. Shaw',
+            jersey: '21',
+            tag: 'INT',
+            fileName: `${slug || 'game'}-sideline-interception.mp4`,
+            addedAt: now,
+          }
+        ];
+      }
+
+      function samplePlayerRows() {
+        const teams = defaultTeams();
+        return [
+          { name: 'A. Monroe', jersey: '3', position: 'RB', school: teams.home },
+          { name: 'E. Price', jersey: '10', position: 'WR', school: teams.home },
+          { name: 'R. Daniels', jersey: '52', position: 'LB', school: teams.away },
+          { name: 'L. Bishop', jersey: '45', position: 'DE', school: teams.away },
+          { name: 'N. Shaw', jersey: '21', position: 'DB', school: teams.away }
+        ];
+      }
+
+      function mergeUniqueClips(rows) {
+        const existing = new Set(
+          state.clips.map((clip) => `${String(clip.title || '').toLowerCase()}|${String(clip.player || '').toLowerCase()}|${String(clip.jersey || '')}|${String(clip.tag || '').toLowerCase()}`)
+        );
+        let inserted = 0;
+        let skippedExactOrHigh = 0;
+        let skippedMedium = 0;
+        const duplicateSamples = [];
+
+        rows.forEach((clip) => {
+          const key = `${String(clip.title || '').toLowerCase()}|${String(clip.player || '').toLowerCase()}|${String(clip.jersey || '')}|${String(clip.tag || '').toLowerCase()}`;
+          if (existing.has(key)) {
+            skippedExactOrHigh += 1;
+            return;
+          }
+
+          const duplicate = findDuplicateClip(clip, null);
+          if (duplicate) {
+            if (duplicate.level === 'exact' || duplicate.level === 'high') {
+              skippedExactOrHigh += 1;
+              if (duplicateSamples.length < 5) {
+                duplicateSamples.push({
+                  title: clip.title || 'Untitled',
+                  level: duplicate.level,
+                  score: duplicate.score,
+                  matchedTitle: duplicate.existing?.title || 'Untitled',
+                });
+              }
+              return;
+            }
+            skippedMedium += 1;
+            if (duplicateSamples.length < 5) {
+              duplicateSamples.push({
+                title: clip.title || 'Untitled',
+                level: duplicate.level,
+                score: duplicate.score,
+                matchedTitle: duplicate.existing?.title || 'Untitled',
+              });
+            }
+            return;
+          }
+
+          existing.add(key);
+          state.clips.push(clip);
+          inserted += 1;
+        });
+
+        return {
+          inserted,
+          skippedExactOrHigh,
+          skippedMedium,
+          duplicateSamples,
+        };
+      }
+
+      function mergeUniquePlayers(rows) {
+        const existing = new Set(
+          state.players.map((player) => `${String(player.name || '').toLowerCase()}|${String(player.jersey || '')}|${normalizeSchool(player).toLowerCase()}`)
+        );
+        let inserted = 0;
+
+        rows.forEach((player) => {
+          const key = `${String(player.name || '').toLowerCase()}|${String(player.jersey || '')}|${normalizeSchool(player).toLowerCase()}`;
+          if (existing.has(key)) return;
+          existing.add(key);
+          player.school = normalizeSchool(player);
+          delete player.team;
+          state.players.push(player);
+          inserted += 1;
+        });
+
+        return inserted;
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function renderClips() {
+        const query = document.getElementById('clipSearch').value.trim().toLowerCase();
+        const list = document.getElementById('clipList');
+        const rows = state.clips.map((clip, idx) => ({ clip, idx })).filter(({ clip }) => {
+          const hay = `${clip.title} ${clip.player} ${clip.jersey} ${clip.tag}`.toLowerCase();
+          return !query || hay.includes(query);
+        });
+
+        document.getElementById('uploadedCount').textContent = `${state.clips.length} uploaded clips`;
+        document.getElementById('gameClips').textContent = String(state.clips.length);
+
+        if (!rows.length) {
+          list.innerHTML = '<div class="empty">No clips match this search yet.</div>';
+          return;
+        }
+
+        list.innerHTML = rows
+          .slice()
+          .reverse()
+          .map(({ clip, idx }) => {
+            const stamp = new Date(clip.addedAt || Date.now()).toLocaleString();
+            return `
+              <div class="item">
+                <div class="item-top">
+                  <div class="item-title">${escapeHtml(clip.title)}</div>
+                  <div class="item-actions">
+                    <button class="btn-mini" type="button" data-kind="clip" data-action="edit" data-index="${idx}">Edit</button>
+                    <button class="btn-mini danger" type="button" data-kind="clip" data-action="delete" data-index="${idx}">Delete</button>
+                  </div>
+                </div>
+                <div class="item-meta">${escapeHtml(stamp)}</div>
+                <div class="chip-row">
+                  <span class="chip">Player: ${escapeHtml(clip.player || 'N/A')}</span>
+                  <span class="chip">#${escapeHtml(clip.jersey || '-')}</span>
+                  <span class="chip">${escapeHtml(clip.tag || 'Clip')}</span>
+                  <span class="chip">File: ${escapeHtml(clip.fileName || 'Not attached')}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      function renderPlayers() {
+        const query = document.getElementById('playerSearch').value.trim().toLowerCase();
+        const list = document.getElementById('playerList');
+        const rows = state.players.map((player, idx) => ({ player, idx })).filter(({ player }) => {
+          const hay = `${player.name} ${player.jersey} ${player.position} ${normalizeSchool(player)}`.toLowerCase();
+          return !query || hay.includes(query);
+        });
+
+        document.getElementById('playerCount').textContent = `${state.players.length} players`;
+
+        if (!rows.length) {
+          list.innerHTML = '<div class="empty">No players match this search yet.</div>';
+          return;
+        }
+
+        list.innerHTML = rows
+          .map(({ player, idx }) => {
+            return `
+              <div class="item">
+                <div class="item-top">
+                  <div class="item-title">${escapeHtml(player.name)}</div>
+                  <div class="item-actions">
+                    <button class="btn-mini" type="button" data-kind="player" data-action="edit" data-index="${idx}">Edit</button>
+                    <button class="btn-mini danger" type="button" data-kind="player" data-action="delete" data-index="${idx}">Delete</button>
+                  </div>
+                </div>
+                <div class="chip-row">
+                  <span class="chip">#${escapeHtml(player.jersey || '-')}</span>
+                  <span class="chip">${escapeHtml(player.position || 'Unassigned')}</span>
+                  <span class="chip">School: ${escapeHtml(normalizeSchool(player) || 'Unassigned')}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      const state = loadState();
+      let editingClipIndex = null;
+      let editingPlayerIndex = null;
+
+      function migrateLegacySeedData() {
+        const teams = defaultTeams();
+        const homeShort = teams.home.split(' ').slice(0, 2).join(' ');
+        const awayShort = teams.away.split(' ').slice(0, 2).join(' ');
+        const oldName = 'Pylon 7v7';
+        const newName = 'Rated 7v7';
+
+        const legacyClipByKey = {
+          'J. Carter|7': `${homeShort} Opening Drive TD`,
+          'M. Knox|44': `${awayShort} Goal Line Stand`,
+          'D. Shaw|2': `${homeShort} Sideline Interception`,
+          'T. Rivers|11': `${homeShort} Deep Corner Shot`,
+        };
+
+        const legacyTitles = new Set(['Opening Drive TD', 'Third Down Stop', 'Red Zone Pick', 'Sideline Catch']);
+        let changed = false;
+
+        state.clips = state.clips.map((clip) => {
+          const rawTitle = String(clip.title || '');
+          const rawFileName = String(clip.fileName || '');
+          const key = `${String(clip.player || '').trim()}|${String(clip.jersey || '').trim()}`;
+          const nextTitle = legacyClipByKey[key];
+          let wasChanged = false;
+
+          let renamedTitle = rawTitle;
+          if (renamedTitle.includes(oldName)) {
+            renamedTitle = renamedTitle.replaceAll(oldName, newName);
+            wasChanged = true;
+          }
+
+          let renamedFileName = rawFileName;
+          if (renamedFileName.toLowerCase().includes('pylon-7v7')) {
+            renamedFileName = renamedFileName.replaceAll('pylon-7v7', 'rated-7v7');
+            wasChanged = true;
+          }
+
+          if (!nextTitle) {
+            if (!wasChanged) return clip;
+            changed = true;
+            return {
+              ...clip,
+              title: renamedTitle,
+              fileName: renamedFileName,
+            };
+          }
+
+          if (!legacyTitles.has(rawTitle.trim())) {
+            if (!wasChanged) return clip;
+            changed = true;
+            return {
+              ...clip,
+              title: renamedTitle,
+              fileName: renamedFileName,
+            };
+          }
+
+          changed = true;
+          const updatedTag = key === 'J. Carter|7' ? 'TD'
+            : key === 'M. Knox|44' ? 'Tackle'
+            : key === 'D. Shaw|2' ? 'INT'
+            : 'Catch';
+
+          return {
+            ...clip,
+            title: nextTitle,
+            tag: clip.tag || updatedTag,
+            fileName: renamedFileName || `${slug || 'game'}-${nextTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.mp4`,
+          };
+        });
+
+        state.players = state.players.map((player) => {
+          const current = normalizeSchool(player);
+          if (current.includes(oldName)) {
+            changed = true;
+            return {
+              ...player,
+              school: current.replaceAll(oldName, newName),
+            };
+          }
+
+          if (current && current !== 'Away Team') return player;
+
+          const isHome = ['J. Carter', 'T. Rivers', 'A. Monroe', 'E. Price'].includes(String(player.name || '').trim());
+          changed = true;
+          return {
+            ...player,
+            school: isHome ? teams.home : teams.away,
+          };
+        });
+
+        if (changed) {
+          saveState();
+        }
+      }
+
+      migrateLegacySeedData();
+
+      function startClipEdit(index) {
+        const clip = state.clips[index];
+        if (!clip) return;
+        editingClipIndex = index;
+        document.getElementById('clipFormTitle').textContent = 'Edit Clip';
+        document.getElementById('clipSubmitBtn').textContent = 'Save Clip';
+        document.getElementById('clipCancelEditBtn').style.display = 'inline-block';
+        document.getElementById('clipTitle').value = clip.title || '';
+        document.getElementById('clipPlayer').value = clip.player || '';
+        document.getElementById('clipJersey').value = clip.jersey || '';
+        document.getElementById('clipTag').value = clip.tag || '';
+        document.getElementById('clipFile').value = '';
+        document.getElementById('clipTitle').focus();
+      }
+
+      function resetClipFormMode() {
+        editingClipIndex = null;
+        document.getElementById('clipFormTitle').textContent = 'Add Clip To This Game';
+        document.getElementById('clipSubmitBtn').textContent = 'Add Clip';
+        document.getElementById('clipCancelEditBtn').style.display = 'none';
+        document.getElementById('clipForm').reset();
+      }
+
+      function normalizeClipKey(clip) {
+        return [
+          String(clip.title || '').trim().toLowerCase(),
+          String(clip.player || '').trim().toLowerCase(),
+          String(clip.jersey || '').trim().toLowerCase(),
+        ].join('|');
+      }
+
+      function tokenizeClipField(value) {
+        return String(value || '')
+          .toLowerCase()
+          .split(/[^a-z0-9#]+/)
+          .map((token) => token.trim())
+          .filter(Boolean);
+      }
+
+      function jaccardSimilarity(left, right) {
+        const leftTokens = new Set(tokenizeClipField(left));
+        const rightTokens = new Set(tokenizeClipField(right));
+        if (!leftTokens.size && !rightTokens.size) return 1;
+        if (!leftTokens.size || !rightTokens.size) return 0;
+
+        let overlap = 0;
+        leftTokens.forEach((token) => {
+          if (rightTokens.has(token)) overlap += 1;
+        });
+
+        const unionSize = new Set([...leftTokens, ...rightTokens]).size;
+        return unionSize ? overlap / unionSize : 0;
+      }
+
+      function scoreClipDuplicate(candidate, existing) {
+        const titleScore = jaccardSimilarity(candidate.title, existing.title);
+        const playerScore = jaccardSimilarity(candidate.player, existing.player);
+        const jerseyA = String(candidate.jersey || '').trim().toLowerCase();
+        const jerseyB = String(existing.jersey || '').trim().toLowerCase();
+        const jerseyScore = jerseyA && jerseyB && jerseyA === jerseyB ? 1 : 0;
+        const tagScore = jaccardSimilarity(candidate.tag, existing.tag);
+
+        const total = (titleScore * 0.52) + (playerScore * 0.28) + (jerseyScore * 0.16) + (tagScore * 0.04);
+        return {
+          total,
+          titleScore,
+          playerScore,
+          jerseyScore,
+          tagScore,
+        };
+      }
+
+      function formatDuplicateBreakdown(scoreMeta) {
+        if (!scoreMeta) return 'no score details';
+        return [
+          `title ${Math.round(scoreMeta.titleScore * 100)}%`,
+          `player ${Math.round(scoreMeta.playerScore * 100)}%`,
+          `jersey ${Math.round(scoreMeta.jerseyScore * 100)}%`,
+          `tag ${Math.round(scoreMeta.tagScore * 100)}%`,
+        ].join(', ');
+      }
+
+      function findDuplicateClip(draftClip, ignoreIndex) {
+        const nextKey = normalizeClipKey(draftClip);
+        if (!nextKey || nextKey === '||') return null;
+
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (let index = 0; index < state.clips.length; index += 1) {
+          if (Number.isInteger(ignoreIndex) && index === ignoreIndex) continue;
+          const existing = state.clips[index];
+          if (normalizeClipKey(existing) === nextKey) {
+            return { index, existing, score: 1, level: 'exact' };
+          }
+
+          const scoreMeta = scoreClipDuplicate(draftClip, existing);
+          if (scoreMeta.total > bestScore) {
+            bestScore = scoreMeta.total;
+            bestMatch = { index, existing, score: scoreMeta.total, scoreMeta };
+          }
+        }
+
+        if (!bestMatch || bestScore < 0.72) return null;
+        return {
+          ...bestMatch,
+          level: bestScore >= 0.92 ? 'high' : 'medium',
+        };
+      }
+
+      function startPlayerEdit(index) {
+        const player = state.players[index];
+        if (!player) return;
+        editingPlayerIndex = index;
+        document.getElementById('playerFormTitle').textContent = 'Edit Player';
+        document.getElementById('playerSubmitBtn').textContent = 'Save Player';
+        document.getElementById('playerCancelEditBtn').style.display = 'inline-block';
+        document.getElementById('playerName').value = player.name || '';
+        document.getElementById('playerJersey').value = player.jersey || '';
+        document.getElementById('playerPosition').value = player.position || '';
+        document.getElementById('playerTeam').value = normalizeSchool(player);
+        document.getElementById('playerName').focus();
+      }
+
+      function resetPlayerFormMode() {
+        editingPlayerIndex = null;
+        document.getElementById('playerFormTitle').textContent = 'Add Player To Roster';
+        document.getElementById('playerSubmitBtn').textContent = 'Add Player';
+        document.getElementById('playerCancelEditBtn').style.display = 'none';
+        document.getElementById('playerForm').reset();
+      }
+
+      document.getElementById('gameTitle').textContent = title;
+      document.getElementById('gameMeta').textContent = meta;
+      document.getElementById('gameSeller').textContent = seller;
+      document.getElementById('gameClips').textContent = clips;
+      document.getElementById('gameSlug').textContent = slug;
+      document.title = `GroundfloorSports - ${title}`;
+
+      document.getElementById('clipSearch').addEventListener('input', renderClips);
+      document.getElementById('playerSearch').addEventListener('input', renderPlayers);
+
+      document.getElementById('clipImportBtn').addEventListener('click', () => {
+        document.getElementById('clipImportInput').click();
+      });
+      document.getElementById('playerImportBtn').addEventListener('click', () => {
+        document.getElementById('playerImportInput').click();
+      });
+      document.getElementById('clipLoadSampleBtn').addEventListener('click', () => {
+        const outcome = mergeUniqueClips(sampleClipRows());
+        saveState();
+        renderClips();
+        alert(outcome.inserted
+          ? `Loaded ${outcome.inserted} sample clips. Skipped ${outcome.skippedExactOrHigh + outcome.skippedMedium}.`
+          : 'Sample clips already loaded for this game.');
+      });
+      document.getElementById('playerLoadSampleBtn').addEventListener('click', () => {
+        const inserted = mergeUniquePlayers(samplePlayerRows());
+        saveState();
+        renderPlayers();
+        alert(inserted ? `Loaded ${inserted} sample players.` : 'Sample players already loaded for this game.');
+      });
+
+      document.getElementById('clipImportInput').addEventListener('change', async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const text = await file.text();
+        const imported = parseCsv(text)
+          .filter((row) => row.title)
+          .map((row) => ({
+            title: row.title,
+            player: row.player || '',
+            jersey: row.jersey || '',
+            tag: row.tag || '',
+            fileName: row.file || '',
+            addedAt: Date.now()
+          }));
+        const outcome = mergeUniqueClips(imported);
+        saveState();
+        event.target.value = '';
+        renderClips();
+        const sampleSummary = outcome.duplicateSamples.length
+          ? ` Top duplicates: ${outcome.duplicateSamples.map((item) => `${item.title} -> ${item.matchedTitle} (${item.level}, ${Math.round(item.score * 100)}%)`).join(' | ')}`
+          : '';
+        alert(`Import summary: inserted ${outcome.inserted}, skipped exact/high ${outcome.skippedExactOrHigh}, skipped possible duplicates ${outcome.skippedMedium}.${sampleSummary}`);
+      });
+
+      document.getElementById('playerImportInput').addEventListener('change', async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const text = await file.text();
+        const imported = parseCsv(text)
+          .filter((row) => row.name)
+          .map((row) => ({
+            name: row.name,
+            jersey: row.jersey || '',
+            position: row.position || '',
+            school: row.school || row.team || ''
+          }));
+        mergeUniquePlayers(imported);
+        saveState();
+        event.target.value = '';
+        renderPlayers();
+      });
+
+      document.getElementById('clipList').addEventListener('click', (event) => {
+        const btn = event.target.closest('button[data-kind="clip"]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const index = Number(btn.getAttribute('data-index'));
+        if (!Number.isInteger(index) || !state.clips[index]) return;
+
+        if (action === 'delete') {
+          if (!confirm('Delete this clip?')) return;
+          state.clips.splice(index, 1);
+          if (editingClipIndex === index) {
+            resetClipFormMode();
+          } else if (editingClipIndex !== null && editingClipIndex > index) {
+            editingClipIndex -= 1;
+          }
+        }
+
+        if (action === 'edit') {
+          startClipEdit(index);
+          return;
+        }
+
+        saveState();
+        renderClips();
+      });
+
+      document.getElementById('clipCancelEditBtn').addEventListener('click', () => {
+        resetClipFormMode();
+      });
+
+      document.getElementById('playerList').addEventListener('click', (event) => {
+        const btn = event.target.closest('button[data-kind="player"]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const index = Number(btn.getAttribute('data-index'));
+        if (!Number.isInteger(index) || !state.players[index]) return;
+
+        if (action === 'delete') {
+          if (!confirm('Delete this player?')) return;
+          state.players.splice(index, 1);
+          if (editingPlayerIndex === index) {
+            resetPlayerFormMode();
+          } else if (editingPlayerIndex !== null && editingPlayerIndex > index) {
+            editingPlayerIndex -= 1;
+          }
+        }
+
+        if (action === 'edit') {
+          startPlayerEdit(index);
+          return;
+        }
+
+        saveState();
+        renderPlayers();
+      });
+
+      document.getElementById('playerCancelEditBtn').addEventListener('click', () => {
+        resetPlayerFormMode();
+      });
+
+      document.getElementById('clipForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const titleValue = document.getElementById('clipTitle').value.trim();
+        const playerValue = document.getElementById('clipPlayer').value.trim();
+        const jerseyValue = document.getElementById('clipJersey').value.trim();
+        const tagValue = document.getElementById('clipTag').value.trim();
+        const fileInput = document.getElementById('clipFile');
+        const selectedFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+        const fileLabel = selectedFile ? `${selectedFile.name} (${Math.max(1, Math.round(selectedFile.size / 1024))}KB)` : '';
+        if (!titleValue) return;
+
+        const duplicate = findDuplicateClip(
+          {
+            title: titleValue,
+            player: playerValue,
+            jersey: jerseyValue,
+            tag: tagValue,
+          },
+          editingClipIndex,
+        );
+
+        if (duplicate) {
+          const existingClip = duplicate.existing || {};
+          const existingSummary = `${existingClip.title || 'Untitled clip'} (${existingClip.player || 'Unknown player'} #${existingClip.jersey || '-'})`;
+          const breakdown = formatDuplicateBreakdown(duplicate.scoreMeta);
+
+          if (duplicate.level === 'exact' || duplicate.level === 'high') {
+            alert(`Potential duplicate clip detected. Matched: ${existingSummary} [${Math.round(duplicate.score * 100)}% confidence, ${duplicate.level}] · ${breakdown}`);
+            return;
+          }
+
+          const keepGoing = confirm(`Possible duplicate detected against ${existingSummary} [${Math.round(duplicate.score * 100)}% confidence, ${duplicate.level}] · ${breakdown}. Add anyway?`);
+          if (!keepGoing) return;
+        }
+
+        if (editingClipIndex !== null && state.clips[editingClipIndex]) {
+          const existing = state.clips[editingClipIndex];
+          state.clips[editingClipIndex] = {
+            ...existing,
+            title: titleValue,
+            player: playerValue,
+            jersey: jerseyValue,
+            tag: tagValue,
+            fileName: fileLabel || existing.fileName || ''
+          };
+        } else {
+          state.clips.push({
+            title: titleValue,
+            player: playerValue,
+            jersey: jerseyValue,
+            tag: tagValue,
+            fileName: fileLabel,
+            addedAt: Date.now()
+          });
+        }
+        saveState();
+        resetClipFormMode();
+        renderClips();
+      });
+
+      document.getElementById('playerForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nameValue = document.getElementById('playerName').value.trim();
+        const jerseyValue = document.getElementById('playerJersey').value.trim();
+        const positionValue = document.getElementById('playerPosition').value.trim();
+        const schoolValue = document.getElementById('playerTeam').value.trim();
+        if (!nameValue) return;
+
+        if (editingPlayerIndex !== null && state.players[editingPlayerIndex]) {
+          const existing = state.players[editingPlayerIndex];
+          state.players[editingPlayerIndex] = {
+            ...existing,
+            name: nameValue,
+            jersey: jerseyValue,
+            position: positionValue,
+            school: schoolValue
+          };
+        } else {
+          state.players.push({
+            name: nameValue,
+            jersey: jerseyValue,
+            position: positionValue,
+            school: schoolValue
+          });
+        }
+        saveState();
+        resetPlayerFormMode();
+        renderPlayers();
+      });
+
+      renderClips();
+      renderPlayers();
+    })();
+  </script>
+</body>
+</html>
+
