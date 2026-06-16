@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    // GroundfloorSports.com domain
     {
       "source": "/",
       "has": [{ "type": "host", "value": "groundfloorsports.com" }],
@@ -51,7 +50,6 @@
       "has": [ { "type": "host", "value": "www.groundfloorsports.com" } ],
       "destination": "/sign-up.html"
     },
-    // Subjectreport.com domain
     {
       "source": "/",
       "has": [{ "type": "host", "value": "subjectreport.com" }],
