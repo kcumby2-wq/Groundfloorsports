@@ -11,3 +11,12 @@ pnpm-debug.log*
 /.clerk/
 
 .vercel
+
+# Raw/oversized source footage — not used by the live site (which only
+# serves from public/media/), too large for GitHub, and not videos you
+# chose to use on the site. Kept on disk, never tracked.
+media/pylon.mp4
+media/highlight-reel.mp4
+Hooks Long form edits/0521.mp4
+Hooks Long form edits/Hooks Plano west session 1.mp4
+Hooks Long form edits/Hooks Session SMU long form.mp4
