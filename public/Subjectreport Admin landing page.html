@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subjectreport - Staff Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-900: #0a1729;
+    --navy-800: #0f2040;
+    --cyan: #2fa3e8;
+    --cyan-bright: #4ec4ff;
+    --cream: #f2eee3;
+    --cream-bright: #f8f5ec;
+    --fog: rgba(242, 238, 227, 0.7);
+    --fog-line: rgba(242, 238, 227, 0.15);
+    --glass: rgba(242, 238, 227, 0.08);
+    --glass-border: rgba(242, 238, 227, 0.25);
+    --ink: #0a1729;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    color: var(--cream);
+    font-family: Inter, sans-serif;
+    background:
+      radial-gradient(ellipse 70% 50% at 82% 0%, rgba(78, 196, 255, 0.13) 0%, transparent 62%),
+      radial-gradient(ellipse 50% 60% at 10% 85%, rgba(47, 163, 232, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 100%);
+  }
+
+  .wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+  }
+
+  .brand {
+    font-family: Anton, sans-serif;
+    font-size: 34px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cream-bright);
+    text-decoration: none;
+  }
+
+  .brand span { color: var(--cyan-bright); }
+
+  .back {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 10px 16px;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .back:hover { border-color: var(--cyan-bright); color: var(--cyan-bright); }
+
+  .hero {
+    margin-bottom: 28px;
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px;
+    background: var(--glass);
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--cyan-bright);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: Anton, sans-serif;
+    font-size: clamp(46px, 7vw, 84px);
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: 12px;
+    color: var(--cream-bright);
+  }
+
+  .sub {
+    color: var(--fog);
+    max-width: 900px;
+    line-height: 1.55;
+    font-size: 17px;
+  }
+
+  .steps {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .step {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    color: var(--cream-bright);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 8px 12px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    background: linear-gradient(180deg, var(--cream-bright) 0%, var(--cream) 100%);
+    color: var(--ink);
+    border-radius: 22px;
+    padding: 34px 30px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  }
+
+  .plus {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid rgba(10, 23, 41, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: rgba(10, 23, 41, 0.55);
+  }
+
+  h2 {
+    font-family: Anton, sans-serif;
+    font-size: clamp(30px, 4.2vw, 46px);
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin-bottom: 16px;
+  }
+
+  .card p {
+    line-height: 1.55;
+    font-size: 15px;
+    opacity: 0.86;
+    margin-bottom: 20px;
+  }
+
+  .list {
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
+    margin-bottom: 22px;
+    font-size: 15px;
+    line-height: 1.45;
+    opacity: 0.86;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card-note {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.45;
+    opacity: 0.68;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+    transition: all 0.2s;
+  }
+
+  .btn.primary {
+    background: var(--navy-900);
+    color: var(--cream-bright);
+  }
+
+  .btn.primary:hover { background: var(--navy-800); transform: translateY(-1px); }
+
+  .btn.ghost {
+    color: var(--ink);
+    border: 1px solid rgba(10, 23, 41, 0.35);
+    background: rgba(10, 23, 41, 0.05);
+  }
+
+  .btn.ghost:hover { background: rgba(10, 23, 41, 0.12); }
+
+  .quick-start {
+    margin-top: 22px;
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    background: var(--glass);
+    padding: 22px;
+  }
+
+  .quick-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .quick-title {
+    font-family: Anton, sans-serif;
+    font-size: clamp(28px, 3.7vw, 42px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--cream-bright);
+  }
+
+  .quick-copy {
+    color: var(--fog);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .quick-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
+    color: var(--cream-bright);
+    line-height: 1.45;
+    font-size: 14px;
+  }
+
+  .quick-print {
+    border: 1px solid var(--fog-line);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    color: var(--cream-bright);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .quick-print:hover {
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  @media print {
+    .top,
+    .hero,
+    .grid,
+    .quick-print {
+      display: none !important;
+    }
+
+    body {
+      background: #ffffff;
+      color: #111111;
+      font-family: Inter, sans-serif;
+    }
+
+    .wrap {
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .quick-start {
+      border: none;
+      background: #ffffff;
+      color: #111111;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .quick-title {
+      color: #111111;
+      font-size: 32px;
+    }
+
+    .quick-copy,
+    .quick-list {
+      color: #111111;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="Subjectreport.html">Subject<span>/</span>Report</a>
+      <a class="back" href="Subjectreport.html">Back To Main Site</a>
+    </div>
+
+    <section class="hero" id="admin-tools">
+      <div class="eyebrow">Staff Tools</div>
+      <h1>Staff tools access</h1>
+      <p class="sub">CSV Builder access is granted after admin purchase. Request a call first, then your team receives onboarding and tool access.</p>
+      <div class="steps">
+        <div class="step">Step 1 · Request Access Call</div>
+        <div class="step">Step 2 · Purchase Admin</div>
+        <div class="step">Step 3 · Receive CSV Builder Access</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <div class="plus">+</div>
+        <h2>Request event admin access</h2>
+        <p>Access to the CSV Builder is no longer public. Request a call to confirm fit, complete admin purchase, and receive your event intake workspace.</p>
+        <div class="actions">
+          <a class="btn primary" href="Subjectreport.html#contact">Request Admin Access Call →</a>
+          <a class="btn ghost" href="template-preview.html">View Header Preview</a>
+        </div>
+        <div class="card-note">Access is provisioned only after admin purchase and onboarding.</div>
+      </article>
+
+      <article class="card">
+        <div class="plus">+</div>
+        <h2>What exports in CSV</h2>
+        <ul class="list">
+          <li>Jersey, name, position, class year, school/team</li>
+          <li>Contact + social fields for outreach</li>
+          <li>Package, status, grade, transcript columns</li>
+          <li>Event summary auto-appended into notes</li>
+        </ul>
+        <div class="actions">
+          <a class="btn primary" href="Subjectreport.html#contact">Request Access →</a>
+        </div>
+        <div class="card-note">Headers match Subjectreport admin import format one-to-one.</div>
+      </article>
+    </section>
+
+    <section class="quick-start" aria-label="Quick Start Checklist">
+      <div class="quick-head">
+        <h2 class="quick-title">Quick Start Checklist</h2>
+        <button class="quick-print" id="printChecklistBtn" type="button">Print Checklist</button>
+      </div>
+      <p class="quick-copy">Use this before and during an event so your CSV exports are clean and ready for Prospect Edge import.</p>
+      <ol class="quick-list">
+        <li>Request an admin access call and complete admin purchase.</li>
+        <li>After onboarding, open CSV Builder and set event series, type, date, and location.</li>
+        <li>Import existing rows or add athlete rows manually.</li>
+        <li>Confirm each row includes first name, last name, position, class year, and school/team.</li>
+        <li>Choose Notes behavior and context format for transcript detail.</li>
+        <li>Export CSV or Export By Date, then upload into Prospect Edge.</li>
+      </ol>
+    </section>
+  </div>
+<script>
+(() => {
+  const printBtn = document.getElementById("printChecklistBtn");
+  if (!printBtn) return;
+  printBtn.addEventListener("click", () => window.print());
+})();
+</script>
+</body>
+</html>
