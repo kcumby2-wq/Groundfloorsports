@@ -227,7 +227,7 @@
   .mobile-nav .mob-cta:hover { background: var(--cyan-bright); }
 
   /* HERO */
-  .hero { padding: 120px 0 140px; text-align: center; position: relative; overflow: hidden; }
+  .hero { padding: 120px 0 140px; text-align: left; position: relative; overflow: hidden; }
   .hero-media {
     position: absolute; inset: 0; z-index: 0;
     overflow: hidden;
@@ -248,26 +248,26 @@
   }
   .hero h1 {
     font-family: "Anton", sans-serif;
-    font-size: clamp(72px, 11.5vw, 184px);
-    line-height: 0.88; letter-spacing: 0.005em;
+    font-size: clamp(40px, 6.5vw, 104px);
+    line-height: 0.92; letter-spacing: 0.005em;
     text-transform: uppercase; color: var(--cream-bright);
     text-shadow: 0 2px 30px rgba(78, 196, 255, 0.15);
-    max-width: 1100px; margin: 0 auto;
+    max-width: 760px; margin: 0;
   }
   .hero h1 .cyan-accent { color: var(--cyan-bright); text-shadow: 0 0 40px var(--cyan-glow); }
   .hero .sub {
-    font-size: 20px; font-weight: 400;
-    color: var(--fog); max-width: 620px;
-    margin: 36px auto 0; line-height: 1.5;
+    font-size: 17px; font-weight: 400;
+    color: var(--fog); max-width: 540px;
+    margin: 28px 0 0; line-height: 1.5;
   }
   .hero .sub .mobile-only { display: none; }
   .hero .hero-cta {
-    margin-top: 56px; display: flex; gap: 16px;
-    justify-content: center; flex-wrap: wrap;
+    margin-top: 40px; display: flex; gap: 16px;
+    justify-content: flex-start; flex-wrap: wrap;
   }
   .hero-sample-link {
-    margin-top: 20px;
-    text-align: center;
+    margin-top: 18px;
+    text-align: left;
   }
   .hero-sample-link a {
     color: rgba(242, 238, 227, 0.5);
@@ -280,22 +280,22 @@
   .hero-sample-link a:hover { color: var(--cyan-bright); border-color: var(--cyan-bright); }
   .hero-proof {
     list-style: none;
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 18px;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 16px;
   }
   .hero-proof li {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 14px;
+    padding: 9px 13px;
     border-radius: 999px;
     background: rgba(242, 238, 227, 0.08);
     border: 1px solid rgba(242, 238, 227, 0.14);
     color: var(--cream-bright);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.03em;
   }
@@ -325,26 +325,27 @@
   }
   .hero .btn-ghost:hover { background: rgba(242, 238, 227, 0.12); border-color: var(--cream); }
   .hero .meta-row {
-    margin-top: 80px; display: grid;
+    margin-top: 56px; display: grid;
     grid-template-columns: repeat(3, 1fr); gap: 0;
-    max-width: 680px; margin-left: auto; margin-right: auto;
+    max-width: 520px; margin-left: 0; margin-right: auto;
   }
   .hero .meta-row > div {
-    padding: 0 20px; border-right: 1px solid var(--fog-line);
-    text-align: center;
+    padding: 0 20px 0 0; border-right: 1px solid var(--fog-line);
+    text-align: left;
   }
+  .hero .meta-row > div:first-child { padding-left: 0; }
   .hero .meta-row > div:last-child { border-right: 0; }
   .hero .meta-row .num {
     font-family: "Anton", sans-serif;
-    font-size: 56px; line-height: 0.9; color: var(--cyan-bright);
+    font-size: 40px; line-height: 0.9; color: var(--cyan-bright);
   }
   .hero .meta-row .label {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--fog); margin-top: 10px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--fog); margin-top: 8px;
   }
   @media (max-width: 700px) {
     .hero { padding: 60px 0 80px; }
-    .hero .meta-row { grid-template-columns: 1fr 1fr; gap: 24px 0; }
+    .hero .meta-row { grid-template-columns: 1fr 1fr; gap: 24px 0; max-width: 100%; }
     .hero .meta-row > div:nth-child(2) { border-right: 0; }
   }
 
@@ -791,6 +792,23 @@
   .pkg button:hover { background: var(--navy-700); }
   .pkg.featured button { background: var(--cyan); color: var(--navy-900); }
   .pkg.featured button:hover { background: var(--cyan-bright); transform: translateY(-2px); box-shadow: 0 10px 30px var(--cyan-glow); }
+  .pkg-pay-now {
+    width: 100%; padding: 16px; margin-top: 10px;
+    background: transparent; color: var(--navy-900);
+    border: 1.5px solid var(--navy-900); border-radius: 999px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    text-decoration: none; box-sizing: border-box;
+  }
+  .pkg-pay-now:hover { background: var(--navy-900); color: var(--cream-bright); }
+  .pkg-pay-note {
+    text-align: center; margin-top: 10px;
+    font-size: 11px; letter-spacing: 0.05em;
+    color: var(--navy-700); opacity: 0.65;
+  }
   @media (max-width: 960px) {
     .pkg-grid { grid-template-columns: 1fr; max-width: 560px; }
   }
@@ -2169,6 +2187,8 @@
     <div class="media-break-slide"><img src="media/carousel/prosper-walnut-grove.jpg" alt="Prosper at Walnut Grove — on-site evaluation" loading="lazy" /><div class="media-break-overlay"></div></div>
     <div class="media-break-slide"><img src="media/carousel/allen-players-talking.jpg" alt="Allen players talking on the sideline" loading="lazy" /><div class="media-break-overlay"></div></div>
     <div class="media-break-slide"><img src="media/carousel/battle-bergen.jpg" alt="Battle at Bergen — game action" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/st-joes.jpg" alt="St. Joe's — game action" loading="lazy" /><div class="media-break-overlay"></div></div>
+    <div class="media-break-slide"><img src="media/carousel/wax-brown.jpg" alt="Wax Brown — game action" loading="lazy" /><div class="media-break-overlay"></div></div>
   </div>
   <button class="media-break-btn mb-prev" type="button" onclick="mediaBreakNav(-1)" aria-label="Previous photo">&#8249;</button>
   <button class="media-break-btn mb-next" type="button" onclick="mediaBreakNav(1)" aria-label="Next photo">&#8250;</button>
@@ -2376,15 +2396,15 @@
 </div>
 <section class="game-film reveal" id="game-film" aria-label="Game film video carousel">
   <div class="game-film-track" id="gameFilmTrack">
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/duncanville.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 1 · Duncanville</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/carter-spring-game.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 2 · Carter Spring Game</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/melissa-vs-anna.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 3 · Melissa vs Anna</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/north-forney.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 4 · North Forney</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/jah.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 5 · Jah</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/northshore.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 6 · Northshore</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/melissa-vs-anna.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 1 · Melissa vs Anna</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/carter-dailey-highlight.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 2 · Carter Dailey</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/north-forney.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 3 · North Forney</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/trey.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 4 · Trey</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/brady-quinn-highlight.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 5 · Brady Quinn</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/ny-hustle-recap.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 6 · NY Hustle Recap</div></div>
     <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/gavin-sidwar-highlight.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 7 · Gavin Sidwar Highlight</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/one-play-clip-6.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 8 · One Play Clip 6</div></div>
-    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/one-play-clip-3.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 9 · One Play Clip 3</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/bump.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 8 · Bump</div></div>
+    <div class="game-film-slide"><video controls preload="metadata" playsinline><source src="media/game-film/howardd.mp4" type="video/mp4" /></video><div class="game-film-overlay"></div><div class="game-film-label">Spot 9 · Howardd</div></div>
   </div>
   <button class="game-film-btn gf-prev" type="button" onclick="gameFilmNav(-1)" aria-label="Previous video">&#8249;</button>
   <button class="game-film-btn gf-next" type="button" onclick="gameFilmNav(1)" aria-label="Next video">&#8250;</button>
@@ -2394,7 +2414,7 @@
 <!-- ░░ MEDIA — FULL-BLEED VIDEO BREAK ░░ -->
 <div class="vid-break reveal">
   <video autoplay muted loop playsinline>
-    <source src="media/game-film/north-forney.mp4" type="video/mp4" />
+    <source src="media/game-film/tahmere-brown.mp4" type="video/mp4" />
   </video>
   <div class="vid-break-overlay"></div>
   <div class="vid-break-label">Game film. Every spot, every sideline</div>
@@ -2456,6 +2476,8 @@
           <li>Graded evaluation (verified scouting report)</li>
         </ul>
         <button type="button" onclick="bookCall()">Book a call →</button>
+        <a href="https://buy.stripe.com/cNi14p9Wt5xLdtt9Vl6Ri00" class="pkg-pay-now" target="_blank" rel="noopener">Pay now →</a>
+        <div class="pkg-pay-note">No call required</div>
       </div>
 
       <!-- 2. RECRUITING PROGRAM -->
@@ -2775,7 +2797,7 @@
 <section class="final-cta">
   <div class="cta-media">
     <video class="cta-media-video" autoplay muted loop playsinline>
-      <source src="media/game-film/northshore.mp4" type="video/mp4" />
+      <source src="media/game-film/derrick.mp4" type="video/mp4" />
     </video>
     <div class="cta-media-overlay"></div>
   </div>
@@ -4473,6 +4495,189 @@
   });
 </script>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<!-- ══════════════════════════
+     10% OFFER POPUP — triggers at 45s
+══════════════════════════ -->
+<style>
+  .offer-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(5, 12, 22, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .offer-overlay.show { opacity: 1; visibility: visible; }
+  .offer-modal {
+    background: linear-gradient(180deg, var(--navy-800) 0%, var(--navy-900) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    max-width: 520px; width: 100%;
+    padding: 48px 40px 40px;
+    position: relative;
+    color: var(--cream);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    animation: offerIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes offerIn {
+    from { transform: translateY(32px) scale(0.96); opacity: 0; }
+    to   { transform: translateY(0)    scale(1);    opacity: 1; }
+  }
+  .offer-close {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(242, 238, 227, 0.06); border: none; border-radius: 50%;
+    width: 32px; height: 32px; cursor: pointer; color: var(--fog);
+    font-size: 18px; line-height: 32px; text-align: center;
+    transition: background 0.2s, color 0.2s;
+  }
+  .offer-close:hover { background: rgba(242, 238, 227, 0.12); color: var(--cream-bright); }
+  .offer-badge {
+    display: inline-block;
+    background: var(--cyan); color: var(--navy-900);
+    font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: .08em;
+    padding: 4px 12px; border-radius: 40px; margin-bottom: 16px;
+  }
+  .offer-headline {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.05; color: var(--cream-bright);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .offer-headline span { color: var(--cyan-bright); }
+  .offer-sub {
+    color: var(--fog); font-size: 14px; margin-bottom: 28px; line-height: 1.6;
+  }
+  .offer-form .form-row { display: flex; gap: 3px; margin-bottom: 3px; }
+  .offer-form .form-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .offer-form label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--fog); }
+  .offer-form input, .offer-form select, .offer-form textarea {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px; color: var(--cream-bright);
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    padding: 10px 14px; width: 100%; outline: none;
+    transition: border-color 0.2s;
+  }
+  .offer-form input:focus, .offer-form select:focus, .offer-form textarea:focus {
+    border-color: var(--cyan-bright);
+  }
+  .offer-form textarea { resize: vertical; min-height: 80px; }
+  .offer-submit {
+    width: 100%; margin-top: 16px;
+    background: var(--cyan); color: var(--navy-900);
+    border: none; border-radius: 10px;
+    font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: .06em;
+    padding: 14px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s, background 0.2s;
+  }
+  .offer-submit:hover { background: var(--cyan-bright); transform: translateY(-1px); }
+  .offer-fine {
+    text-align: center; font-size: 11px; color: var(--fog);
+    opacity: 0.7;
+    margin-top: 12px;
+  }
+  @media (max-width: 540px) {
+    .offer-modal { padding: 36px 24px 28px; }
+    .offer-form .form-row { flex-direction: column; }
+  }
+</style>
+
+<div class="offer-overlay" id="offerOverlay" role="dialog" aria-modal="true" aria-label="Exclusive offer">
+  <div class="offer-modal">
+    <button class="offer-close" onclick="closeOffer()" aria-label="Close">✕</button>
+    <div class="offer-badge">LIMITED OFFER</div>
+    <div class="offer-headline">Get <span>10% Off</span><br>Your First Transcript</div>
+    <p class="offer-sub">Still deciding? Lock in your discount now — drop your info and we'll reach out to get your evaluation started.</p>
+    <form class="offer-form" onsubmit="submitOffer(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="srname">Name *</label>
+          <input type="text" id="srname" placeholder="Your full name" autocomplete="name" />
+        </div>
+        <div class="form-field">
+          <label for="sremail">Email *</label>
+          <input type="email" id="sremail" placeholder="you@email.com" autocomplete="email" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="srphone">Phone Number</label>
+          <input type="tel" id="srphone" placeholder="(555) 000-0000" autocomplete="tel" />
+        </div>
+        <div class="form-field">
+          <label for="srtype">I'm a...</label>
+          <select id="srtype">
+            <option value="">Select one</option>
+            <option>Parent / Athlete</option>
+            <option>High School Coach</option>
+            <option>Club Coach / AD</option>
+            <option>College Recruiter</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="srmsg">Tell us about your athlete *</label>
+          <textarea id="srmsg" placeholder="Sport, class year, position, what you're looking for..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="offer-submit">CLAIM MY 10% OFF →</button>
+      <p class="offer-fine">One-time offer · No spam · We respond within 24 hours</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ── 45-second offer popup ──
+  (function() {
+    var shown = sessionStorage.getItem('srOfferShown');
+    if (!shown) {
+      setTimeout(function() {
+        document.getElementById('offerOverlay').classList.add('show');
+        sessionStorage.setItem('srOfferShown', '1');
+      }, 45000);
+    }
+  })();
+
+  function closeOffer() {
+    document.getElementById('offerOverlay').classList.remove('show');
+  }
+
+  document.getElementById('offerOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeOffer();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeOffer();
+  });
+
+  function submitOffer(e) {
+    e.preventDefault();
+    var name  = document.getElementById('srname').value.trim();
+    var email = document.getElementById('sremail').value.trim();
+    var msg   = document.getElementById('srmsg').value.trim();
+    if (!name || !email || !msg) {
+      alert('Please fill in your name, email, and athlete details.');
+      return;
+    }
+    var subject = encodeURIComponent('10% Offer Claim — Subjectreport');
+    var body = encodeURIComponent(
+      '*** 10% DISCOUNT CLAIM ***\n\n' +
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Phone: ' + document.getElementById('srphone').value + '\n' +
+      'Type: ' + document.getElementById('srtype').value + '\n\n' +
+      'Athlete Details:\n' + msg
+    );
+    window.location.href = 'mailto:hello@subjectreport.com?subject=' + subject + '&body=' + body;
+    closeOffer();
+  }
+</script>
+
 </body>
 </html>
 </center>
