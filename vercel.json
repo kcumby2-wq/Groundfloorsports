@@ -1,4 +1,30 @@
 {
+  "headers": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "subjectreport.com" }],
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.subjectreport.com" }],
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "groundfloorsports.com" }],
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.groundfloorsports.com" }],
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/Subjectreport.html",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
