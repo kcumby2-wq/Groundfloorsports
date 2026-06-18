@@ -1,0 +1,42 @@
+{
+  "stage": "analysis",
+  "company": "CMC Visuals",
+  "ecosystemFit": {
+    "score": "strong",
+    "reasoning": "CMC Visuals is the operational proof-of-concept for SubjectSkillz — the creator pipeline that supplies Subject Media production capacity. Every CMC sale generates SR upsell potential and validates the SubjectSkillz onboarding model.",
+    "strengthens": ["Subject Media (creator supply pipeline)", "SubjectSkillz (501c3 youth creator program)", "Subject Report (SR transcript upsell on every delivery)"]
+  },
+  "revenueModel": {
+    "primary": "mixed",
+    "streams": [
+      { "name": "Photo Coverage", "price": 49, "cadence": "per event" },
+      { "name": "Video Coverage", "price": 99, "cadence": "per event" },
+      { "name": "Elite Coverage", "price": 139, "cadence": "per event" },
+      { "name": "Team Elite", "price": 399, "cadence": "per event" },
+      { "name": "Subscription", "price": 8.97, "cadence": "monthly" },
+      { "name": "SR Transcript upsell", "price": 249, "cadence": "per delivery" }
+    ],
+    "splitPercent": 80,
+    "platformCut": 20,
+    "yearOneEstimate": {
+      "low": 8000,
+      "high": 18000,
+      "assumptions": "Based on 19 orders / ~$2,049 in ~5 months. Assumes 3-4 events/month at average ticket $120. High includes Team Elite deals + subscriptions + SR upsell at 15% conversion."
+    }
+  },
+  "risks": [
+    { "risk": "Creator is a minor — consent exposure on footage of other minors", "severity": "high", "mitigation": "Parental consent at checkout (built). Privacy policy + ToS (built). Parent controls Connect account (built). No public posting without consent verification." },
+    { "risk": "Single creator = single point of failure", "severity": "med", "mitigation": "SubjectSkillz bench-building is the fix. CMC's success is the case study." },
+    { "risk": "Central Stripe account restriction stops all creator payouts", "severity": "med", "mitigation": "Stripe Connect Express sub-accounts per creator. Never commingle SR and creator-network revenue." },
+    { "risk": "Subscription churn if community isn't actively programmed", "severity": "low", "mitigation": "HL bridge automates access. Cohorts and 1-on-1s (human layer) are the retention mechanism." }
+  ],
+  "classificationHint": {
+    "template": "media-coverage",
+    "usesGHL": false,
+    "agentsNeeded": ["CAMPAIGNER", "CONTENT-ENG", "BRAND-BUILD", "QA"],
+    "repoTemplate": "cmc-visuals",
+    "configChangeOnly": true
+  },
+  "recommendation": "pursue",
+  "nextStageInputs": "Stage 3 (WorldBuild Bible) needs: creator real name or brand identity preference, tone/voice direction (personal brand vs faceless company), existing brand assets (logo confirmed?), SR upsell timing (48hr or 72hr post-delivery)."
+}

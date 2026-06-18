@@ -1,0 +1,20 @@
+{
+  "stage": "discovery",
+  "capturedAt": "2026-06-18",
+  "companyName": "CMC Visuals",
+  "ownerName": "CMC (youth creator)",
+  "ownerEmail": "REPLACE_CREATOR_EMAIL",
+  "guardianEmail": "REPLACE_PARENT_EMAIL",
+  "whatTheyDo": "Done-for-you sports media coverage — photo, video, and elite packages for athletes and teams at events. Delivered within 48 hours.",
+  "whoTheyServe": "Athletes, parents, coaches, and teams at youth sports events (7v7, AAU, club). Parents pay for their kid's coverage. Coaches pay a small access fee to have CMC on site.",
+  "offers": "Photo Coverage $49 · Video Coverage $99 · Elite Coverage $139 · Team Elite $399 · Subscription $8.97/mo",
+  "revenueModel": "one-time per event + optional subscription + team access fees",
+  "usesGHL": "No — standalone",
+  "splitPercent": 80,
+  "domain": "cmcvisuals.com (not yet pointed)",
+  "goals90": "Get the storefront live, take real payments, and use CMC as the proof-of-concept template for every SubjectSkillz creator that comes after.",
+  "existingRevenue": 2048.75,
+  "existingOrders": 19,
+  "platformsInUse": ["Stripe (central account)", "Supabase (creator-network project)", "Vercel", "GitHub"],
+  "notes": "Creator is a minor. Parent/guardian controls the Stripe Connect account and payouts. CMC is the first creator in the SubjectSkillz pipeline."
+}
