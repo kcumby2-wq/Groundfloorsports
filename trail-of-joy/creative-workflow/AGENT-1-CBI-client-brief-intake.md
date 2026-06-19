@@ -1,129 +1,173 @@
 # Creative AI Workflow — Agent 1: Client Brief Intake (CBI)
-**Version:** 1.0 (practice build)
+**Version:** 1.1
 **Codename:** CBI
-**Sequence position:** Agent 1 of N (build one at a time, perfect before moving on)
+**Sequence position:** Agent 1 of N
 **Hosting target:** Claude Code + VSCode, versioned in GitHub
-**Status:** Built as SOP + schema; the Claude Code operationalization (live agent, feedback loop, auto-correction) is a separate next step that has to happen at the desk, not from here.
+**Status:** Schema + workflow spec. Operationalization (live agent, feedback loop, auto-correction) is a Claude Code build that happens at the desk, not from here.
+
+**What changed from v1.0:** Six gaps surfaced by the two Capo practice runs are now fixed in the schema. The basic agent shape and feedback-loop pattern are unchanged from v1.0 — only the data model and a few workflow rules changed. See revision history at end for the full diff.
 
 ---
 
 ## Why this agent exists
 
-Every downstream agent in this workflow — Style Lock Setup (Soul ID training + style spec), Daily Content Generator, Asset Distributor, etc. — needs the same shape of input to do its job well: who is this client, what do they actually look/sound like, what are we producing for them, what's NOT allowed, and what does "on-brand" mean for them specifically. Without a structured brief, every downstream agent has to re-derive that from scratch every time, which is slow, inconsistent, and exactly why client work goes sideways at scale.
+Every downstream agent in this workflow (Style Lock Setup, Daily Content Generator, Asset Distributor) needs the same shape of input to do its job well. CBI is the agent that takes a new client and produces a single canonical Client Brief that every other agent reads from. Without a structured brief, every downstream agent has to re-derive context from scratch every time, which is slow, inconsistent, and exactly why client work goes sideways at scale.
 
-CBI is the agent that takes a new client (today's "Capo," tomorrow's whoever) and produces a single canonical Client Brief that every other agent reads from. It is the foundation document the rest of the workflow rests on.
+## Business context (unchanged from v1.0)
 
-## Business context (what this is for, what it isn't)
-
-- **What it's for:** Producing the locked input that powers Soul ID-based creative asset generation in Higgsfield (and downstream tools) for Subject Medias and Groundfloorsports client work, on a repeatable per-client basis, and eventually templated for other creators and small agencies to run themselves.
-- **What it isn't:** A creative agent itself. CBI doesn't generate images, write captions, or render video. It collects, structures, and validates inputs. The actual creative work happens in Agents 2+.
-- **Who the clients are:** Adult business clients of Subject Medias and Groundfloorsports paying for creative services. NOT minor creators (Track A) or Groundfloorsports-filmed athletes (Track B) — that's a separate paperwork track. If a client situation ever involves creative assets featuring a minor, CBI flags it for human review before any downstream agent runs.
+- **What it's for:** Producing the locked input that powers Soul ID-based and other AI-generated creative asset work in Higgsfield (and downstream tools) for Subject Medias and Groundfloorsports client work, on a repeatable per-client basis, eventually templated for other creators and small agencies.
+- **What it isn't:** A creative agent. CBI doesn't generate images, write captions, or render video. It collects, structures, and validates.
+- **Who the clients are:** Adult business clients of Subject Medias and Groundfloorsports paying for creative services. The minor-handling rules below cover the cases where minors appear as subjects of the work.
 
 ## Inputs CBI accepts
 
-CBI is designed to take partial, messy, real-world inputs (a sales call transcript, a competitor's Instagram, half-finished brand docs, a phone note) and structure them. Never require everything up front — most clients won't have it. Specifically:
+CBI accepts partial, messy, real-world inputs. Same as v1.0:
 
-1. **Stated goals** — what the client says they want (sales, awareness, launch, rebrand, recruitment, etc.)
-2. **Existing assets** — anything they already have: logo files, brand guide, product shots, website URL, social handles
-3. **Reference material** — competitors they admire, mood boards, "make it look like X" requests
-4. **Transcript or notes** — discovery call, sales call, kickoff meeting (raw, not pre-summarized)
-5. **Role-model brands or creators** — who they want to feel like, even informally
-6. **Business context** — what the client actually sells, who they sell to, what makes them different
-7. **Constraints** — anything off-limits (categories they won't be associated with, words they hate, competitors they don't want to be compared to)
-8. **Subject-of-imagery confirmation** — whose face/likeness will appear in generated content (the client themselves, hired models, an AI persona, a real employee, etc.) — and CRITICALLY, whether any of those subjects are minors
+1. Stated goals
+2. Existing assets (logo, brand guide, product shots, website, social handles)
+3. Reference material (competitors, mood boards, "make it look like X")
+4. Transcript or notes (raw — CBI summarizes, not the user)
+5. Role-model brands or creators
+6. Business context (what they sell, who they sell to)
+7. Constraints (off-limits categories, hated words, competitor blacklist)
+8. **Subject-of-imagery confirmation** — who appears in generated content, per subject, including whether each is a minor and the release status for each
 
-## Outputs CBI produces
+## Outputs CBI produces (v1.1 schema)
 
-A single Client Brief document, in a fixed shape every downstream agent can parse. The fixed shape matters more than the polish — consistency lets the rest of the workflow scale.
-
-**Schema (the same fields, same order, every time, even when half are "unknown — to be gathered"):**
+Single Client Brief, fixed shape. The structural changes from v1.0 are marked inline below.
 
 ```yaml
 client_brief:
-  client_id: [unique slug, e.g. "capo-2026-q3"]
-  client_name: [official name as the client uses it]
-  brief_version: 1.0
-  built_by: CBI
+  client_id: [unique slug, e.g. "capo-athletics-2026"]
+  client_name: [as the client uses it]
+  brief_version: 1.1
+  built_by: CBI v1.1
   built_at: [ISO timestamp]
 
+  # NEW IN v1.1 — explicit track assignment so downstream agents apply the right constraint set
+  track: [A | B | C | N/A]
+  track_rationale: [one sentence — why this track applies, e.g. "Adult client, minor subjects with parent releases held by client → Track C"]
+
   identity:
-    one_line_description: [what they actually are, in plain language]
+    one_line_description: [plain language — what they actually are]
     audience: [who they're talking to]
-    tone_words: [3-5 words the brand should feel like — used directly by Agent 2 style spec]
-    forbidden_tone: [what it should NEVER feel like]
+    tone_words: [3-5 words — directly fed to copy/caption agents downstream]
+    forbidden_tone: [what it must never feel like]
 
   visual:
-    soul_id_status: [not_yet_trained | trained | needs_retrain]
-    subject_of_imagery: [client_self | hired_model | ai_persona | employee | other]
-    subject_is_minor: [true | false]  # if true, CBI HALTS and flags for human review
-    reference_images_provided: [count + brief description, e.g. "3 headshots, varied lighting"]
+    # CHANGED IN v1.1 — was single value, now structured list per subject
+    subjects:
+      - identifier: [name or descriptor, e.g. "Coach Marcus" or "Tyrese (athlete)"]
+        type: [client_self | hired_model | ai_persona | employee | athlete_of_client | environment | other]
+        is_minor: [true | false]
+        # NEW IN v1.1 — typed field, no longer prose
+        model_release_status: [none | in_place_general | in_place_AI_scope | in_progress | not_applicable]
+        release_holder: [trail_of_joy | outside_client | self | n/a]
+        # NEW IN v1.1 — per-subject Soul ID permission, governed by Track + minor status
+        soul_id_allowed: [true | false]
+        soul_id_status: [not_yet_trained | trained | needs_retrain | prohibited]
+        reference_images_provided: [count + brief description]
+        notes: [anything else relevant about this subject specifically]
+
     color_palette: [hex values if known, else "to be derived from references"]
-    aesthetic_keywords: [4-6 keywords describing the visual feel — feeds Agent 2 directly]
+    aesthetic_keywords: [4-6 keywords — fed to visual-prompt agents]
     avoid_visually: [what shouldn't appear in any output]
 
   voice:
-    written_voice_examples: [paste of 2-3 sample sentences in the client's actual voice]
+    written_voice_examples: [2-3 sample sentences in the client's actual voice]
     avoid_phrases: [things they hate or have outlawed]
 
   scope:
-    asset_types_needed: [social_posts | reels | thumbnails | banners | sales_deck | full_campaign]
+    asset_types_needed: [list]
     cadence: [one-off | weekly | daily | per-campaign]
-    distribution: [where the output goes — IG, YouTube, sales calls, internal use]
+    distribution: [where output goes]
+
+  # NEW IN v1.1 — structured "AI must not do X" rules, separate from general visual avoid list
+  prohibited_ai_operations:
+    - operation: [e.g. "soul_id_training_on_minor_subject"]
+      reason: [e.g. "Track C point 4"]
+    - operation: [e.g. "fabricated_scenario_for_real_minor"]
+      reason: [e.g. "Track C point 5"]
+    - operation: [e.g. "ai_audio_alteration_of_minor_speech"]
+      reason: [e.g. "Client constraint, confirmed verbally"]
 
   constraints:
-    industry_restrictions: [legal, regulatory, or category-specific limits]
+    industry_restrictions: [legal, regulatory, category-specific]
     competitor_blacklist: [brands NOT to mirror]
-    minor_imagery_flag: [if subject_is_minor is true, this is set to "HALT — escalate to human"]
 
   source_inputs:
-    - transcript: [path/link to discovery call notes]
-    - existing_assets: [paths/links to logo, brand guide, etc.]
+    - transcript: [path]
+    - existing_assets: [paths]
     - references: [URLs or descriptions]
+    - releases_on_file: [path/description if applicable — required for Track C]
 
-  gaps_flagged_by_cbi: [list of fields CBI couldn't fill — these are what the next conversation with the client needs to cover]
+  gaps_flagged_by_cbi: [list — what CBI couldn't fill from inputs, kept honest, never invented]
 
-  ready_for_next_agent: [true | false]  # only true when no halting flags, soul_id reference images exist, and tone + aesthetic keywords are populated
+  # CHANGED IN v1.1 — per-downstream-agent, not a global boolean
+  ready_for:
+    agent_2_style_lock_soul_id: [true | false]
+    agent_3_copy_captions: [true | false]
+    agent_4_asset_generation: [true | false]
+    # additional agents added here as the workflow grows
+  ready_for_blockers: [list, only populated where any ready_for is false — what's missing for each blocked agent]
 ```
 
-## CBI's workflow (what it does on each run)
+## CBI's workflow (v1.1)
 
-1. **Read all inputs the user provides.** Don't ask the user to pre-summarize — CBI reads the raw transcript, the raw notes, the actual website. Summarizing is its job.
-2. **Populate the schema.** Every field. If a field can't be filled from available inputs, write `"unknown — to be gathered"` and add it to `gaps_flagged_by_cbi` — do NOT invent.
-3. **Check for the minor-imagery flag first, before doing any other work.** If `subject_is_minor: true`, stop processing and return a single output: a flag that this client needs to be reviewed against the Track A/B paperwork system before any creative workflow runs. Don't try to handle it inside this agent.
-4. **Derive tone_words and aesthetic_keywords from real evidence in the inputs.** If the client's website uses words like "rigorous" and "uncompromising," those are evidence. If they admire a particular brand, that's evidence. Do NOT default to generic ("modern, clean, professional") unless the inputs really are that thin — and if they are, flag that as a gap.
-5. **Set `ready_for_next_agent: true` only when:** there are no halting flags, at least one reference image is documented for Soul ID training, and the tone + aesthetic + scope sections are populated from real input (not guesses).
-6. **Output the brief.** One file, the schema above, ready to be read by Agent 2 (Style Lock Setup).
+1. **Read all raw inputs the user provides.** Don't ask them to pre-summarize.
+2. **Assign the `track` field FIRST,** before anything else. Track A (SubjectSkillz creator), Track B (Groundfloorsports-filmed athlete), Track C (outside-client creative work with minor subjects), or N/A (adult-only). The track determines which constraints apply to the rest of the brief.
+3. **Populate the `subjects` list.** Every person or non-person reference subject who will appear in generated content gets one entry. For each subject, fill `type`, `is_minor`, `model_release_status`, `release_holder`, and `soul_id_allowed` BEFORE moving to other sections — these are the gating fields for downstream work.
+4. **Apply track-specific halts/restrictions:**
+   - If `track: C` and any minor subject has `model_release_status` not in `[in_place_AI_scope]`, set `soul_id_allowed: false` for that subject AND flag the brief as not ready for Agent 4 with the missing release as the blocker.
+   - For ANY minor subject (regardless of track), `soul_id_allowed` is automatically `false`. This is non-negotiable, enforced by the agent, not left to user judgment.
+   - For ANY minor subject, prohibited_ai_operations automatically includes `soul_id_training_on_minor_subject`, `fabricated_scenario_for_real_minor`, and `ai_audio_alteration_of_minor_speech` — these are inserted by CBI by default and cannot be removed by user input.
+5. **Populate identity, visual aesthetic, voice, scope, constraints** from real evidence in the inputs. Never invent — flag gaps.
+6. **Compute per-agent `ready_for` flags:**
+   - Agent 2 ready when: subjects with `soul_id_allowed: true` have ≥3 clean reference photos documented
+   - Agent 3 ready when: tone_words and written_voice_examples are populated from real input
+   - Agent 4 ready when: aesthetic_keywords populated, at least one subject has usable reference imagery, and prohibited_ai_operations is set
+7. **Output the brief.**
 
-## What CBI explicitly does NOT do
+## What CBI explicitly does NOT do (v1.1, unchanged + clarified)
 
-- Does not generate images, captions, video, or creative copy.
-- Does not invent details about the client to fill gaps — gaps stay flagged, not papered over.
-- Does not approve downstream creative work — it produces inputs, not approvals.
-- Does not run if `subject_is_minor: true` — it halts and escalates.
-- Does not summarize the brief into "vibes" — the schema's structure IS the output. Downstream agents need parseable fields, not narrative.
+- Does not generate images, captions, video, or copy.
+- Does not invent details to fill gaps — gaps stay flagged.
+- Does not approve downstream creative work — produces inputs, not approvals.
+- **Does not allow `soul_id_allowed: true` for any minor subject under any circumstance, regardless of consent.** This is enforced in step 4 above. If a user attempts to override this, the brief fails validation.
+- **Does not allow removal of the three auto-inserted prohibited_ai_operations for minor subjects.** Same enforcement.
+- Does not run a brief with `track: C` past the validation step unless `releases_on_file` is populated in source_inputs.
 
-## Feedback loop (the part that makes this self-improving over time)
+## Feedback loop (unchanged from v1.0, plus a new pattern)
 
-Every time a brief is produced and downstream agents (Soul ID setup, content generation) actually run from it, capture three things:
+Every time a brief is produced and downstream agents run from it, capture:
 
-1. **What downstream agents asked for that wasn't in the brief.** That's a schema gap — add the field next version.
-2. **What downstream agents had to guess or re-derive.** That means CBI wasn't specific enough — refine the prompting for that field.
-3. **What the client said felt wrong about the output.** Often the root is in the brief — wrong tone_words, wrong aesthetic_keywords. Trace it back.
+1. What downstream agents asked for that wasn't in the brief → schema gap
+2. What downstream agents had to guess or re-derive → prompting wasn't specific enough
+3. What the client said felt wrong about the output → often traces back to brief inputs
 
-These three feedback streams go into a running `cbi-feedback-log.md` (one entry per brief that gets run downstream). When patterns emerge (3+ similar gaps), the schema gets a version bump and the changes go to GitHub with a real commit message documenting why.
+**New v1.1 pattern:** Every time a brief is produced where a subject was a minor, ALSO log:
+4. Whether the prohibited_ai_operations were respected by every downstream agent
+5. Whether the Track C release status was checked at point of use, not just point of intake
 
-**The auto-correction part — where CBI eventually adjusts its own prompting based on metrics — is a Claude Code build, not something this SOP can self-execute.** This SOP is the contract for what gets fed to that loop once it's running.
+These two extra streams exist because the practice runs proved that minor-handling rules are the highest-stakes part of this whole workflow.
 
-## Practice test plan (build against, not for a real client yet)
+## Practice test plan
 
-**Practice client: "Capo" (placeholder).** Construct a realistic fake intake — a sales call transcript, a fake website URL, a couple of reference images described in text — and run CBI against it. The first real test of this agent is: does the output brief have enough specificity that you can hand it to Agent 2 (Style Lock Setup) without needing to add anything by hand? If yes, CBI v1.0 is working. If no, the brief is missing fields and the schema needs a v1.1 before we touch Agent 2.
+Both Capo practice cases (run #1: minor subjects without releases → halt; run #2: minor subjects with Track C-compliant releases → produce brief with Soul ID prohibited for minors but allowed for adult client) should run cleanly through v1.1 without bending the schema. If they don't, v1.1 has a gap and we iterate before touching Agent 2.
 
-## Exit gate for CBI being "done"
-- [ ] Schema produced and version-controlled in GitHub
-- [ ] At least one practice run completed against a "Capo" test case
-- [ ] At least one real run completed (a real Subject Medias or Groundfloorsports client) and the brief was usable by Agent 2 without manual additions
-- [ ] First three feedback-log entries captured
-- [ ] No real-client work has happened where `subject_is_minor: true` was missed or papered over
+## Exit gate for CBI v1.1 being "done"
+- [ ] Schema v1.1 produced and version-controlled
+- [ ] Capo run #1 (no consent) re-runs through v1.1 and halts cleanly
+- [ ] Capo run #2 (Track C compliant) re-runs through v1.1 with no schema bending
+- [ ] Per-agent ready_for flags are accurately computed in both runs
+- [ ] No new "must bend the schema" issues surfaced
 
 ## Revision History
-- v1.0 — First spec for the Client Brief Intake agent. Establishes a fixed YAML schema, an explicit halt on minor-imagery cases (routing to the existing Track A/B paperwork system instead), a feedback-loop pattern, and a practice-first test plan. Built as the foundation Agent 1 must be perfected before Agent 2 (Style Lock Setup / Soul ID training) is touched.
+- **v1.0** — First spec for CBI. Single subject_of_imagery field, single boolean ready_for_next_agent, no track field, prohibited operations buried in prose. Surfaced 6 schema gaps across two Capo practice runs.
+- **v1.1** — Six fixes from practice-run feedback:
+  1. `subject_of_imagery` → structured `subjects` list with typed per-subject fields
+  2. `model_release_status` → typed required per-subject field, replaces prose notes
+  3. `ready_for_next_agent` → per-agent `ready_for` block, replaces global boolean
+  4. NEW `track: A | B | C | N/A` field, set first, drives downstream constraint application
+  5. NEW `prohibited_ai_operations` structured list, separate from general avoid-visually
+  6. NEW agent-enforced minor-subject rules (Soul ID prohibited, three default prohibited operations auto-inserted) that cannot be overridden by user input
