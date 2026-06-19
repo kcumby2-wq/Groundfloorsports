@@ -1,0 +1,52 @@
+{
+  "company": "CMC Visuals",
+  "creator": "Carson McCauley",
+  "stage": 4,
+  "stage_name": "SubjectOS Classification",
+  "status": "SIMULATED — gate not actually green; depends on signed consent (see note below)",
+  "classification": {
+    "template": "standalone-storefront",
+    "base_repo": "cmc-visuals",
+    "reason": "Personal brand, single creator, direct-to-consumer checkout. No multi-stakeholder pipeline (coach outreach, recurring B2B sales) that would require a GHL-native build."
+  },
+  "ghl_routing": {
+    "uses_ghl_pipeline": false,
+    "uses_ghl_bridge": true,
+    "bridge_scope": "Subscription tier ($8.97/mo) grants community access via the existing HighLevel community bridge. That is the only GHL touchpoint — no contact pipeline, no GHL-driven sales sequence."
+  },
+  "agents_activated": [
+    {
+      "agent": "CAMPAIGNER",
+      "role": "Deploys/redeploys the cmc-visuals Vercel project, manages env vars and the Stripe Connect test→live flow, owns the D-checklist."
+    },
+    {
+      "agent": "CONTENT-ENG",
+      "role": "Builds stage 6 starter content (emails, captions, SR upsell copy) from the WorldBuild Bible voice. Pulls real examples from Carson's existing portfolio rather than inventing generic copy."
+    },
+    {
+      "agent": "BRAND-BUILD",
+      "role": "Reviews Carson's current tagline/positioning against his own bar (his Midwest Next co-venture has sharper copy: 'Capture. Create. Elevate.') and proposes tightened CMC Visuals positioning if warranted. Does NOT build anything for Midwest Next itself — out of scope per stage 3."
+    },
+    {
+      "agent": "QA",
+      "role": "Owns the minor-safety gate check. Cannot mark stage 6/7/9 green without the signed consent-agreement artifact on file. This is QA's hardest gate in this build, not a formality."
+    }
+  ],
+  "infrastructure_reuse": {
+    "supabase_schema": "existing multi-tenant creator-network schema (zrhblsrtyilpopqjengp) — no new tables needed",
+    "stripe_connect": "existing parent-onboarding flow — no new code needed",
+    "repo": "fork pattern not needed yet since CMC is the origin repo; future creators fork this one"
+  },
+  "what_is_NOT_in_scope": [
+    "Midwest Next (Carson's co-owned NIL agency) — independent business, not onboarded to Trail of Joy",
+    "Any GHL contact pipeline for CMC — not needed for a single-creator storefront",
+    "Automated public posting of event footage — explicitly excluded by the consent agreement, Section 4"
+  ],
+  "exit_gate": {
+    "criteria": "Template chosen; agents + routing confirmed",
+    "mechanically_satisfied": true,
+    "actually_green": false,
+    "blocking_reason": "Per MASTER-BUILD-PIPELINE.md v1.1 minor-safety gate: stage 4 classification itself doesn't touch content/automation/live footage, so it can be completed as planning. But stages 6, 7, and 9 that follow it remain hard-blocked until consent-agreement-signed.md exists for Carson."
+  },
+  "note": "This stage was run as a practice/simulation per owner request ('let's pretend the agreement is signed') to keep pipeline development moving. The underlying real-world fact — no signature exists yet for Carson — is unchanged. Each future creator (waiting list) gets their own consent-agreement-signed.md before their stages 6/7/9 go live; this classification document does not generalize consent across creators."
+}
