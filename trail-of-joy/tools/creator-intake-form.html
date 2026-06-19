@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Trail of Joy — Creator Intake</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --paper:#faf8f5; --line:#d8d3c8;
+    --accent:#b3402c; --accent-soft:#f1e3dd; --good:#3f6b4a; --good-soft:#e6efe8;
+    --muted:#6b6458;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    line-height:1.45;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:20px 18px 100px;}
+  header{padding:18px 0 14px;border-bottom:2px solid var(--ink);margin-bottom:18px;}
+  header .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  header h1{font-size:22px;margin:4px 0 2px;font-weight:700;}
+  header .sub{font-size:13px;color:var(--muted);}
+
+  .progress{display:flex;gap:4px;margin-bottom:22px;}
+  .progress span{flex:1;height:4px;background:var(--line);border-radius:2px;}
+  .progress span.done{background:var(--accent);}
+
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+  .field .hint{font-size:12px;color:var(--muted);margin-top:4px;}
+  input[type=text],input[type=tel],input[type=email],input[type=number],textarea{
+    width:100%;padding:11px 12px;font-size:16px;border:1.5px solid var(--line);
+    border-radius:8px;background:#fff;color:var(--ink);font-family:inherit;
+  }
+  input:focus,textarea:focus{outline:none;border-color:var(--ink);}
+  textarea{resize:vertical;min-height:60px;}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+  .choice-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .choice{
+    padding:9px 14px;border:1.5px solid var(--line);border-radius:20px;
+    font-size:13.5px;cursor:pointer;background:#fff;user-select:none;font-weight:500;
+  }
+  .choice.selected{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  .flag-card{
+    border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:10px;
+    padding:14px;margin-bottom:18px;
+  }
+  .flag-card .flag-title{font-weight:700;font-size:13.5px;margin-bottom:6px;}
+  .flag-card .flag-body{font-size:13px;color:#4a2018;}
+  .flag-yn{display:flex;gap:8px;margin-top:10px;}
+  .flag-yn .choice{border-color:var(--accent);}
+  .flag-yn .choice.selected{background:var(--accent);border-color:var(--accent);}
+
+  .note-banner{
+    background:var(--good-soft);border:1.5px solid var(--good);border-radius:10px;
+    padding:12px 14px;font-size:13px;margin-top:10px;color:#1f3a26;display:none;
+  }
+  .note-banner.show{display:block;}
+
+  section.block{margin-bottom:26px;}
+  section.block h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px;border-bottom:1px solid var(--line);padding-bottom:8px;}
+
+  .actions{
+    position:fixed;bottom:0;left:0;right:0;background:var(--paper);
+    border-top:1.5px solid var(--ink);padding:12px 18px;display:flex;gap:10px;
+    max-width:640px;margin:0 auto;
+  }
+  .actions{position:fixed;}
+  button{
+    flex:1;padding:13px;font-size:14.5px;font-weight:700;border-radius:8px;border:none;
+    cursor:pointer;font-family:inherit;
+  }
+  .btn-primary{background:var(--ink);color:#fff;}
+  .btn-secondary{background:#fff;color:var(--ink);border:1.5px solid var(--ink);}
+  .btn-primary:disabled{background:#bbb;cursor:not-allowed;}
+
+  .output-screen{display:none;}
+  .output-screen.show{display:block;}
+  .form-screen.hide{display:none;}
+
+  .summary-card{border:1.5px solid var(--ink);border-radius:10px;padding:16px;margin-bottom:16px;background:#fff;}
+  .summary-card h3{margin:0 0 8px;font-size:15px;}
+  .summary-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;border-bottom:1px solid #eee;}
+  .summary-row span:first-child{color:var(--muted);}
+
+  .next-steps{font-size:13.5px;}
+  .next-steps li{margin-bottom:6px;}
+
+  textarea#jsonOut{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;min-height:220px;background:#1a1a1a;color:#9fe0a8;}
+
+  .copy-msg{font-size:12px;color:var(--good);font-weight:600;margin-top:6px;display:none;}
+  .copy-msg.show{display:block;}
+
+  .saved-list{margin-top:24px;}
+  .saved-item{
+    border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center;background:#fff;font-size:13.5px;
+  }
+  .saved-item button{flex:none;padding:6px 10px;font-size:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Trail of Joy · Stage 1</div>
+    <h1>Creator Intake</h1>
+    <div class="sub">One form. Works on a call or live at an event. Takes 3-4 minutes per kid.</div>
+  </header>
+
+  <div class="progress" id="progressBar">
+    <span class="done"></span><span></span><span></span><span></span>
+  </div>
+
+  <form id="intakeForm" class="form-screen">
+
+    <section class="block">
+      <h2>The athlete</h2>
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="kidName" required placeholder="First and last name">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Age</label>
+          <input type="number" id="kidAge" min="5" max="19" placeholder="e.g. 16">
+        </div>
+        <div class="field">
+          <label>City / region</label>
+          <input type="text" id="kidLocation" placeholder="e.g. Indianapolis area">
+          <div class="hint">General area only — not a street address.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sport(s) + team / program</label>
+        <input type="text" id="kidSport" placeholder="e.g. Football — Camboyz 7v7">
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Parent / guardian</h2>
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="parentName" required placeholder="Full name">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Phone</label>
+          <input type="tel" id="parentPhone" placeholder="best number">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="parentEmail" placeholder="best email">
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Brand & social</h2>
+      <div class="field">
+        <label>Existing social handles, if any</label>
+        <input type="text" id="socialHandles" placeholder="e.g. @handle — ask, don't search">
+        <div class="hint">Ask what they have. Don't go look it up unless they hand you the link and ask for a read on it.</div>
+      </div>
+      <div class="field">
+        <label>Personal brand or hasn't decided yet</label>
+        <div class="choice-group" id="brandChoice">
+          <div class="choice" data-val="personal">Personal brand</div>
+          <div class="choice" data-val="undecided">Hasn't decided — default to personal</div>
+          <div class="choice" data-val="company">Wants a company-style brand</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Starting offer</h2>
+      <div class="field">
+        <label>Which package sounds right today?</label>
+        <div class="choice-group" id="packageChoice">
+          <div class="choice" data-val="photo">Photo — $49</div>
+          <div class="choice" data-val="video">Video — $99</div>
+          <div class="choice" data-val="elite">Elite — $139</div>
+          <div class="choice" data-val="team">Team Elite — $399</div>
+          <div class="choice" data-val="unsure">Not sure yet</div>
+        </div>
+        <div class="hint">This can change later — just need a starting point.</div>
+      </div>
+    </section>
+
+    <div class="flag-card">
+      <div class="flag-title">Required question — ask every time</div>
+      <div class="flag-body">"Do you shoot at team events where other kids besides yours would be in frame?"</div>
+      <div class="flag-yn" id="thirdPartyFlag">
+        <div class="choice" data-val="yes">Yes</div>
+        <div class="choice" data-val="no">No — solo/individual sessions only</div>
+      </div>
+      <div class="note-banner" id="flagYesNote">
+        This family gets the full consent walk-through emphasized — Section 2-4 on how footage of <em>other</em> kids gets handled. Don't rush this part.
+      </div>
+      <div class="note-banner" id="flagNoNote" style="background:var(--good-soft);border-color:var(--good);">
+        Still present the consent agreement in full — just less likely to need the deep walk-through on third-party footage.
+      </div>
+    </div>
+
+    <section class="block">
+      <h2>Notes</h2>
+      <div class="field">
+        <label>Anything that doesn't fit the template</label>
+        <textarea id="notes" placeholder="e.g. already has a co-owned business, plays multiple sports, complicated family situation — anything that means stage 3 needs real thinking, not just a template fill"></textarea>
+      </div>
+    </section>
+
+  </form>
+
+  <div class="output-screen" id="outputScreen">
+    <div class="summary-card">
+      <h3 id="outName">—</h3>
+      <div class="summary-row"><span>Parent / guardian</span><span id="outParent">—</span></div>
+      <div class="summary-row"><span>Sport / team</span><span id="outSport">—</span></div>
+      <div class="summary-row"><span>Location</span><span id="outLocation">—</span></div>
+      <div class="summary-row"><span>Starting package</span><span id="outPackage">—</span></div>
+      <div class="summary-row"><span>Third-party footage flag</span><span id="outFlag">—</span></div>
+    </div>
+
+    <section class="block">
+      <h2>What happens next</h2>
+      <ul class="next-steps">
+        <li><strong>Today:</strong> save this intake. It's the input for stage 2 (analysis) and stage 3 (the WorldBuild Bible) — both run fast from here.</li>
+        <li><strong>Before signing anything:</strong> the consent agreement goes to this parent — in person if this is a group/event setting, or sent ahead of a 1:1 call so the call itself is for questions, not a first read.</li>
+        <li><strong>Track it:</strong> add this kid to the signature-tracking sheet (talked-to date = today) so the 4-5 day clock is visible.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Stage 1 intake JSON</h2>
+      <div class="hint" style="margin-bottom:8px;">Copy this into the kid's pipeline-runs folder as stage-1-intake.json.</div>
+      <textarea id="jsonOut" readonly></textarea>
+      <div class="copy-msg" id="copyMsg">Copied to clipboard.</div>
+    </section>
+  </div>
+
+  <div class="saved-list" id="savedList" style="display:none;">
+    <h2 style="font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:8px;">Saved this session</h2>
+    <div id="savedItems"></div>
+  </div>
+
+</div>
+
+<div class="actions">
+  <button class="btn-secondary" id="backBtn" style="display:none;">Edit</button>
+  <button class="btn-primary" id="nextBtn">Generate intake</button>
+</div>
+
+<script>
+(function(){
+  var brandVal = null, packageVal = null, flagVal = null;
+  var savedKids = [];
+
+  function wireChoiceGroup(groupId, setter){
+    var group = document.getElementById(groupId);
+    var choices = group.querySelectorAll('.choice');
+    choices.forEach(function(c){
+      c.addEventListener('click', function(){
+        choices.forEach(function(x){ x.classList.remove('selected'); });
+        c.classList.add('selected');
+        setter(c.getAttribute('data-val'));
+      });
+    });
+  }
+
+  wireChoiceGroup('brandChoice', function(v){ brandVal = v; });
+  wireChoiceGroup('packageChoice', function(v){ packageVal = v; });
+  wireChoiceGroup('thirdPartyFlag', function(v){
+    flagVal = v;
+    document.getElementById('flagYesNote').classList.toggle('show', v === 'yes');
+    document.getElementById('flagNoNote').classList.toggle('show', v === 'no');
+  });
+
+  var packageLabels = {
+    photo: 'Photo Coverage — $49',
+    video: 'Video Coverage — $99',
+    elite: 'Elite Coverage — $139',
+    team: 'Team Elite — $399',
+    unsure: 'Not yet decided'
+  };
+  var brandLabels = {
+    personal: 'Personal brand',
+    undecided: 'Undecided (defaulting to personal)',
+    company: 'Company-style brand'
+  };
+
+  var formSubmitted = false;
+
+  function resetForm(){
+    document.getElementById('intakeForm').reset();
+    brandVal = null; packageVal = null; flagVal = null;
+    document.querySelectorAll('.choice').forEach(function(c){ c.classList.remove('selected'); });
+    document.getElementById('flagYesNote').classList.remove('show');
+    document.getElementById('flagNoNote').classList.remove('show');
+    document.getElementById('intakeForm').classList.remove('hide');
+    document.getElementById('outputScreen').classList.remove('show');
+    document.getElementById('backBtn').style.display = 'none';
+    document.getElementById('nextBtn').textContent = 'Generate intake';
+    formSubmitted = false;
+    updateProgress(1);
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', function(e){
+    e.preventDefault();
+
+    if(formSubmitted){
+      // This click is "Save & start next kid" — the summary is already showing, so reset for the next one.
+      resetForm();
+      return;
+    }
+
+    var name = document.getElementById('kidName').value.trim();
+    var parentName = document.getElementById('parentName').value.trim();
+
+    if(!name || !parentName){
+      alert('Athlete name and parent/guardian name are required.');
+      return;
+    }
+    if(!flagVal){
+      alert('Please answer the required third-party footage question before generating.');
+      return;
+    }
+
+    var data = {
+      kidName: name,
+      kidAge: document.getElementById('kidAge').value.trim(),
+      kidLocation: document.getElementById('kidLocation').value.trim(),
+      kidSport: document.getElementById('kidSport').value.trim(),
+      parentName: parentName,
+      parentPhone: document.getElementById('parentPhone').value.trim(),
+      parentEmail: document.getElementById('parentEmail').value.trim(),
+      socialHandles: document.getElementById('socialHandles').value.trim(),
+      brand: brandVal || 'undecided',
+      startingPackage: packageVal || 'unsure',
+      thirdPartyFootageFlag: flagVal,
+      notes: document.getElementById('notes').value.trim(),
+      capturedAt: new Date().toISOString()
+    };
+
+    // Render summary
+    document.getElementById('outName').textContent = data.kidName + (data.kidAge ? ' · age ' + data.kidAge : '');
+    document.getElementById('outParent').textContent = data.parentName + (data.parentPhone ? ' · ' + data.parentPhone : '');
+    document.getElementById('outSport').textContent = data.kidSport || '—';
+    document.getElementById('outLocation').textContent = data.kidLocation || '—';
+    document.getElementById('outPackage').textContent = packageLabels[data.startingPackage] || '—';
+    document.getElementById('outFlag').textContent = data.thirdPartyFootageFlag === 'yes'
+      ? 'Yes — full consent walk-through required'
+      : 'No — still present full agreement';
+
+    // Build stage-1 JSON shape (mirrors the CMC stage-1-intake.json pattern)
+    var stage1 = {
+      stage: "discovery",
+      capturedVia: "scale-intake-form",
+      athlete: {
+        name: data.kidName,
+        age: data.kidAge || null,
+        location: data.kidLocation || null,
+        sport: data.kidSport || null,
+        brandDirection: data.brand
+      },
+      guardian: {
+        name: data.parentName,
+        phone: data.parentPhone || null,
+        email: data.parentEmail || null
+      },
+      socialPresence: {
+        handlesProvided: data.socialHandles || null,
+        researchPolicy: "Ask-don't-search by default. Only research if parent shares a link and asks for a read, or something doesn't add up and the owner requests a check."
+      },
+      startingOffer: {
+        package: data.startingPackage,
+        priceNote: packageLabels[data.startingPackage] || null,
+        changeable: true
+      },
+      minorSafety: {
+        thirdPartyFootageExpected: data.thirdPartyFootageFlag === 'yes',
+        consentAgreementStatus: "NOT YET SENT — required before stage 6/7/9",
+        note: "Per MASTER-BUILD-PIPELINE v1.1 minor-safety gate, no content/automation/portal stage may go live until consent-agreement-signed.md exists for this athlete."
+      },
+      freeformNotes: data.notes || null,
+      templateFit: data.notes ? "FLAGGED — review before forcing stage 4 lookup table; notes suggest something may not fit the standard template" : "Likely fits standard solo-creator template (see Part 4, Scale Intake SOP)",
+      capturedAt: data.capturedAt
+    };
+
+    document.getElementById('jsonOut').value = JSON.stringify(stage1, null, 2);
+
+    document.getElementById('intakeForm').classList.add('hide');
+    document.getElementById('outputScreen').classList.add('show');
+    document.getElementById('backBtn').style.display = 'block';
+    document.getElementById('nextBtn').textContent = 'Save & start next kid';
+    formSubmitted = true;
+    updateProgress(4);
+
+    savedKids.push({name: data.kidName, parent: data.parentName, flag: data.thirdPartyFootageFlag});
+    renderSavedList();
+  });
+
+  document.getElementById('backBtn').addEventListener('click', function(){
+    document.getElementById('intakeForm').classList.remove('hide');
+    document.getElementById('outputScreen').classList.remove('show');
+    document.getElementById('backBtn').style.display = 'none';
+    document.getElementById('nextBtn').textContent = 'Generate intake';
+    formSubmitted = false;
+    updateProgress(1);
+  });
+
+  document.getElementById('jsonOut').addEventListener('click', function(){
+    this.select();
+    try{
+      document.execCommand('copy');
+      var msg = document.getElementById('copyMsg');
+      msg.classList.add('show');
+      setTimeout(function(){ msg.classList.remove('show'); }, 2000);
+    }catch(e){}
+  });
+
+  function updateProgress(step){
+    var spans = document.querySelectorAll('#progressBar span');
+    spans.forEach(function(s, i){
+      s.classList.toggle('done', i < step);
+    });
+  }
+
+  function renderSavedList(){
+    if(savedKids.length === 0) return;
+    document.getElementById('savedList').style.display = 'block';
+    var container = document.getElementById('savedItems');
+    container.innerHTML = '';
+    savedKids.forEach(function(k){
+      var row = document.createElement('div');
+      row.className = 'saved-item';
+      var flagTxt = k.flag === 'yes' ? '⚠ third-party footage' : 'solo only';
+      row.innerHTML = '<span>' + k.name + ' — ' + k.parent + ' (' + flagTxt + ')</span>';
+      container.appendChild(row);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
