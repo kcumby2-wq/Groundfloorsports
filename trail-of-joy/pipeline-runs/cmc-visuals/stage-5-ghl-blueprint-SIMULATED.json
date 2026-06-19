@@ -1,0 +1,56 @@
+{
+  "company": "CMC Visuals",
+  "creator": "Carson McCauley",
+  "stage": 5,
+  "stage_name": "GHL Blueprint",
+  "status": "SIMULATED / PRACTICE ARTIFACT — not built in a live GHL account, not yet real",
+  "label": "This document specs what WOULD be configured in GHL if/when this stage actually runs. No GHL workspace has been touched. Treat every field below as a draft for review, not a live system.",
+  "scope_note": "Per stage 4 classification: CMC Visuals does not need a GHL contact pipeline. The ONLY GHL touchpoint is the existing community-access bridge tied to the $8.97/mo membership tier. This stage is intentionally small — most companies in the Trail of Joy factory will need a fuller blueprint than this; CMC is the minimal case, not the template for blueprint size.",
+
+  "ghl_pipeline_needed": false,
+  "reason_no_pipeline": "No B2B sales motion, no multi-step contact nurture, no coach-outreach sequence for CMC specifically (that exists at the Subject Media level, not the individual-creator level). A single creator selling direct-to-parent checkout doesn't need a CRM pipeline stage-by-stage tracker.",
+
+  "ghl_bridge": {
+    "exists_in_code": true,
+    "location": "cmc-visuals repo, src/lib/highlevel-bridge + backend_highlevelBridge route",
+    "trigger": "Stripe subscription webhook (subscription.created / subscription.active) for the $8.97/mo tier",
+    "action": "Add subscriber to a 'CMC Visuals Community' tag/list in GHL; this is what would gate access to SubjectSkillz community content/cohorts",
+    "reverse_action": "On subscription.cancelled or payment_failed past dunning window: remove tag, revoke access",
+    "status_as_of_this_doc": "Code exists (built in earlier session). Whether it has been pointed at a real GHL workspace/location ID has NOT been verified in this session — that's a real open item, not assumed done."
+  },
+
+  "tags_simulated": [
+    {"tag": "cmc-subscriber-active", "applied_when": "subscription active"},
+    {"tag": "cmc-subscriber-lapsed", "applied_when": "payment failed past dunning grace period"},
+    {"tag": "cmc-team-elite-customer", "applied_when": "Team Elite ($399) purchase — flags coach/program contacts separately from individual parents"}
+  ],
+
+  "automations_simulated": [
+    {
+      "name": "Subscriber welcome",
+      "trigger": "tag: cmc-subscriber-active added",
+      "action": "Send community welcome message with access link (this would be an email/SMS via the existing email lib, not necessarily a GHL workflow — open design question, not yet decided)"
+    },
+    {
+      "name": "Subscriber lapse handling",
+      "trigger": "tag: cmc-subscriber-lapsed added",
+      "action": "Revoke community access; send a plain, non-pushy re-engagement note. No urgency/scarcity language per voice rules."
+    }
+  ],
+
+  "what_this_stage_does_NOT_include": [
+    "Any GHL workflow has actually been created or tested in a real account",
+    "A coach/program contact pipeline (out of scope for CMC; would belong to a Subject Media-level blueprint, not this creator's)",
+    "Anything related to public posting of event content — that stays human-decided per the consent agreement, not automatable via GHL trigger"
+  ],
+
+  "exit_gate": {
+    "criteria": "Contact types, pipeline stages, tags, triggers defined",
+    "mechanically_satisfied_as_a_spec": true,
+    "actually_green": false,
+    "blocking_reasons": [
+      "This is a planning document, not a built system — no GHL workspace has been configured",
+      "Per minor-safety gate (MASTER-BUILD-PIPELINE v1.1): even once built, this stage cannot go live for Carson without consent-agreement-signed.md on file"
+    ]
+  }
+}
