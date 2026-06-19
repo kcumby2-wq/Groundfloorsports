@@ -1,5 +1,5 @@
 # Trail of Joy — Master Build Pipeline (Company Factory)
-**Version:** 1.0
+**Version:** 1.1
 **Scope:** The canonical, repeatable pipeline for standing up ANY company under Trail of Joy — from discovery call to live portal to ongoing optimization. CMC Visuals was the first run; this generalizes it.
 
 ## The 10 stages
@@ -18,6 +18,14 @@ Each stage has an OWNER agent, an INPUT (the prior stage's output), a deliverabl
 | 9 | **Client Portal** | CAMPAIGNER | template + config → deployed storefront/dashboard | Deployed READY; data path + payment verified (D-checklist) |
 | 10 | **Monthly Optimization** | QA + ECO-STRAT | live metrics → report + next-month priorities | Report produced; loop entry; SOP version bump if earned |
 
+## MINOR-SAFETY GATE (hard block — applies to every stage, every company)
+If the client or creator on file is a minor, OR if the company's work product is reasonably likely to include images/video of minors who are *not* the client (event coverage, team shoots, group content), the following is a **hard gate**, not a checklist item:
+
+- **No stage 6 (Content), stage 7 (Automation), or stage 9 (Client Portal/go-live) may proceed** until a signed parent/guardian agreement exists that covers: (a) consent for the creator's own minor-status data and likeness, and (b) the creator's process for obtaining consent from the *other* families whose minors appear in event/team footage before that footage is used publicly or sold.
+- This consent record is a real, dated, parent-signed artifact — not a checkbox in a SOP doc. It lives in the company's pipeline-runs folder as `consent-agreement.md` (or signed PDF) before the gate is marked green.
+- Any pipeline doc, WorldBuild Bible, or config file describing a minor should use general location (city/region) rather than precise home address/suburb, and should avoid aggregating identity details (real name + exact location + school/team + financial account) into a single artifact beyond what the business purpose requires.
+- Research into a minor's existing public presence (social accounts, portfolio, etc.) should happen with the parent's awareness, not unilaterally — surface findings to the parent/owner rather than treating it as routine OSINT.
+
 ## Reusable assets (the foundation — don't rebuild)
 - **cmc-visuals repo** = the storefront/portal template. New company = new config + new connected account.
 - **Supabase creator-network schema** (multi-tenant, RLS) = the data model for any creator/client network.
@@ -34,6 +42,7 @@ Each stage has an OWNER agent, an INPUT (the prior stage's output), a deliverabl
 
 ## Definition of DONE (a company is "stood up")
 - [ ] All 10 stage gates green
+- [ ] Minor-safety gate green if applicable (signed parent consent agreement on file)
 - [ ] Portal deployed READY; payment + data paths verified (Stripe TEST loop passed)
 - [ ] GHL pipeline live with contact types + automations
 - [ ] Content starter set + voice skill in repo
@@ -41,7 +50,8 @@ Each stage has an OWNER agent, an INPUT (the prior stage's output), a deliverabl
 - [ ] Project Record + Loop entry written; monthly optimization scheduled
 
 ## The protected interpersonal layer (never automated)
-Discovery call, onboarding call, cohorts, 1-on-1s, final go-live approval, anything touching secrets/money/destruction. Target: 95% of mechanical work automated; this layer stays human by design.
+Discovery call, onboarding call, cohorts, 1-on-1s, final go-live approval, anything touching secrets/money/destruction, and any minor-consent conversation. Target: 95% of mechanical work automated; this layer stays human by design.
 
 ## Revision History
 - **v1.0** — Pipeline formalized from the CMC Visuals build. Maps all 10 stages to owner agents and reusable assets. Establishes token-efficiency rules so the pipeline compounds toward expert, low-cost repeat builds.
+- **v1.1** — Added minor-safety gate as a hard block across stages 6/7/9, applying to any company whose creator is a minor or whose footage may include other minors. Requires a real signed consent artifact, not a checklist line. Restricts how minor identity/location data is aggregated in pipeline docs.
