@@ -1,6 +1,8 @@
 # Trail of Joy — Master Build Pipeline (Company Factory)
-**Version:** 1.1
+**Version:** 1.2
 **Scope:** The canonical, repeatable pipeline for standing up ANY company under Trail of Joy — from discovery call to live portal to ongoing optimization. CMC Visuals was the first run; this generalizes it.
+
+**What changed in v1.2:** Added one clarifying sentence under "Reusable assets" addressing Gap #9 from the Track A hypothetical run: the CBI→SLS→CCG→AGV→DSC creative workflow serves outside clients of Subject Medias' creative services (Track C), not the SubjectSkillz creator program (Track A). This was implicit before; v1.2 makes it explicit so it's not rediscovered as a question every time someone reads this pipeline alongside the creative workflow docs.
 
 ## The 10 stages
 Each stage has an OWNER agent, an INPUT (the prior stage's output), a deliverable, and a binary exit gate. No stage starts until the prior gate is green.
@@ -32,6 +34,7 @@ If the client or creator on file is a minor, OR if the company's work product is
 - **Stripe Connect + parent/guardian onboarding flow** = any company where money splits to a third party.
 - **HighLevel bridge + dunning** = any subscription → community access.
 - **trail-of-joy SOPs** (DEPLOYER, CAMPAIGNER, QA + 15 skills) = the agent library.
+- **(v1.2) The CBI → SLS → CCG → AGV → DSC creative workflow** (`creative-workflow/`) serves outside clients of Subject Medias' creative services (Track C engagements — businesses like Capo Athletics or Verde Athletics paying for AI-assisted creative work). It does NOT serve SubjectSkillz creators (Track A) — those creators (Carson-style) run their own content and write their own captions; the creative workflow doesn't touch their day-to-day. If a SubjectSkillz creator's work is ever featured in something Subject Medias itself produces (a "meet the creators" piece, an operator-page repost), that's governed by the Track A consent agreement's Section 5 (Operator-Side Reposting) and the per-project consent path in `TRACK-A-OPERATOR-PRODUCED-CONTENT-CONSENT.md` — not by routing the creator through the Track C creative workflow.
 
 ## Token-efficiency rules (so the agent gets expert + cheap)
 1. **Reuse before rebuild.** Each new company forks cmc-visuals; only the config changes. Never regenerate the stack.
@@ -55,3 +58,4 @@ Discovery call, onboarding call, cohorts, 1-on-1s, final go-live approval, anyth
 ## Revision History
 - **v1.0** — Pipeline formalized from the CMC Visuals build. Maps all 10 stages to owner agents and reusable assets. Establishes token-efficiency rules so the pipeline compounds toward expert, low-cost repeat builds.
 - **v1.1** — Added minor-safety gate as a hard block across stages 6/7/9, applying to any company whose creator is a minor or whose footage may include other minors. Requires a real signed consent artifact, not a checklist line. Restricts how minor identity/location data is aggregated in pipeline docs.
+- **v1.2** — Adds one clarifying line under "Reusable assets" stating explicitly that the creative workflow (CBI→SLS→CCG→AGV→DSC) serves Track C outside clients, not Track A SubjectSkillz creators. Addresses Gap #9 from the Track A hypothetical run (`hypothetical-runs/01-track-a-marcus-cole.md`).
