@@ -1,6 +1,8 @@
 # Trail of Joy / Subject Medias — Client Creative Services Agreement
-**Version:** 1.0
+**Version:** 1.1
 **Status: TEMPLATE — requires legal review before any client signs this.** This document implements the operational rules already established in `TRACK-C-OUTSIDE-CLIENT-MINOR-SUBJECTS.md`. It is the actual contract Track C clients (like Capo Athletics) would sign; the policy document explains why these terms exist, this document is the terms themselves.
+
+**What changed in v1.1:** Adds Section 2.1 (Fee Structure), addressing Gap #5 from the Track C hypothetical run: "Service Agreement template doesn't include the actual fee structure." Replaces the prior placeholder with a real recommended package structure grounded in current small-business social/creative services market rates.
 
 **Scope note:** This agreement covers any outside business client engaging Trail of Joy / Subject Medias for creative services (brief intake, style lock setup, copy/caption generation, asset generation, distribution). Section 8 (Minor Subject Addendum) applies specifically when the client's creative work features minor subjects who are not Trail of Joy creators or athletes — i.e., Track C engagements. For clients whose work involves no minor subjects, Section 8 is simply not triggered.
 
@@ -27,6 +29,22 @@ Service Provider will, per the engagement scope agreed in the intake process:
 - Distribute approved content to Client-designated destinations (via the DSC agent), per Client's specified approval process
 
 All AI-assisted outputs are drafts requiring Client (or Client's designated reviewer) approval before any public use. Service Provider does not auto-publish without an approval step appropriate to the destination, per Section 6.
+
+## 2.1 Fee Structure (NEW in v1.1)
+
+**Recommended package structure — owner should confirm or adjust before this goes into a real contract; see internal notes for the reasoning behind these tiers.**
+
+| Tier | Setup fee (one-time) | Monthly retainer | What's included |
+|---|---|---|---|
+| **Starter** | $750 | $600/month | CBI + SLS setup once; 4 assets/month (mix of posts/captions); single platform; per-batch approval |
+| **Standard** | $1,250 | $1,100/month | CBI + SLS setup once; 8 assets/month + 1 monthly highlight video; up to 2 platforms; per-batch approval (per-post for any minor-subject content, per the structural DSC rule) |
+| **Growth** | $2,000 | $1,800/month | CBI + SLS setup once; 12-16 assets/month + 1-2 monthly highlight videos + sales-deck assets as needed; up to 3 platforms; per-batch approval (per-post for minor-subject content) |
+
+**Out of scope for all tiers (priced separately if needed):** Soul ID retraining after the initial setup (if the client's own adult likeness drifts and needs refreshing), rush turnaround outside the normal weekly cadence, video editing beyond what the AGV/Higgsfield pipeline produces (e.g., full traditional video editing of raw footage), paid ad campaign management (this Agreement covers organic creative content, not media buying).
+
+**Contract minimum:** 3-month minimum term recommended, consistent with standard practice for retainer-based creative services where ramp-up (Section 2's CBI/SLS setup) takes real time before the engagement hits its working cadence.
+
+**Selected tier:** ☐ Starter   ☐ Standard   ☐ Growth   ☐ Custom (specify): _______________
 
 ## 3. Client Representations and Warranties
 
@@ -88,7 +106,7 @@ Client designates, at intake, which destinations Service Provider may post to on
 
 **This section implements `TRACK-C-OUTSIDE-CLIENT-MINOR-SUBJECTS.md` v1.0 as binding contract terms.**
 
-**8.1 — Client's release obligation.** Client represents and warrants that Client holds written, parent/guardian-signed releases for every minor subject whose likeness will appear in creative work produced under this engagement, and that those releases explicitly cover AI-generated or AI-derivative imagery (not merely general photography/video use). A generic release that does not address AI/derivative use is insufficient, and Client confirms it will not rely on one.
+**8.1 — Client's release obligation.** Client represents and warrants that Client holds written, parent/guardian-signed releases for every minor subject whose likeness will appear in creative work produced under this engagement, and that those releases explicitly cover AI-generated or AI-derivative imagery (not merely general photography/video use). A generic release that does not address AI/derivative use is insufficient, and Client confirms it will not rely on one. **(See `RECOMMENDED-AI-DERIVATIVE-RELEASE-LANGUAGE.md` — Service Provider will share this with Client at intake to help close this gap.)**
 
 **8.2 — Production on request.** Client will provide copies of the relevant releases to Service Provider upon request, at any point during or after this engagement.
 
@@ -110,7 +128,7 @@ Each party keeps confidential any non-public business information disclosed duri
 
 ## 10. Term and Termination
 
-Effective upon signature, continues for the engagement term specified at intake (one-off, monthly retainer, etc.). Either party may terminate with 14 days written notice. Service Provider may terminate immediately if Client breaches Section 3.2, 3.3, or Section 8 (where applicable).
+Effective upon signature, continues for the engagement term specified at intake (minimum 3 months per Section 2.1, then month-to-month unless otherwise agreed). Either party may terminate with 14 days written notice after the minimum term. Service Provider may terminate immediately if Client breaches Section 3.2, 3.3, or Section 8 (where applicable).
 
 ## 11. Limitation of Liability
 
@@ -144,6 +162,9 @@ Date of Execution: ___________________________
 2. **Section 7's checkbox structure is deliberate.** It defaults to NO reposting rights, requiring an affirmative election to grant them. This mirrors the same "opt-in, not opt-out" structure used in the Track A consent agreement's Section 5 — convenience for Service Provider is never the default; it has to be specifically granted.
 3. **This Agreement is what the Capo practice case was missing.** Without it, DSC v1.1's cross-population permission check for Track C content (Section 7) has no actual contract to point to, which means the check can never pass for a real Track C client — exactly the gap that's now closed.
 4. **For Capo specifically**, if this were a real engagement: Section 8.1 would require Marcus's existing parent release language to be reviewed against the "explicitly covers AI-generated/derivative use" standard (per the practice case material, his release does include that language as of a 2024 revision — promising, but still needs real verification, not just a templated read).
+5. **(v1.1) Reasoning behind the Section 2.1 fee tiers.** Researched current market rates for small-business social media/creative content services before proposing numbers: basic packages for small businesses with 1-2 platforms generally run $500-$1,500/month, with full-service multi-platform packages at $2,000-$5,000+/month for larger accounts. The tiers above are positioned at the lower-to-middle end of that range — appropriate for the actual client profile this Agreement targets (small training programs and youth sports businesses like Capo or Verde Athletics, not mid-market or enterprise accounts). The setup fee reflects the real one-time work of CBI/SLS intake and style-lock construction, which doesn't repeat monthly. These numbers should be treated as a reasoned starting point, not a final settled price — adjust based on actual delivery costs (including Higgsfield credit usage) and competitive positioning once you have a few real engagements under your belt.
+6. **The minimum-term addition (Section 2.1 + Section 10) is new in v1.1** and reflects standard retainer-services practice — the setup/ramp-up work in Section 2 has real cost regardless of term length, and a 1-month client doesn't let that cost amortize. This is a real business protection, not boilerplate.
 
 ## Revision History
 - v1.0 — First draft of the Track C Client Creative Services Agreement. Implements `TRACK-C-OUTSIDE-CLIENT-MINOR-SUBJECTS.md` as Section 8 binding terms. Section 7 establishes an opt-in (not opt-out) reposting-rights structure mirroring the Track A consent agreement's Section 5 model. Closes the gap where DSC v1.1's cross-population permission check for Track C clients had no actual contract to reference.
+- v1.1 — Adds Section 2.1 (Fee Structure): three recommended tiers (Starter $750 setup/$600 month, Standard $1,250/$1,100, Growth $2,000/$1,800), grounded in researched small-business social/creative services market rates rather than an arbitrary placeholder. Adds a 3-month contract minimum (Section 2.1, reflected in Section 10). Addresses Gap #5 from the Track C hypothetical run. Cross-references the new Recommended AI-Derivative Release Language template in Section 8.1.
