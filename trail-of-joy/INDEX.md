@@ -1,6 +1,8 @@
 # Trail of Joy — Document Index
-**Version:** 1.1
+**Version:** 1.2
 **Purpose:** Organized per the A-E structure requested in the Contracts/Documents planning doc. This index answers: what documents exist, who uses them, and which version is current. Files are not physically moved — this index is the map. (If the file count grows enough to warrant real folders later, this index makes that reorganization low-risk because every file's purpose is already documented here.)
+
+**What changed in v1.2:** Added `SUBJECT-OS-MASTER.md` to this directory — the strategic layer above `OPERATING-CHARTER.md`. Defines the six-engine company architecture (SubjectReport, Subject Media, SubjectAI, SubjectSkillz, SubjectSystem, Yngstars), the AI Maturity Model, the Four Levels of Value Creation, the Core Agent Stack, the Self-Improvement Loop, and the SubjectOS Command (the standing "Attention/Trust/Data/Systems/AI/Opportunity" decision filter, now appended to all three brand `CLAUDE.md` files). Each brand repo (`Subject-report-os`, `Subject-medias-os`, `TOJ-advisory-os`) also received a new `MATURITY.md` (weekly Level 1-7 self-assessment) and `agents/README.md` (the six Core Agent Stack roles mapped to that brand's actual goals/workflows). Flags that **SubjectAI** and **SubjectSystem** — the Automation and Operations engines — have no dedicated repo yet; this is the architecture's most visible gap as of this commit.
 
 **What changed in v1.1:** The three SubjectSkillz-exclusive documents (Mentorship Agreement, Education Delivery Architecture, Mentor Assignment & Matching SOP) moved to their own dedicated repo, `TOJ-advisory-os`, since they had no real cross-references into the rest of `trail-of-joy/` and benefit from living alongside the SubjectSkillz operating agent's `CLAUDE.md` and daily workflow. The genuinely shared documents (`TWO-TRACK-ATHLETE-MODEL.md`, `CONTRACTOR-MINOR-FOOTAGE-OVERLAP-RULE.md`, `MASTER-BUILD-PIPELINE.md`, this index) stay here, since their value is being visible to both Track A and Track B at once.
 
@@ -32,11 +34,12 @@
 | `SOP - CLIENTS, SALES & DELIVERY.docx` *(uploaded)* | Sales behavior standards, client priority rules | Active |
 | `SOP 2 - HOW IT WORKS.docx` *(uploaded)* | Dashboard, channels, booking-to-delivery flow for adult contractors | Active |
 | `SOP 3 - CONTENT QUALITY.docx` *(uploaded)* | Equipment, the three content types, technical standards, standards violations | Active |
+| `SUBJECT-OS-MASTER.md` | Strategic layer above the Operating Charter — six-engine architecture, AI Maturity Model, Four Levels of Value Creation, Core Agent Stack, Self-Improvement Loop, SubjectOS Command | Active, v1.0 — new this commit |
 | `MASTER-BUILD-PIPELINE.md` | The 10-stage company-building pipeline (discovery → live portal) + minor-safety gate | Active, v1.2 |
 | `SCALE-INTAKE-SOP.md` | Reverse-engineered process for 50 conversations/week, cohort signing model | Active, v1.0 |
 | `SUBJECT-MEDIAS-CLIPPING-FOUNDATION.md` | Source-rights matrix for Hudl/YouTube/Kick/Twitch clipping; routing rules | Active, v1.0 — forward-looking, not yet operational |
 | `CONTRACTOR-MINOR-FOOTAGE-OVERLAP-RULE.md` | Clarifies adult-contractor footage ownership vs. minor-safety consent as separate questions | Active policy |
-| `OPERATING-CHARTER.md` | v1.1 — original Trail of Joy operating charter | Active |
+| `OPERATING-CHARTER.md` | v1.1 — original Trail of Joy operating charter (the operational layer SUBJECT-OS-MASTER.md sits above) | Active |
 | `AGENT-SOP-deploy-interface-backend.md` | DEPLOYER agent SOP | Active, v1.1 |
 | `AGENT-SOP-campaign-deploy.md` | CAMPAIGNER agent SOP | Active, v1.0 |
 | `AGENT-SOP-qa-verification.md` | QA agent SOP | Active, v1.0 |
@@ -71,9 +74,11 @@
 
 | Repo | Contents | Why it's separate |
 |---|---|---|
-| `Subject-report-os` | SubjectReport's operating agent (CLAUDE.md, goals, workflows, skills, feedback) | Marketing/voice/workflow content with zero cross-references into trail-of-joy/ — a clean split |
-| `Subject-medias-os` | Subject Media's operating agent (CLAUDE.md, daily workflow, voice skill, outreach/event data) | Same as above, for Subject Media |
-| `TOJ-advisory-os` | SubjectSkillz mentorship operating agent — the Mentorship Agreement Template, Education Delivery Architecture, Mentor Assignment & Matching SOP | SubjectSkillz-exclusive documents with no real cross-references into Track B or the rest of trail-of-joy/. Its `CLAUDE.md` explicitly points back to `TWO-TRACK-ATHLETE-MODEL.md`, `CONTRACTOR-MINOR-FOOTAGE-OVERLAP-RULE.md`, `MASTER-BUILD-PIPELINE.md`, and this index, rather than duplicating them. |
+| `Subject-report-os` | SubjectReport's operating agent (`CLAUDE.md` — now includes the SubjectOS Command — `goals/`, `workflows/`, `skills/`, `feedback/`, `MATURITY.md`, `agents/README.md`) | Marketing/voice/workflow content with zero cross-references into trail-of-joy/ — a clean split |
+| `Subject-medias-os` | Subject Media's operating agent (`CLAUDE.md` — now includes the SubjectOS Command — `daily.md`, `skills/sm-voice/`, outreach/event data, `MATURITY.md`, `agents/README.md`). Notably: `goals/goals.md` is still empty and there's no `workflows/weekly.md` yet — see its `MATURITY.md` for the priority fix. | Same split rationale as above, for Subject Media |
+| `TOJ-advisory-os` | SubjectSkillz mentorship operating agent — the Mentorship Agreement Template, Education Delivery Architecture, Mentor Assignment & Matching SOP, `CLAUDE.md` (now includes the SubjectOS Command), `MATURITY.md`, `agents/README.md`. Notably: this repo has no `goals/`, `workflows/`, `skills/`, or `feedback/` folder at all yet — it's a document library, not yet an operating loop. | SubjectSkillz-exclusive documents with no real cross-references into Track B or the rest of trail-of-joy/. Its `CLAUDE.md` explicitly points back to `TWO-TRACK-ATHLETE-MODEL.md`, `CONTRACTOR-MINOR-FOOTAGE-OVERLAP-RULE.md`, `MASTER-BUILD-PIPELINE.md`, and this index, rather than duplicating them. |
+
+**Engines with no repo yet:** Per `SUBJECT-OS-MASTER.md`, the six-engine architecture names **SubjectAI** (Automation Engine) and **SubjectSystem** (Operations Engine) as the remaining two brands. Neither has a repo as of this commit — the clearest open item in the whole ecosystem right now.
 
 ## Version Control Note
 This index reflects the repo state as of this commit. When a new document is added to `trail-of-joy/`, add one line to the relevant table above in the same commit — keeping this index current is cheap; letting it drift defeats its purpose. The same discipline applies across repos now: if a SubjectSkillz-exclusive document is added to `TOJ-advisory-os`, it doesn't need a row here, but if a genuinely shared document changes, update it here AND check whether `TOJ-advisory-os/CLAUDE.md`'s "Shared Documents" section still describes it accurately.
@@ -83,7 +88,9 @@ This index reflects the repo state as of this commit. When a new document is add
 - SubjectSkillz Mentorship Agreement (now in `TOJ-advisory-os`) — needs legal review, no real mentor/mentee assigned yet
 - Groundfloorsports Footage Licensing Agreement — needs legal review + the flat-fee dollar amount decided
 - Track B intake form — doesn't exist yet as a standalone tool
+- SubjectAI and SubjectSystem repos — don't exist yet at all (see Section G note above)
 
 ## Revision History
 - v1.0 — First index, built per the A-E (extended to F) structure from the original Contracts/Documents planning note. Maps every file currently in `trail-of-joy/` plus the owner's uploaded SOP/agreement docs (referenced, not duplicated into the repo) to its category and real status.
 - v1.1 — Moves the three SubjectSkillz-exclusive documents (Mentorship Agreement Template, Education Delivery Architecture, Mentor Assignment & Matching SOP) to a dedicated repo, `TOJ-advisory-os`, alongside that program's own `CLAUDE.md` and daily workflow. Rationale: these three had no real cross-references into Track B, the contractor-overlap rule, or the general build pipeline — unlike `TWO-TRACK-ATHLETE-MODEL.md` and `CONTRACTOR-MINOR-FOOTAGE-OVERLAP-RULE.md`, whose entire value is being visible to both tracks at once and which therefore stay here. Adds Section G mapping the now-three related-but-separate operating-agent repos (SubjectReport, Subject Media, TOJ Advisory) so a future reader of this index knows where to look.
+- v1.2 — Adds `SUBJECT-OS-MASTER.md` (Section C) as the strategic layer above `OPERATING-CHARTER.md`: the six-engine architecture, AI Maturity Model, Four Levels of Value Creation, Core Agent Stack, Self-Improvement Loop, and SubjectOS Command. Updates Section G to note that all three brand-repo `CLAUDE.md` files now carry the SubjectOS Command and that each repo received a `MATURITY.md` and `agents/README.md`. Flags the two unbuilt engines, SubjectAI and SubjectSystem, as the most visible open item in the ecosystem as of this commit.
