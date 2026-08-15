@@ -413,10 +413,10 @@
         </select>
       </div>
       <form onsubmit="submitBook(event)" style="margin-top:18px; display:flex; flex-direction:column; gap:12px;">
-        <input type="text" placeholder="Athlete or guardian name" required style="width:100%; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/>
-        <input type="email" placeholder="Email" required style="width:100%; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/>
-        <div style="display:flex; gap:10px;"><input type="text" placeholder="Sport · position" style="flex:1; min-width:0; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/><input type="text" placeholder="Class year" style="width:110px; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/></div>
-        <textarea placeholder="Film link or anything we should know (optional)" style="width:100%; min-height:70px; resize:vertical; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"></textarea>
+        <input id="brName" type="text" placeholder="Athlete or guardian name" required style="width:100%; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/>
+        <input id="brEmail" type="email" placeholder="Email" required style="width:100%; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/>
+        <div style="display:flex; gap:10px;"><input id="brSport" type="text" placeholder="Sport · position" style="flex:1; min-width:0; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/><input id="brClass" type="text" placeholder="Class year" style="width:110px; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"/></div>
+        <textarea id="brNotes" placeholder="Film link or anything we should know (optional)" style="width:100%; min-height:70px; resize:vertical; background:rgba(242,238,227,0.05); border:1px solid rgba(242,238,227,0.16); border-radius:10px; padding:13px 14px; color:#f8f5ec; font-family:'Inter',sans-serif; font-size:14px;"></textarea>
         <button type="submit" style="width:100%; padding:16px; background:#4ec4ff; color:#05131f; border:0; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer;">Book my call →</button>
       </form>
       <button type="button" onclick="closeBook()" style="width:100%; margin-top:10px; padding:12px; background:transparent; color:rgba(242,238,227,0.55); border:0; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer;">Cancel</button>
@@ -453,8 +453,33 @@
   function closeBook(){ sheet.classList.add('hidden'); document.body.style.overflow=''; }
   function submitBook(e){
     e.preventDefault();
-    // preserve the live site's real booking path — route to the calendar
-    try { if(typeof gtag==='function') gtag('event','book_request',{package: pkgSelect.value}); } catch(_){}
+    var pkg = pkgSelect.value;
+    var val = function(id){ var el=document.getElementById(id); return el ? String(el.value||'').trim() : ''; };
+    // Lead → Intake CRM (onboarding_intakes) via same-origin proxy to the Render backend.
+    // Booked as guardian-contact + pending-consent (is_minor:true, no consent_level) so the
+    // lead lands in the CRM with a consent token but is NOT embedded into the RAG corpus
+    // before a guardian grants a visibility level. Fire-and-forget: never block the booking UX.
+    var lead = {
+      audience: "athlete",
+      branch: "subject-report",
+      is_minor: true,
+      guardian_name: val('brName'),
+      guardian_email: val('brEmail'),
+      intake_version: "sr-redesign-v1",
+      source: "subjectreport.com/booking",
+      payload: {
+        kind: "booking_request",
+        package: pkg,
+        sport_position: val('brSport'),
+        class_year: val('brClass'),
+        notes: val('brNotes')
+      }
+    };
+    try {
+      fetch('/api/onboarding', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead) }).catch(function(){});
+    } catch(_){}
+    // preserve the live site's real booking path — analytics + route to the calendar
+    try { if(typeof gtag==='function') gtag('event','book_request',{package: pkg}); } catch(_){}
     try { window.open('https://calendly.com/kcumby2/30min','_blank','noopener'); } catch(_){}
     document.getElementById('bookForm').classList.add('hidden');
     document.getElementById('bookSuccess').classList.remove('hidden');
