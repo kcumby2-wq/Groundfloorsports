@@ -225,6 +225,50 @@
     <div style="font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(242,238,227,0.5); margin-top:10px;">QB · full-game breakdown</div>
   </section>
 
+  <!-- ===== STILLS CAROUSEL ===== -->
+  <section id="stills" style="padding:44px 0; border-top:1px solid rgba(242,238,227,0.08); background:rgba(10,23,41,0.35);">
+    <div style="padding:0 20px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#4ec4ff; margin-bottom:12px;">On the sideline</div>
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px;">
+        <h2 style="font-family:'Anton',sans-serif; font-size:30px; line-height:0.98; text-transform:uppercase; color:#f8f5ec;">Stills<span style="color:#4ec4ff;">.</span></h2>
+        <div style="display:flex; gap:8px;">
+          <button type="button" onclick="scrollStills(-1)" aria-label="Previous" style="width:42px; height:42px; border-radius:999px; background:rgba(242,238,227,0.06); border:1px solid rgba(242,238,227,0.22); color:#f2eee3; font-size:20px; line-height:1; cursor:pointer;">&lsaquo;</button>
+          <button type="button" onclick="scrollStills(1)" aria-label="Next" style="width:42px; height:42px; border-radius:999px; background:rgba(242,238,227,0.06); border:1px solid rgba(242,238,227,0.22); color:#f2eee3; font-size:20px; line-height:1; cursor:pointer;">&rsaquo;</button>
+        </div>
+      </div>
+      <p style="font-size:13px; line-height:1.5; color:rgba(242,238,227,0.6); margin-top:10px;">A slice of what we shoot on event day. Swipe &rarr;</p>
+    </div>
+    <div id="stillsTrack" style="display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:20px; scrollbar-width:none; -ms-overflow-style:none;">
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-01.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-02.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-03.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-04.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-05.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-06.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-07.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-08.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-09.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-10.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-11.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-12.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-13.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-14.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-15.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-16.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-17.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-18.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-19.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-20.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-21.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-22.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-23.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-24.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+      <div style="flex:0 0 auto; scroll-snap-align:center; height:min(64vh,520px); border-radius:14px; overflow:hidden; background:#0a1322; border:1px solid rgba(242,238,227,0.1);"><img src="media/stills/still-25.jpg" loading="lazy" alt="" style="display:block; height:100%; width:auto;"></div>
+    </div>
+  </section>
+  <style>#stillsTrack::-webkit-scrollbar{display:none;}</style>
+  <script>function scrollStills(d){var t=document.getElementById('stillsTrack');if(t)t.scrollBy({left:d*Math.min(t.clientWidth*0.85,520),behavior:'smooth'});}</script>
+
   <!-- ===== RECRUITING TIMELINE ===== -->
   <section id="timeline" style="padding:44px 20px; border-top:1px solid rgba(242,238,227,0.08);">
     <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#4ec4ff; margin-bottom:14px;">The real sequence</div>
